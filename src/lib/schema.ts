@@ -1,7 +1,7 @@
 /**
  * Schema.org structured data. Built strictly from confirmed content:
  * no ratings, prices, street address or coordinates unless they are set in
- * content/property.ts.
+ * src/content/property.ts.
  */
 import { property } from '@content/property';
 import { faqs } from '@content/faq';

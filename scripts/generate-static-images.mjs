@@ -1,7 +1,7 @@
 /**
  * Regenerates the static fallback images in /public:
  *   og-image.jpg (1200×630 social card, used until a hero photo exists),
- *   favicon-32.png, apple-touch-icon.png.
+ *   favicon/favicon-32.png, favicon/apple-touch-icon.png.
  * Run with: node scripts/generate-static-images.mjs
  */
 import sharp from 'sharp';
@@ -9,10 +9,10 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const pub = new URL('../public/', import.meta.url);
-const favicon = await readFile(new URL('favicon.svg', pub));
+const favicon = await readFile(new URL('favicon/favicon.svg', pub));
 
-await sharp(favicon, { density: 300 }).resize(32, 32).png().toFile(fileURLToPath(new URL('favicon-32.png', pub)));
-await sharp(favicon, { density: 600 }).resize(180, 180).flatten({ background: '#1d4b52' }).png().toFile(fileURLToPath(new URL('apple-touch-icon.png', pub)));
+await sharp(favicon, { density: 300 }).resize(32, 32).png().toFile(fileURLToPath(new URL('favicon/favicon-32.png', pub)));
+await sharp(favicon, { density: 600 }).resize(180, 180).flatten({ background: '#1d4b52' }).png().toFile(fileURLToPath(new URL('favicon/apple-touch-icon.png', pub)));
 
 const og = `
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">

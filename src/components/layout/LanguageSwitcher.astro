@@ -1,0 +1,91 @@
+---
+import { locales, localeMeta, type Locale } from '@/i18n/config';
+import { fill, localizePath, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import Flag from '@/components/ui/Flag.astro';
+
+interface Props {
+  lang: Locale;
+  /** Language-neutral path of the current page. */
+  path: string;
+  class?: string;
+}
+const { lang, path, class: className } = Astro.props;
+---
+
+<div class:list={['lang-switch', className]} role="group" aria-label={t(ui.language, lang)}>
+  <ul role="list">
+    {
+      locales.map((l) => {
+        const current = l === lang;
+        const label = localeMeta[l].label;
+        return (
+          <li>
+            <a
+              href={localizePath(path, l)}
+              hreflang={localeMeta[l].htmlLang}
+              lang={localeMeta[l].htmlLang}
+              class:list={['lang-switch__link', { 'is-current': current }]}
+              aria-current={current ? 'true' : undefined}
+              title={current ? label : fill(t(ui.switchTo, lang), { language: label })}
+              data-lang-link
+            >
+              <Flag code={localeMeta[l].flag} />
+              <span class="visually-hidden">{label}</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>
+
+<script>
+  // Keep the visitor on the same section when switching language.
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[data-lang-link]');
+    if (a && location.hash && !a.hash) a.hash = location.hash;
+  });
+</script>
+
+<style>
+  .lang-switch ul {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin: 0;
+  }
+  .lang-switch__link {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    opacity: 0.6;
+    filter: saturate(0.7);
+    transition:
+      opacity 0.2s var(--ease),
+      filter 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+  .lang-switch__link:hover {
+    opacity: 1;
+    filter: none;
+    background: rgb(127 127 127 / 0.12);
+  }
+  .lang-switch__link.is-current {
+    opacity: 1;
+    filter: none;
+    position: relative;
+  }
+  .lang-switch__link.is-current::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 7px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+</style>

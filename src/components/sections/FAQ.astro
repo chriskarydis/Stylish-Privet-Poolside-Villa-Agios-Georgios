@@ -1,0 +1,119 @@
+---
+import { faqs } from '@content/faq';
+import { home } from '@content/home';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<section id="faq" class="section" aria-labelledby="faq-title">
+  <div class="container faq__grid">
+    <div class="faq__head">
+      <p class="eyebrow">{t(home.faq.eyebrow, lang)}</p>
+      <h2 id="faq-title">{t(home.faq.title, lang)}</h2>
+    </div>
+
+    <div class="faq__list">
+      {
+        faqs.map((f) => (
+          <details class="faq" id={`faq-${f.id}`}>
+            <summary>
+              <h3 class="faq__q">{t(f.question, lang)}</h3>
+              <span class="faq__icon" aria-hidden="true">
+                <Icon name="chevron-down" size={20} />
+              </span>
+            </summary>
+            <p class="faq__a">{t(f.answer, lang)}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .faq__head {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    align-self: start;
+  }
+  .faq__list {
+    border-top: 1px solid var(--line);
+  }
+  .faq {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    min-height: 44px;
+    padding: 1.2rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+  .faq summary:hover .faq__q {
+    color: var(--sea);
+  }
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--sea);
+    transition: transform 0.3s var(--ease), background-color 0.3s var(--ease);
+  }
+  .faq[open] .faq__icon {
+    transform: rotate(180deg);
+    background: var(--sea-tint);
+  }
+  .faq__a {
+    max-width: 60ch;
+    padding: 0 3.5rem 1.4rem 0;
+    color: var(--ink-soft);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .faq[open] .faq__a {
+      animation: faq-in 0.35s var(--ease);
+    }
+  }
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+  @media (min-width: 64em) {
+    .faq__grid {
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+    }
+    .faq__head {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+</style>

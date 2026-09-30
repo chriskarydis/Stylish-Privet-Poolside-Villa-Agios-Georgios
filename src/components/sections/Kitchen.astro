@@ -1,0 +1,94 @@
+---
+import { home } from '@content/home';
+import { kitchenFeatures } from '@content/amenities';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import SmartImage from '@/components/ui/SmartImage.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<div class="kitchen">
+  <div class="kitchen__text">
+    <span class="kitchen__icon"><Icon name="cooking-pot" size={26} /></span>
+    <h3>{t(home.kitchen.title, lang)}</h3>
+    <p class="lead">{t(home.kitchen.body, lang)}</p>
+    <ul role="list" class="kitchen__features">
+      {
+        kitchenFeatures.map((f) => (
+          <li>
+            <Icon name={f.icon} size={24} />
+            <span>{t(f.label, lang)}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="frame kitchen__media" data-reveal>
+    <SmartImage image="kitchen" lang={lang} sizes="(min-width: 64em) 45vw, 92vw" />
+  </div>
+</div>
+
+<style>
+  .kitchen {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .kitchen__text {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .kitchen__icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--sea-tint);
+    color: var(--sea);
+  }
+  .kitchen__media {
+    aspect-ratio: 3 / 2;
+  }
+  .kitchen__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    width: 100%;
+    margin-top: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--line);
+    overflow: hidden;
+  }
+  .kitchen__features li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--surface);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+  .kitchen__features :global(.icon) {
+    color: var(--sea);
+  }
+  @media (min-width: 40em) {
+    .kitchen__features {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 64em) {
+    .kitchen {
+      grid-template-columns: 1fr 1.15fr;
+      gap: clamp(3rem, 1rem + 5vw, 6rem);
+    }
+  }
+</style>

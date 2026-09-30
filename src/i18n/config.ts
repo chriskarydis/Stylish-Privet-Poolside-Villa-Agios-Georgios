@@ -3,7 +3,7 @@
  *
  * To add a language: add it here and in `astro.config.mjs` (i18n.locales and
  * the sitemap locales), add the translations to every `Localized` value in
- * /content and src/i18n/ui.ts (TypeScript will point out every missing one),
+ * src/content and src/i18n/ui.ts (TypeScript will point out every missing one),
  * and create `src/pages/<code>/` routes mirroring `src/pages/el/`.
  */
 export const locales = ['en', 'el'] as const;

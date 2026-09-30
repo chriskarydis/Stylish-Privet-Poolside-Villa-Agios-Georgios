@@ -1,6 +1,6 @@
 /**
  * Interface strings (navigation, buttons, accessibility labels).
- * Property content lives in /content.
+ * Property content lives in src/content.
  */
 import type { Localized } from './config';
 

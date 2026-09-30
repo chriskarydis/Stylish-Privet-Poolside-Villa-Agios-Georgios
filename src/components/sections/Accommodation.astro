@@ -1,0 +1,59 @@
+---
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import BedroomCard from '@/components/cards/BedroomCard.astro';
+import Bathrooms from '@/components/sections/Bathrooms.astro';
+import Kitchen from '@/components/sections/Kitchen.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<section id="accommodation" class="section section--surface" aria-labelledby="accommodation-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{t(home.accommodation.eyebrow, lang)}</p>
+      <h2 id="accommodation-title">{t(home.accommodation.title, lang)}</h2>
+      <p class="lead">{t(home.accommodation.body, lang)}</p>
+    </div>
+
+    <div class="rooms">
+      {
+        property.sleeping.map((s, i) => (
+          <BedroomCard lang={lang} room={s.room} beds={s.beds} icon={s.icon} image={s.image} index={i} />
+        ))
+      }
+    </div>
+
+    <div class="rooms__more">
+      <Bathrooms lang={lang} />
+      <Kitchen lang={lang} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .rooms {
+    display: grid;
+    gap: 2.5rem 1.75rem;
+  }
+  @media (min-width: 40em) {
+    .rooms {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64em) {
+    .rooms {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .rooms__more {
+    display: grid;
+    gap: clamp(3.5rem, 2rem + 5vw, 6rem);
+    margin-top: clamp(4rem, 2.5rem + 6vw, 7.5rem);
+  }
+</style>
