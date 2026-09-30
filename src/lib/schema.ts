@@ -41,6 +41,8 @@ export function accommodationSchema(lang: Locale, pageUrl: string, imageUrls: st
       '@type': 'Place',
       name: `${t(loc.locality, lang)}, ${t(loc.region, lang)}, ${t(loc.country, lang)}`,
     },
+    ...(property.contact.phone ? { telephone: property.contact.phone.replace(/\s+/g, '') } : {}),
+    ...(property.contact.email ? { email: property.contact.email } : {}),
     checkinTime: rules.checkIn,
     checkoutTime: rules.checkOut,
     petsAllowed: rules.pets,

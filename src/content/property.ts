@@ -98,9 +98,9 @@ export const property = {
 
   /** Contact details — NOT yet supplied. Each item is hidden while null. */
   contact: {
-    email: null as string | null,
-    phone: null as string | null, // international format, e.g. '+30 69x xxx xxxx'
-    whatsapp: null as string | null, // digits only, e.g. '3069xxxxxxxx'
+    email: 'chriskaridis76@gmail.com' as string | null,
+    phone: '+30 690 654 2839' as string | null, // international format
+    whatsapp: '306906542839' as string | null, // digits only, with country code
   },
 
   /**
