@@ -1,0 +1,135 @@
+---
+/**
+ * Renders a content image slot: an optimised, responsive <picture> (AVIF/WebP)
+ * when the photo exists in src/assets/images/, otherwise a tasteful placeholder.
+ * The image always fills its parent — size the parent (e.g. aspect-ratio).
+ */
+import { Picture } from 'astro:assets';
+import type { ImageKey, ImageSlot } from '@content/gallery';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import { findImage, resolveSlot } from '@/lib/images';
+import Icon from './Icon.astro';
+
+interface Props {
+  image: ImageKey | ImageSlot;
+  lang: Locale;
+  /** The `sizes` attribute — describe how wide the image is displayed. */
+  sizes?: string;
+  widths?: number[];
+  /** Above-the-fold image (hero): load eagerly with high priority. */
+  priority?: boolean;
+  /** Hide the placeholder caption (e.g. for very small tiles). */
+  compact?: boolean;
+  class?: string;
+}
+
+const {
+  image,
+  lang,
+  sizes = '100vw',
+  widths = [480, 768, 1080, 1440, 1920],
+  priority = false,
+  compact = false,
+  class: className,
+} = Astro.props;
+
+const slot = resolveSlot(image);
+const src = findImage(slot);
+const alt = t(slot.alt, lang);
+const usableWidths = src ? widths.filter((w) => w <= src.width).concat(src.width < widths[0] ? [src.width] : []) : [];
+---
+
+{
+  src ? (
+    <Picture
+      src={src}
+      alt={alt}
+      widths={usableWidths}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'sync' : 'async'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      class:list={['smart-img', className]}
+      style={slot.position ? `object-position:${slot.position}` : undefined}
+      pictureAttributes={{ class: 'smart-picture' }}
+    />
+  ) : (
+    <div class:list={['smart-ph', `tone-${slot.tone}`, className]} role="img" aria-label={alt}>
+      <svg class="smart-ph__lines" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 210 C 70 190, 130 230, 200 205 S 330 185, 400 200" />
+        <path d="M0 232 C 80 214, 140 250, 210 228 S 330 210, 400 224" />
+        <path d="M0 254 C 90 238, 150 270, 220 250 S 330 236, 400 248" />
+      </svg>
+      {!compact && (
+        <span class="smart-ph__caption">
+          <Icon name="images" size={18} />
+          <span>{t(slot.label, lang)}</span>
+          <small>{t(ui.photoComingSoon, lang)}</small>
+          {import.meta.env.DEV && <code>src/assets/images/{slot.file}</code>}
+        </span>
+      )}
+    </div>
+  )
+}
+
+<style>
+  :global(.smart-picture) {
+    display: contents;
+  }
+  .smart-img,
+  .smart-ph {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .smart-ph {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--ph-bg);
+    color: var(--ph-fg);
+  }
+  .smart-ph__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    opacity: 0.18;
+    vector-effect: non-scaling-stroke;
+  }
+  .smart-ph__lines path {
+    vector-effect: non-scaling-stroke;
+  }
+  .smart-ph__caption {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.3rem;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .smart-ph__caption small {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+  .smart-ph__caption code {
+    margin-top: 0.25rem;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    word-break: break-all;
+  }
+</style>

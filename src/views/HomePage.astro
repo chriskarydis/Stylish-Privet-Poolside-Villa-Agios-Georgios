@@ -1,0 +1,62 @@
+---
+/** The one-page homepage, rendered once per language (src/pages/index.astro, src/pages/el/index.astro). */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Hero from '@/components/Hero.astro';
+import PropertyHighlights from '@/components/PropertyHighlights.astro';
+import AboutVilla from '@/components/AboutVilla.astro';
+import Accommodation from '@/components/Accommodation.astro';
+import PoolSection from '@/components/PoolSection.astro';
+import OutdoorSection from '@/components/OutdoorSection.astro';
+import AmenitiesGrid from '@/components/AmenitiesGrid.astro';
+import LocationSection from '@/components/LocationSection.astro';
+import ExploreSouthernCorfu from '@/components/ExploreSouthernCorfu.astro';
+import Experiences from '@/components/Experiences.astro';
+import Gallery from '@/components/Gallery.astro';
+import Reviews from '@/components/Reviews.astro';
+import FAQ from '@/components/FAQ.astro';
+import BookingCTA from '@/components/BookingCTA.astro';
+import Footer from '@/components/Footer.astro';
+import { getImage } from 'astro:assets';
+import type { Locale } from '@/i18n/config';
+import { localizePath } from '@/i18n/utils';
+import { findImage } from '@/lib/images';
+import { accommodationSchema, faqSchema } from '@/lib/schema';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const path = '/';
+const pageUrl = new URL(localizePath(path, lang), Astro.site).href;
+
+// Only real photos go into structured data.
+const schemaImages = await Promise.all(
+  (['hero', 'exterior', 'pool', 'livingRoom', 'kitchen'] as const)
+    .map((k) => findImage(k))
+    .filter((s) => s !== undefined)
+    .map(async (src) => new URL((await getImage({ src, width: 1600, format: 'jpg' })).src, Astro.site).href),
+);
+---
+
+<BaseLayout lang={lang} path={path} jsonLd={[accommodationSchema(lang, pageUrl, schemaImages), faqSchema(lang)]}>
+  <div id="top"></div>
+  <Header lang={lang} path={path} overlay />
+  <main id="main" tabindex="-1">
+    <Hero lang={lang} />
+    <PropertyHighlights lang={lang} />
+    <AboutVilla lang={lang} />
+    <Accommodation lang={lang} />
+    <PoolSection lang={lang} />
+    <OutdoorSection lang={lang} />
+    <AmenitiesGrid lang={lang} />
+    <LocationSection lang={lang} />
+    <ExploreSouthernCorfu lang={lang} />
+    <Experiences lang={lang} />
+    <Gallery lang={lang} />
+    <Reviews lang={lang} />
+    <FAQ lang={lang} />
+    <BookingCTA lang={lang} />
+  </main>
+  <Footer lang={lang} path={path} />
+</BaseLayout>

@@ -1,0 +1,98 @@
+---
+import { home } from '@content/home';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import SmartImage from './ui/SmartImage.astro';
+import Icon from './ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<section id="pool-outdoors" class="pool on-dark" aria-labelledby="pool-title">
+  <div class="container pool__grid">
+    <div class="pool__media" data-reveal>
+      <div class="frame pool__frame">
+        <SmartImage image="pool" lang={lang} sizes="(min-width: 64em) 55vw, 92vw" />
+      </div>
+      <p class="badge pool__badge">
+        <Icon name="pool" size={16} />
+        {t(home.pool.badge, lang)}
+      </p>
+    </div>
+
+    <div class="pool__text">
+      <p class="eyebrow">{t(home.pool.eyebrow, lang)}</p>
+      <h2 id="pool-title">{t(home.pool.title, lang)}</h2>
+      <div class="prose">
+        {t(home.pool.body, lang).map((p) => <p>{p}</p>)}
+      </div>
+      <p class="pool__note">
+        <Icon name="info" size={18} />
+        <span>{t(home.pool.note, lang)}</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pool {
+    padding-block: var(--section-y);
+    background: var(--sea-deep);
+    color: var(--on-dark);
+  }
+  .pool .eyebrow {
+    color: #efc9a6;
+  }
+  .pool .prose {
+    color: var(--on-dark-muted);
+  }
+  .pool__grid {
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 4vw, 5.5rem);
+    align-items: center;
+  }
+  .pool__media {
+    position: relative;
+  }
+  .pool__frame {
+    aspect-ratio: 4 / 3;
+    background: #2a5d63;
+  }
+  .pool__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+  .pool__text {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+  }
+  .pool__note {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    padding: 1rem 1.15rem;
+    border: 1px solid rgb(247 242 234 / 0.22);
+    border-radius: var(--radius);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    color: var(--on-dark);
+  }
+  .pool__note :global(.icon) {
+    flex: none;
+    margin-top: 0.1rem;
+    color: #efc9a6;
+  }
+  @media (min-width: 64em) {
+    .pool__grid {
+      grid-template-columns: 1.25fr 1fr;
+    }
+    .pool__frame {
+      aspect-ratio: 5 / 4;
+    }
+  }
+</style>

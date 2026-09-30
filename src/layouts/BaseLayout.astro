@@ -1,0 +1,114 @@
+---
+import '@fontsource-variable/eb-garamond/wght.css';
+import '@fontsource-variable/manrope/wght.css';
+import '@/styles/global.css';
+
+import garamondLatin from '@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2?url';
+import garamondGreek from '@fontsource-variable/eb-garamond/files/eb-garamond-greek-wght-normal.woff2?url';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import manropeGreek from '@fontsource-variable/manrope/files/manrope-greek-wght-normal.woff2?url';
+
+import { getImage } from 'astro:assets';
+import { property } from '@content/property';
+import { locales, localeMeta, defaultLocale, type Locale } from '@/i18n/config';
+import { localizePath, t } from '@/i18n/utils';
+import { findImage } from '@/lib/images';
+import { websiteSchema } from '@/lib/schema';
+
+interface Props {
+  lang: Locale;
+  /** Language-neutral path of this page, e.g. '/' or '/privacy-policy'. */
+  path: string;
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD objects for this page. */
+  jsonLd?: object[];
+}
+
+const { lang, path, title = t(property.seo.title, lang), description = t(property.seo.description, lang), noindex = false, jsonLd = [] } = Astro.props;
+
+const site = Astro.site!;
+const canonical = new URL(localizePath(path, lang), site).href;
+const alternates = locales.map((l) => ({ lang: localeMeta[l].htmlLang, href: new URL(localizePath(path, l), site).href }));
+const xDefault = new URL(localizePath(path, defaultLocale), site).href;
+
+// Social image: the hero photo once supplied, otherwise the branded fallback card.
+const heroSrc = findImage('hero');
+const ogImage = heroSrc
+  ? new URL((await getImage({ src: heroSrc, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, site).href
+  : new URL('/og-image.jpg', site).href;
+const ogAlt = heroSrc ? t({ en: 'The villa and pool', el: 'Η βίλα και η πισίνα' }, lang) : property.name;
+
+const fontPreloads = lang === 'el' ? [garamondGreek, manropeGreek] : [garamondLatin, manropeLatin];
+const schemas = [websiteSchema(lang, new URL(localizePath('/', lang), site).href), ...jsonLd];
+---
+
+<!doctype html>
+<html lang={localeMeta[lang].htmlLang} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={t(property.seo.keywords, lang).join(', ')} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+
+    <meta name="theme-color" content="#f7f2ea" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {fontPreloads.map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={property.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={localeMeta[lang].ogLocale} />
+    {locales.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={localeMeta[l].ogLocale} />)}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      // Subtle reveal-on-scroll. Content is fully visible without JS.
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if ('IntersectionObserver' in window && els.length) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

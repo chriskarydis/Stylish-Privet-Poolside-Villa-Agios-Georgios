@@ -1,0 +1,26 @@
+{
+  "name": "stylish-private-poolside-villa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Website for Stylish Private Poolside Villa, Agios Georgios, Southern Corfu",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/eb-garamond": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@lucide/astro": "^1.49.0",
+    "astro": "^7.3.5",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,226 @@
+---
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { fill, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import { findImage } from '@/lib/images';
+import SmartImage from './ui/SmartImage.astro';
+import Icon from './ui/Icon.astro';
+import type { IconName } from './ui/icons';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const { facts } = property;
+const hasPhoto = !!findImage('hero');
+
+const keyFacts: { icon: IconName; text: string }[] = [
+  { icon: 'users', text: fill(t(ui.guests, lang), { n: facts.maxGuests }) },
+  { icon: 'bed-double', text: fill(t(ui.bedrooms, lang), { n: facts.bedrooms }) },
+  { icon: 'bath', text: fill(t(ui.bathrooms, lang), { n: facts.bathrooms }) },
+  { icon: 'waves', text: fill(t(ui.beach, lang), { n: facts.beachDistanceM }) },
+];
+---
+
+<section class="hero on-dark" aria-labelledby="hero-title">
+  <div class="hero__media">
+    {
+      hasPhoto ? (
+        <SmartImage image="hero" lang={lang} priority sizes="100vw" widths={[640, 960, 1280, 1600, 1920, 2560]} />
+      ) : (
+        /* Painted Corfu coastline — shown until the hero photo is added (content/gallery.ts → hero). */
+        <svg class="hero__art" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#23474f" />
+              <stop offset="0.55" stop-color="#8a8a78" />
+              <stop offset="1" stop-color="#e2b48c" />
+            </linearGradient>
+            <linearGradient id="hero-sea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3f7479" />
+              <stop offset="1" stop-color="#173c42" />
+            </linearGradient>
+            <linearGradient id="hero-pool" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5fa3a5" />
+              <stop offset="1" stop-color="#2c6f74" />
+            </linearGradient>
+            <radialGradient id="hero-sun" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#fbe3c2" />
+              <stop offset="1" stop-color="#fbe3c2" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <rect width="1600" height="600" fill="url(#hero-sky)" />
+          <circle cx="1060" cy="560" r="220" fill="url(#hero-sun)" opacity="0.55" />
+          <circle cx="1060" cy="560" r="46" fill="#f8dcb6" opacity="0.9" />
+          <path d="M0 560 C 180 505, 320 520, 470 548 S 760 590, 900 585 L 900 600 L 0 600 Z" fill="#4c6660" opacity="0.75" />
+          <path d="M1180 596 C 1300 560, 1420 540, 1600 548 L 1600 600 L 1180 600 Z" fill="#53695f" opacity="0.7" />
+          <rect y="596" width="1600" height="404" fill="url(#hero-sea)" />
+          <g stroke="#f3d7b4" stroke-linecap="round" opacity="0.45">
+            <path d="M980 622h160M1000 646h120M960 672h210M1010 700h110" stroke-width="3" />
+          </g>
+          <!-- Dunes / shore -->
+          <path d="M0 760 C 220 700, 420 720, 640 752 S 1100 800, 1600 720 L 1600 1000 L 0 1000 Z" fill="#c9a77f" />
+          <path d="M0 800 C 260 760, 520 790, 760 812 S 1200 840, 1600 790 L 1600 1000 L 0 1000 Z" fill="#8f8a63" />
+          <!-- Pool deck -->
+          <path d="M0 850 L 1600 830 L 1600 1000 L 0 1000 Z" fill="#e8dcc8" />
+          <path d="M220 872 L 1380 858 L 1460 1000 L 120 1000 Z" fill="url(#hero-pool)" />
+          <g stroke="#cfe9e6" stroke-width="3" stroke-linecap="round" opacity="0.55" fill="none">
+            <path d="M330 900c40-8 80-8 120 0s80 8 120 0" />
+            <path d="M760 930c40-8 80-8 120 0s80 8 120 0" />
+            <path d="M1060 895c40-8 80-8 120 0" />
+            <path d="M480 965c40-8 80-8 120 0s80 8 120 0" />
+          </g>
+          <!-- Cypress & olive silhouettes -->
+          <g fill="#223a31">
+            <path d="M1430 850 C 1405 700, 1418 560, 1442 470 C 1466 560, 1478 700, 1454 850 Z" />
+            <path d="M1500 848 C 1480 720, 1490 610, 1510 540 C 1530 610, 1540 720, 1522 848 Z" />
+            <path d="M1362 852 C 1346 760, 1352 680, 1370 626 C 1388 680, 1394 760, 1380 852 Z" />
+          </g>
+        </svg>
+      )
+    }
+    <div class="hero__scrim"></div>
+  </div>
+
+  <div class="hero__content container">
+    <p class="hero__eyebrow">{t(home.hero.eyebrow, lang)}</p>
+    <h1 id="hero-title" class="hero__title">{t(home.hero.title, lang)}</h1>
+    <p class="hero__subtitle">{t(home.hero.subtitle, lang)}</p>
+
+    <ul class="hero__facts" role="list" aria-label={t(ui.heroFacts, lang)}>
+      {
+        keyFacts.map((f) => (
+          <li>
+            <Icon name={f.icon} size={20} />
+            <span>{f.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="hero__ctas">
+      <a class="btn btn--light" href="#book">
+        {t(home.hero.primaryCta, lang)}
+        <Icon name="arrow-right" size={18} />
+      </a>
+      <a class="btn btn--ghost-light" href="#villa">{t(home.hero.secondaryCta, lang)}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: calc(var(--header-h) + 2.5rem);
+    padding-bottom: clamp(2.5rem, 1.5rem + 5vw, 5.5rem);
+    color: var(--on-dark);
+    background: var(--sea-deep);
+    isolation: isolate;
+    overflow: hidden;
+  }
+  @media (min-width: 64em) {
+    .hero {
+      min-height: min(100svh, 62rem);
+    }
+  }
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .hero__media :global(img),
+  .hero__art {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgb(10 26 29 / 0.82) 0%, rgb(10 26 29 / 0.5) 38%, rgb(10 26 29 / 0.05) 70%),
+      linear-gradient(to right, rgb(10 26 29 / 0.45), rgb(10 26 29 / 0) 65%);
+  }
+  .hero__content {
+    display: grid;
+    justify-items: start;
+    gap: clamp(1rem, 0.7rem + 1vw, 1.5rem);
+  }
+  .hero__eyebrow {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #f1dcc3;
+  }
+  .hero__title {
+    max-width: 16ch;
+    font-size: var(--fs-h1);
+    font-weight: 450;
+    text-shadow: 0 1px 24px rgb(0 0 0 / 0.18);
+  }
+  :lang(el) .hero__title {
+    max-width: 18ch;
+  }
+  .hero__subtitle {
+    max-width: 38rem;
+    font-size: var(--fs-lg);
+    line-height: 1.6;
+    color: rgb(247 242 234 / 0.92);
+  }
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    margin: 0.25rem 0 0.5rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .hero__facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero__facts :global(.icon) {
+    color: #f1dcc3;
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  @media (max-width: 30em) {
+    .hero__facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 1rem;
+      width: 100%;
+    }
+    .hero__ctas {
+      display: grid;
+      width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__content > * {
+      animation: hero-in 1s var(--ease) both;
+    }
+    .hero__content > :nth-child(2) { animation-delay: 0.08s; }
+    .hero__content > :nth-child(3) { animation-delay: 0.16s; }
+    .hero__content > :nth-child(4) { animation-delay: 0.24s; }
+    .hero__content > :nth-child(5) { animation-delay: 0.32s; }
+  }
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+</style>

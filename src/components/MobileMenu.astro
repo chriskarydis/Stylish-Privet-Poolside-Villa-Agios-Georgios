@@ -1,0 +1,170 @@
+---
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { localizePath, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Icon from './ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+  path: string;
+  links: { id: string; href: string; text: string }[];
+}
+const { lang, path, links } = Astro.props;
+---
+
+<dialog id="mobile-menu" class="mobile-menu" aria-label={t(ui.mainNav, lang)} data-menu>
+  <div class="mobile-menu__top">
+    <LanguageSwitcher lang={lang} path={path} />
+    <button type="button" class="mobile-menu__close" data-menu-close>
+      <Icon name="x" size={26} />
+      <span class="visually-hidden">{t(ui.closeMenu, lang)}</span>
+    </button>
+  </div>
+
+  <nav aria-label={t(ui.mainNav, lang)}>
+    <ol role="list" class="mobile-menu__list">
+      {
+        links.map((l, i) => (
+          <li style={`--i:${i}`}>
+            <a href={l.href} data-menu-link>
+              {l.text}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+
+  <div class="mobile-menu__foot">
+    <a class="btn" href={`${localizePath('/', lang)}#book`} data-menu-link>{t(ui.bookNow, lang)}</a>
+    <p class="mobile-menu__place">
+      <Icon name="map-pin" size={16} />
+      {t(property.location.locality, lang)}, {t(property.location.region, lang)}
+    </p>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  if (dialog && openBtn) {
+    openBtn.addEventListener('click', () => {
+      dialog.showModal();
+      openBtn.setAttribute('aria-expanded', 'true');
+    });
+    dialog.addEventListener('close', () => openBtn.setAttribute('aria-expanded', 'false'));
+    dialog.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog.close());
+    dialog.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => dialog.close()));
+    // Close when tapping the backdrop.
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    // Close if the viewport grows to the desktop layout.
+    matchMedia('(min-width: 80em)').addEventListener('change', (m) => m.matches && dialog.open && dialog.close());
+  }
+</script>
+
+<style>
+  .mobile-menu {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(26rem, 100%);
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: max(0.75rem, env(safe-area-inset-top)) var(--gutter) max(1.5rem, env(safe-area-inset-bottom));
+    border: 0;
+    background: var(--linen);
+    color: var(--ink);
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .mobile-menu[open] {
+    display: flex;
+  }
+  .mobile-menu::backdrop {
+    background: rgb(20 30 32 / 0.45);
+  }
+  :global(html:has(.mobile-menu[open])) {
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-menu[open] {
+      animation: slide-in 0.4s var(--ease);
+    }
+    .mobile-menu[open]::backdrop {
+      animation: fade-in 0.4s var(--ease);
+    }
+    .mobile-menu[open] .mobile-menu__list li {
+      animation: rise 0.5s var(--ease) both;
+      animation-delay: calc(var(--i) * 30ms + 80ms);
+    }
+  }
+  @keyframes slide-in {
+    from { transform: translateX(100%); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+  }
+
+  .mobile-menu__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 56px;
+    margin-bottom: 1rem;
+  }
+  .mobile-menu__close {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-right: -0.5rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+  }
+  .mobile-menu__close:hover {
+    background: var(--linen-deep);
+  }
+  .mobile-menu__list {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+  .mobile-menu__list a {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding-block: 0.35rem;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .mobile-menu__list a:hover {
+    color: var(--sea);
+  }
+  .mobile-menu__foot {
+    display: grid;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+  .mobile-menu__place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+</style>

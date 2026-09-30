@@ -1,0 +1,125 @@
+---
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import SmartImage from './ui/SmartImage.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const { facts } = property;
+const stats = [
+  { value: `${facts.maxGuests}`, label: { en: 'guests (max.)', el: 'άτομα (μέγ.)' } },
+  { value: `${facts.bedrooms}`, label: { en: 'bedrooms', el: 'υπνοδωμάτια' } },
+  { value: `${facts.bathrooms}`, label: { en: 'bathrooms', el: 'μπάνια' } },
+  { value: `~${facts.sizeSqm}`, label: { en: 'm² approx.', el: 'τ.μ. περίπου' } },
+];
+---
+
+<section id="villa" class="section about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <div class="about__text">
+      <p class="eyebrow">{t(home.about.eyebrow, lang)}</p>
+      <h2 id="about-title">{t(home.about.title, lang)}</h2>
+      <div class="prose">
+        {t(home.about.body, lang).map((p, i) => <p class:list={{ lead: i === 0 }}>{p}</p>)}
+      </div>
+      <dl class="about__stats">
+        {
+          stats.map((s) => (
+            <div>
+              <dt class="visually-hidden">{t(s.label, lang)}</dt>
+              <dd>
+                <span class="about__stat-value serif">{s.value}</span>
+                <span class="about__stat-label" aria-hidden="true">{t(s.label, lang)}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="about__media" data-reveal>
+      <div class="frame about__main">
+        <SmartImage image="exterior" lang={lang} sizes="(min-width: 64em) 44vw, 92vw" />
+      </div>
+      <div class="frame about__inset">
+        <SmartImage image="livingRoom" lang={lang} sizes="(min-width: 64em) 20vw, 45vw" compact />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 6rem);
+    align-items: center;
+  }
+  .about__text {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: start;
+  }
+  .about__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 1.5rem;
+    width: 100%;
+    margin-top: 1rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+  .about__stats dd {
+    display: grid;
+    margin: 0;
+  }
+  .about__stat-value {
+    font-size: clamp(2.2rem, 1.8rem + 1.6vw, 3rem);
+    line-height: 1;
+    color: var(--sea);
+  }
+  .about__stat-label {
+    margin-top: 0.35rem;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .about__media {
+    position: relative;
+    padding-bottom: 12%;
+    padding-right: 8%;
+  }
+  .about__main {
+    aspect-ratio: 4 / 5;
+  }
+  .about__inset {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 46%;
+    aspect-ratio: 1;
+    border: 6px solid var(--linen);
+    box-shadow: var(--shadow);
+  }
+  @media (min-width: 40em) {
+    .about__stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .about__main {
+      aspect-ratio: 4 / 3;
+    }
+  }
+  @media (min-width: 64em) {
+    .about__grid {
+      grid-template-columns: 1.05fr 1fr;
+    }
+    .about__main {
+      aspect-ratio: 4 / 5;
+    }
+  }
+</style>

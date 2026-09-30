@@ -1,0 +1,67 @@
+---
+import { destinations } from '@content/destinations';
+import { home } from '@content/home';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import DestinationCard from './DestinationCard.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<section id="explore" class="section" aria-labelledby="explore-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">{t(home.explore.eyebrow, lang)}</p>
+      <h2 id="explore-title">{t(home.explore.title, lang)}</h2>
+      <p class="lead">{t(home.explore.body, lang)}</p>
+    </div>
+  </div>
+  <div class="container dest-rail-wrap">
+    <div class="dest-rail" role="list" tabindex="0" aria-labelledby="explore-title">
+      {
+        destinations.map((d, i) => (
+          <div role="listitem">
+            <DestinationCard lang={lang} destination={d} index={i} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Mobile: horizontal scroll-snap rail. Desktop: 5-column grid. */
+  .dest-rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78%, 20rem);
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 0 var(--gutter) 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--stone) transparent;
+  }
+  .dest-rail > * {
+    scroll-snap-align: start;
+  }
+  @media (min-width: 40em) {
+    .dest-rail {
+      grid-auto-columns: min(44%, 20rem);
+    }
+  }
+  @media (min-width: 64em) {
+    .dest-rail {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(5, 1fr);
+      overflow: visible;
+      margin-inline: 0;
+      padding: 0;
+    }
+  }
+</style>

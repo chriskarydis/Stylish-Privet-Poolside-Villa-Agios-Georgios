@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { property } from '@content/property';
+import { getLangFromUrl, localizePath, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<BaseLayout lang={lang} path="/404" title={`${t(ui.notFoundTitle, lang)} | ${property.name}`} noindex>
+  <Header lang={lang} path="/" />
+  <main id="main" tabindex="-1" class="section">
+    <div class="container nf">
+      <p class="eyebrow">404</p>
+      <h1>{t(ui.notFoundTitle, lang)}</h1>
+      <p class="lead">{t(ui.notFoundText, lang)}</p>
+      <a class="btn" href={localizePath('/', lang)}>{t(ui.backHome, lang)}</a>
+    </div>
+  </main>
+  <Footer lang={lang} path="/" />
+</BaseLayout>
+
+<style>
+  .nf {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    min-height: 50vh;
+    align-content: center;
+  }
+</style>

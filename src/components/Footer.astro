@@ -1,0 +1,225 @@
+---
+import { home } from '@content/home';
+import { legalPages } from '@content/legal';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { localizePath, t } from '@/i18n/utils';
+import { nav, ui } from '@/i18n/ui';
+import Logo from './Logo.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Icon from './ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+  path: string;
+}
+const { lang, path } = Astro.props;
+const home_ = localizePath('/', lang);
+const { contact, booking, location: loc } = property;
+const newTab = t(ui.opensInNewTab, lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <Logo lang={lang} />
+        <p>{t(ui.footerTagline, lang)}</p>
+        <p class="footer__place">
+          <Icon name="map-pin" size={16} />
+          <span>
+            {loc.streetAddress && <>{t(loc.streetAddress, lang)}, </>}
+            {t(loc.locality, lang)}, {t(loc.region, lang)}, {t(loc.country, lang)}
+          </span>
+        </p>
+      </div>
+
+      <nav class="footer__col" aria-labelledby="footer-explore">
+        <h2 id="footer-explore" class="footer__title">{t(ui.explore, lang)}</h2>
+        <ul role="list">
+          {
+            nav
+              .filter((n) => !['home', 'contact'].includes(n.id))
+              .map((n) => (
+                <li>
+                  <a href={`${home_}${n.href}`}>{t(n.label, lang)}</a>
+                </li>
+              ))
+          }
+        </ul>
+      </nav>
+
+      <div class="footer__col" id="contact">
+        <h2 class="footer__title">{t(home.contact.title, lang)}</h2>
+        <p class="footer__text">{t(home.contact.viaPlatforms, lang)}</p>
+        <ul role="list">
+          {
+            contact.email && (
+              <li>
+                <a href={`mailto:${contact.email}`} class="footer__icon-link">
+                  <Icon name="mail" size={16} />
+                  {contact.email}
+                </a>
+              </li>
+            )
+          }
+          {
+            contact.phone && (
+              <li>
+                <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} class="footer__icon-link">
+                  <Icon name="phone" size={16} />
+                  {contact.phone}
+                </a>
+              </li>
+            )
+          }
+          {
+            contact.whatsapp && (
+              <li>
+                <a href={`https://wa.me/${contact.whatsapp}`} class="footer__icon-link" target="_blank" rel="noopener noreferrer">
+                  <Icon name="message-circle" size={16} />
+                  WhatsApp
+                  <span class="visually-hidden">{newTab}</span>
+                </a>
+              </li>
+            )
+          }
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="footer__title">{t(ui.bookOn, lang)}</h2>
+        <ul role="list">
+          <li>
+            <a href={booking.airbnb[lang]} target="_blank" rel="noopener noreferrer" class="footer__icon-link">
+              Airbnb <span class="visually-hidden">{newTab}</span>
+              <Icon name="external-link" size={14} />
+            </a>
+          </li>
+          <li>
+            <a href={booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer" class="footer__icon-link">
+              Booking.com <span class="visually-hidden">{newTab}</span>
+              <Icon name="external-link" size={14} />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© {year} {property.name}. {t(ui.rights, lang)}</p>
+      <nav aria-label={t(ui.legal, lang)}>
+        <ul role="list" class="footer__legal">
+          {
+            legalPages.map((p) => (
+              <li>
+                <a href={localizePath(`/${p.slug}`, lang)}>{t(p.title, lang)}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <LanguageSwitcher lang={lang} path={path} />
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 5.5rem) 1.5rem;
+    background: #10292d;
+    color: var(--on-dark-muted);
+    font-size: var(--fs-sm);
+  }
+  .footer a {
+    text-decoration: none;
+  }
+  .footer a:hover {
+    color: var(--on-dark);
+    text-decoration: underline;
+  }
+  .footer__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .footer__brand {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    max-width: 22rem;
+    color: var(--on-dark-muted);
+  }
+  .footer__brand :global(.logo) {
+    color: var(--on-dark);
+  }
+  .footer__place {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  .footer__place :global(.icon) {
+    flex: none;
+    margin-top: 0.3rem;
+    color: #efc9a6;
+  }
+  .footer__title {
+    margin-bottom: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #efc9a6;
+  }
+  .footer__col ul {
+    display: grid;
+    gap: 0.1rem;
+    margin: 0;
+  }
+  .footer__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+  .footer__icon-link {
+    gap: 0.5rem;
+  }
+  .footer__text {
+    max-width: 22rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(247 242 234 / 0.14);
+  }
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+  }
+  .footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  @media (min-width: 40em) {
+    .footer__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64em) {
+    .footer__grid {
+      grid-template-columns: 1.4fr 1fr 1.2fr 0.9fr;
+      gap: 3rem;
+    }
+  }
+</style>

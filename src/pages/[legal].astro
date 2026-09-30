@@ -1,0 +1,11 @@
+---
+import type { GetStaticPaths } from 'astro';
+import LegalPage from '@/views/LegalPage.astro';
+import { legalPages, type LegalPage as Legal } from '@content/legal';
+
+export const getStaticPaths = (() => legalPages.map((page) => ({ params: { legal: page.slug }, props: { page } }))) satisfies GetStaticPaths;
+
+const { page } = Astro.props as { page: Legal };
+---
+
+<LegalPage lang="en" page={page} />
