@@ -1,0 +1,90 @@
+---
+import { experiences } from '@content/experiences';
+import { home } from '@content/home';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+---
+
+<section id="experiences" class="section section--tint" aria-labelledby="experiences-title">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">{t(home.experiences.eyebrow, lang)}</p>
+      <h2 id="experiences-title">{t(home.experiences.title, lang)}</h2>
+    </div>
+
+    <ul role="list" class="exp-grid">
+      {
+        experiences.map((e, i) => (
+          <li class="exp" data-reveal style={`--reveal-delay:${(i % 3) * 80}ms`}>
+            <span class="exp__icon">
+              <Icon name={e.icon} size={28} />
+            </span>
+            <h3 class="exp__title">{t(e.title, lang)}</h3>
+            <p class="exp__text">{t(e.text, lang)}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .exp-grid {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    border-top: 1px solid var(--stone);
+  }
+  .exp {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.25rem;
+    row-gap: 0.4rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--stone);
+  }
+  .exp__icon {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--stone);
+    border-radius: 50%;
+    color: var(--terracotta);
+  }
+  .exp__title {
+    font-size: var(--fs-h4);
+    align-self: end;
+  }
+  .exp__text {
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  @media (min-width: 48em) {
+    .exp-grid {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 3rem;
+    }
+  }
+  @media (min-width: 64em) {
+    .exp-grid {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 3.5rem;
+    }
+    .exp {
+      grid-template-columns: 1fr;
+      padding: 2.5rem 0 2.25rem;
+    }
+    .exp__icon {
+      grid-row: auto;
+      margin-bottom: 1rem;
+    }
+  }
+</style>

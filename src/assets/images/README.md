@@ -28,7 +28,7 @@ Recommended: landscape, at least **2400 px wide** (hero: 2560 px+), JPG quality 
 | corfuTown       | `location/corfu-town.jpg`          | Explore card                    |
 | achilleion      | `location/achilleion.jpg`          | Explore card                    |
 
-Slots, alt texts and the gallery order are defined in `content/gallery.ts`.
+Slots, alt texts and the gallery order are defined in `src/content/gallery.ts`.
 After adding a photo, update its `alt` text there so it describes the real image.
 To add more gallery photos, add entries to `galleryItems` in the same file.
 
