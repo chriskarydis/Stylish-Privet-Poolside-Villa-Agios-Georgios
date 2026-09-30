@@ -1,22 +1,22 @@
 ---
 /** The one-page homepage, rendered once per language (src/pages/index.astro, src/pages/el/index.astro). */
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
-import Hero from '@/components/Hero.astro';
-import PropertyHighlights from '@/components/PropertyHighlights.astro';
-import AboutVilla from '@/components/AboutVilla.astro';
-import Accommodation from '@/components/Accommodation.astro';
-import PoolSection from '@/components/PoolSection.astro';
-import OutdoorSection from '@/components/OutdoorSection.astro';
-import AmenitiesGrid from '@/components/AmenitiesGrid.astro';
-import LocationSection from '@/components/LocationSection.astro';
-import ExploreSouthernCorfu from '@/components/ExploreSouthernCorfu.astro';
-import Experiences from '@/components/Experiences.astro';
-import Gallery from '@/components/Gallery.astro';
-import Reviews from '@/components/Reviews.astro';
-import FAQ from '@/components/FAQ.astro';
-import BookingCTA from '@/components/BookingCTA.astro';
-import Footer from '@/components/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import Hero from '@/components/sections/Hero.astro';
+import PropertyHighlights from '@/components/sections/PropertyHighlights.astro';
+import AboutVilla from '@/components/sections/AboutVilla.astro';
+import Accommodation from '@/components/sections/Accommodation.astro';
+import PoolSection from '@/components/sections/PoolSection.astro';
+import OutdoorSection from '@/components/sections/OutdoorSection.astro';
+import AmenitiesGrid from '@/components/sections/AmenitiesGrid.astro';
+import LocationSection from '@/components/sections/LocationSection.astro';
+import ExploreSouthernCorfu from '@/components/sections/ExploreSouthernCorfu.astro';
+import Experiences from '@/components/sections/Experiences.astro';
+import Gallery from '@/components/sections/Gallery.astro';
+import Reviews from '@/components/sections/Reviews.astro';
+import FAQ from '@/components/sections/FAQ.astro';
+import BookingCTA from '@/components/sections/BookingCTA.astro';
+import Footer from '@/components/layout/Footer.astro';
 import { getImage } from 'astro:assets';
 import type { Locale } from '@/i18n/config';
 import { localizePath } from '@/i18n/utils';

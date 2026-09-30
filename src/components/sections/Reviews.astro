@@ -1,0 +1,198 @@
+---
+/**
+ * Aggregate platform ratings only — no testimonials are shown because no
+ * verified review texts have been supplied. Scores live in src/content/property.ts.
+ */
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { fill, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const { airbnb, bookingCom } = property.ratings;
+const nf = new Intl.NumberFormat(lang === 'el' ? 'el-GR' : 'en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const newTab = t(ui.opensInNewTab, lang);
+---
+
+<section id="reviews" class="section section--surface" aria-labelledby="reviews-title">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">{t(home.reviews.eyebrow, lang)}</p>
+      <h2 id="reviews-title">{t(home.reviews.title, lang)}</h2>
+      <p class="lead">{t(home.reviews.body, lang)}</p>
+    </div>
+
+    <div class="scores">
+      <article class="score" data-reveal aria-labelledby="score-airbnb">
+        <h3 id="score-airbnb" class="score__platform">Airbnb</h3>
+        <p class="score__value" aria-label={fill(t(ui.ratingLabel, lang), { score: nf.format(airbnb.score), max: airbnb.outOf, platform: 'Airbnb' })}>
+          <span class="score__num serif">{nf.format(airbnb.score)}</span>
+          <span class="score__max">/ {airbnb.outOf}</span>
+        </p>
+        <div class="score__stars" aria-hidden="true" style={`--pct:${(airbnb.score / airbnb.outOf) * 100}%`}>
+          <span class="score__stars-base">{Array.from({ length: 5 }, () => <Icon name="star" size={22} />)}</span>
+          <span class="score__stars-fill">{Array.from({ length: 5 }, () => <Icon name="star" size={22} />)}</span>
+        </div>
+        <a class="text-link score__link" href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
+          {fill(t(ui.readReviewsOn, lang), { platform: 'Airbnb' })}
+          <span class="visually-hidden">{newTab}</span>
+          <Icon name="external-link" size={14} />
+        </a>
+      </article>
+
+      <article class="score score--booking" data-reveal style="--reveal-delay:90ms" aria-labelledby="score-booking">
+        <h3 id="score-booking" class="score__platform">Booking.com</h3>
+        <p class="score__value" aria-label={fill(t(ui.ratingLabel, lang), { score: nf.format(bookingCom.score), max: bookingCom.outOf, platform: 'Booking.com' })}>
+          <span class="score__num serif">{nf.format(bookingCom.score)}</span>
+          <span class="score__max">/ {bookingCom.outOf}</span>
+        </p>
+        <dl class="score__cats">
+          {
+            bookingCom.categories.map((c) => (
+              <div class="score__cat">
+                <dt>{t(c.label, lang)}</dt>
+                <dd>
+                  <span class="score__bar" aria-hidden="true">
+                    <span style={`width:${(c.score / bookingCom.outOf) * 100}%`} />
+                  </span>
+                  <span class="score__cat-num">{nf.format(c.score)}</span>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+        <a class="text-link score__link" href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
+          {fill(t(ui.readReviewsOn, lang), { platform: 'Booking.com' })}
+          <span class="visually-hidden">{newTab}</span>
+          <Icon name="external-link" size={14} />
+        </a>
+      </article>
+    </div>
+
+    <p class="scores__note">{t(home.reviews.disclaimer, lang)}</p>
+  </div>
+</section>
+
+<style>
+  .scores {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+  .score {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 1rem;
+    padding: clamp(1.6rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--linen);
+  }
+  .score__platform {
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .score__value {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    line-height: 1;
+  }
+  .score__num {
+    font-size: clamp(3.6rem, 2.8rem + 3vw, 5rem);
+    color: var(--sea);
+  }
+  .score__max {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .score__stars {
+    position: relative;
+    display: inline-block;
+    color: var(--stone);
+  }
+  .score__stars-base,
+  .score__stars-fill {
+    display: flex;
+    gap: 0.2rem;
+  }
+  .score__stars-fill {
+    position: absolute;
+    inset: 0;
+    color: var(--terracotta);
+    clip-path: inset(0 calc(100% - var(--pct)) 0 0);
+  }
+  .score__stars-fill :global(svg) {
+    fill: currentColor;
+  }
+  .score__stars-base :global(svg) {
+    fill: currentColor;
+  }
+  .score__cats {
+    display: grid;
+    gap: 0.7rem;
+    width: 100%;
+    margin: 0.25rem 0 0.25rem;
+  }
+  .score__cat {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(7rem, 1.2fr);
+    align-items: center;
+    gap: 1rem;
+    font-size: var(--fs-sm);
+  }
+  .score__cat dt {
+    font-weight: 500;
+  }
+  .score__cat dd {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .score__bar {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--sand);
+    overflow: hidden;
+  }
+  .score__bar span {
+    display: block;
+    height: 100%;
+    background: var(--sea);
+  }
+  .score__cat-num {
+    min-width: 2.2rem;
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .score__link {
+    margin-top: auto;
+  }
+  .scores__note {
+    max-width: 44rem;
+    margin: 2rem auto 0;
+    text-align: center;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+  @media (min-width: 48em) {
+    .scores {
+      grid-template-columns: 1fr 1.35fr;
+    }
+  }
+</style>
