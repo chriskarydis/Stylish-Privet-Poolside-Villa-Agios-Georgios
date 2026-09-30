@@ -438,18 +438,20 @@ const strings = {
     padding: 0 var(--gutter) max(1rem, env(safe-area-inset-bottom));
   }
   .lightbox__stage {
+    position: relative;
     display: grid;
     place-items: center;
     min-height: 0;
+    overflow: hidden;
     touch-action: pan-y;
   }
+  /* Absolutely positioned so the photo always fits the stage, whatever its size. */
   .lightbox__stage :global(img) {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    border-radius: var(--radius-sm);
   }
   .lightbox__stage :global(.lightbox__ph) {
     display: grid;
