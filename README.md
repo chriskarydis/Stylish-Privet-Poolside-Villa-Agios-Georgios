@@ -84,7 +84,7 @@ Imports use aliases — `@/…` for `src/…` and `@content/…` for `src/conten
 
 | Branch | Purpose |
 | --- | --- |
-| `main` | Production — what is (or will be) live. Only receives tested work from `develop`. |
+| `main` | Production — what is (or will be) live. **Protected:** changes only via a Pull Request from `develop` with a passing build; no direct pushes, force pushes or deletion. |
 | `develop` | Integration — the latest finished work, checked before release. |
 | `feature/…`, `fix/…`, `content/…` | One branch per change, created from `develop`. |
 
@@ -106,14 +106,17 @@ git checkout develop
 git merge --no-ff feature/booking-form
 git push
 
-# 4. Release: when develop is OK, merge it into main (or a PR develop → main)
-git checkout main
-git pull
-git merge --no-ff develop
+# 4. Release: open a Pull Request develop → main and merge it once the build is green
+gh pr create --base main --head develop --title "Release: booking enquiry form" --body "…"
+gh pr merge --merge          # after the "build" check passes (or use the GitHub website)
+
+# 5. Bring develop level with main again
+git checkout develop
+git pull origin main
 git push
 ```
 
-GitHub Actions builds every pushed branch (see the **Actions** tab); a red ✗ means the build broke and the branch should not be merged. Delete a feature branch after it is merged: `git branch -d feature/booking-form && git push origin --delete feature/booking-form`.
+GitHub Actions builds every pushed branch (see the **Actions** tab); a red ✗ means the build broke and the branch should not be merged — GitHub will refuse to merge it into `main`. Branches merged through a Pull Request are deleted on GitHub automatically; delete your local copy with `git branch -d feature/booking-form`.
 
 ## Adding another language
 
