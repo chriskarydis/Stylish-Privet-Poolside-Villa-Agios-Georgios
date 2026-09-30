@@ -38,7 +38,10 @@ const {
 const slot = resolveSlot(image);
 const src = findImage(slot);
 const alt = t(slot.alt, lang);
-const usableWidths = src ? widths.filter((w) => w <= src.width).concat(src.width < widths[0] ? [src.width] : []) : [];
+// Never upscale; if the photo is smaller than the largest requested width, also offer it at full size.
+const usableWidths = src
+  ? [...new Set([...widths.filter((w) => w < src.width), ...(widths.some((w) => w >= src.width) ? [src.width] : [])])]
+  : [];
 ---
 
 {

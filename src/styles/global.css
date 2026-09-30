@@ -84,6 +84,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+[hidden] {
+  display: none !important;
+}
 img,
 picture,
 svg,
