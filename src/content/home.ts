@@ -219,8 +219,12 @@ export const home = {
   contact: {
     title: { en: 'Contact', el: 'Επικοινωνία' },
     viaPlatforms: {
-      en: 'Have a question before booking? Send the host a message through Airbnb or Booking.com.',
-      el: 'Έχετε κάποια ερώτηση πριν από την κράτηση; Στείλτε μήνυμα στον οικοδεσπότη μέσω Airbnb ή Booking.com.',
+      en: 'Have a question before booking? Contact us directly by phone, WhatsApp or email.',
+      el: 'Έχετε κάποια ερώτηση πριν από την κράτηση; Επικοινωνήστε απευθείας μαζί μας τηλεφωνικά, μέσω WhatsApp ή με email.',
+    },
+    whatsappMessage: {
+      en: 'Hello, I am interested in Stylish Private Poolside Villa in Agios Georgios.',
+      el: 'Γεια σας, ενδιαφέρομαι για τη Stylish Private Poolside Villa στον Άγιο Γεώργιο.',
     },
   },
 };

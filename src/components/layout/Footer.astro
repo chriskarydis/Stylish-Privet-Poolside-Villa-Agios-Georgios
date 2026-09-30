@@ -77,7 +77,7 @@ const year = new Date().getFullYear();
           {
             contact.whatsapp && (
               <li>
-                <a href={`https://wa.me/${contact.whatsapp}`} class="footer__icon-link" target="_blank" rel="noopener noreferrer">
+                <a href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t(home.contact.whatsappMessage, lang))}`} class="footer__icon-link" target="_blank" rel="noopener noreferrer">
                   <Icon name="message-circle" size={16} />
                   WhatsApp
                   <span class="visually-hidden">{newTab}</span>
