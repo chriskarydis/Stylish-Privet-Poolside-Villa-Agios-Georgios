@@ -38,7 +38,7 @@ const newTab = t(ui.opensInNewTab, lang);
           <span class="score__stars-base">{Array.from({ length: 5 }, () => <Icon name="star" size={22} />)}</span>
           <span class="score__stars-fill">{Array.from({ length: 5 }, () => <Icon name="star" size={22} />)}</span>
         </div>
-        <a class="text-link score__link" href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
+        <a class="text-link score__link" href={airbnb.reviewsUrl[lang]} target="_blank" rel="noopener noreferrer">
           {fill(t(ui.readReviewsOn, lang), { platform: 'Airbnb' })}
           <span class="visually-hidden">{newTab}</span>
           <Icon name="external-link" size={14} />
@@ -66,7 +66,7 @@ const newTab = t(ui.opensInNewTab, lang);
             ))
           }
         </dl>
-        <a class="text-link score__link" href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
+        <a class="text-link score__link" href={bookingCom.reviewsUrl[lang]} target="_blank" rel="noopener noreferrer">
           {fill(t(ui.readReviewsOn, lang), { platform: 'Booking.com' })}
           <span class="visually-hidden">{newTab}</span>
           <Icon name="external-link" size={14} />

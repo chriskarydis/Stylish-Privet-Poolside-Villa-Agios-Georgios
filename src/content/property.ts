@@ -151,10 +151,23 @@ export const property = {
    * They are intentionally NOT added to structured data.
    */
   ratings: {
-    airbnb: { score: 5.0, outOf: 5 },
+    airbnb: {
+      score: 5.0,
+      outOf: 5,
+      /** Opens the listing's reviews directly. */
+      reviewsUrl: {
+        en: 'https://www.airbnb.com/rooms/768554587544600429/reviews',
+        el: 'https://www.airbnb.gr/rooms/768554587544600429/reviews',
+      } satisfies Localized,
+    },
     bookingCom: {
       score: 8.8,
       outOf: 10,
+      /** Opens the property page on its reviews tab. */
+      reviewsUrl: {
+        en: 'https://www.booking.com/hotel/gr/stylish-privet-poolside-villa.en-gb.html#tab-reviews',
+        el: 'https://www.booking.com/hotel/gr/stylish-privet-poolside-villa.el.html#tab-reviews',
+      } satisfies Localized,
       categories: [
         { label: { en: 'Cleanliness', el: 'Καθαριότητα' }, score: 10.0 },
         { label: { en: 'Comfort', el: 'Άνεση' }, score: 9.5 },
