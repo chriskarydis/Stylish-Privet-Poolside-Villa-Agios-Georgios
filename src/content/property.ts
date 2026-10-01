@@ -102,8 +102,8 @@ export const property = {
    * app with the message prefilled to `contact.email` instead.
    */
   forms: {
-    generalFormId: null as string | null,
-    bookingFormId: null as string | null,
+    generalFormId: 'maenkrjl' as string | null,
+    bookingFormId: 'xljdvqnz' as string | null,
   },
 
   /**
