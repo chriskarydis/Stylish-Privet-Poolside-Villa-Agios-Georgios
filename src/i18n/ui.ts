@@ -72,6 +72,10 @@ export const ui = {
     el: 'Η σελίδα αυτή βρίσκεται υπό προετοιμασία. Το τελικό κείμενο θα δημοσιευτεί σύντομα.',
   },
   lastUpdated: { en: 'Last updated: {date}', el: 'Τελευταία ενημέρωση: {date}' },
+  legalDraft: {
+    en: 'Draft — this text is being finalised and some details are still to be completed.',
+    el: 'Προσχέδιο — το κείμενο οριστικοποιείται και ορισμένα στοιχεία δεν έχουν ακόμα συμπληρωθεί.',
+  },
   notFoundTitle: { en: 'Page not found', el: 'Η σελίδα δεν βρέθηκε' },
   notFoundText: {
     en: 'The page you are looking for does not exist or has moved.',
