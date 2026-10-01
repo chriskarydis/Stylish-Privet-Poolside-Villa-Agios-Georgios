@@ -96,7 +96,29 @@ export const property = {
     directUrl: null as string | null,
   },
 
-  /** Contact details — NOT yet supplied. Each item is hidden while null. */
+  /**
+   * Forms (https://formspree.io). Paste each form's ID — the part after
+   * `formspree.io/f/`. While an ID is null, the form opens the visitor's email
+   * app with the message prefilled to `contact.email` instead.
+   */
+  forms: {
+    generalFormId: null as string | null,
+    bookingFormId: null as string | null,
+  },
+
+  /**
+   * Availability calendar. Booked dates come from the Airbnb / Booking.com
+   * iCal links, which are stored as secret environment variables on
+   * Cloudflare (ICAL_AIRBNB, ICAL_BOOKING) — never in this repository.
+   * Without them the calendar still works for choosing dates and guests.
+   */
+  availability: {
+    endpoint: '/api/availability',
+    /** How many months ahead guests can select. */
+    monthsAhead: 12,
+  },
+
+  /** Contact details. Each item is hidden while null. */
   contact: {
     email: 'chriskaridis76@gmail.com' as string | null,
     phone: '+30 690 654 2839' as string | null, // international format

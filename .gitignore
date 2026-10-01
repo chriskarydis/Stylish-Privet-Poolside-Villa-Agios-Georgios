@@ -19,3 +19,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .claude/settings.local.json
+
+# Cloudflare local dev
+.wrangler/
+.dev.vars
