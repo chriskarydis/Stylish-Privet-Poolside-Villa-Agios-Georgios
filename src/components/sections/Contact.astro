@@ -49,7 +49,20 @@ const config = {
             <li>
               <a href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t(c.whatsappMessage, lang))}`} target="_blank" rel="noopener noreferrer">
                 <span class="contact__icon"><Icon name="message-circle" size={20} /></span>
-                <span><small>WhatsApp</small>{contact.phone ?? `+${contact.whatsapp}`}<span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span></span>
+                <span>
+                  <small>WhatsApp</small>
+                  {
+                    contact.whatsappName ? (
+                      <>
+                        {t(contact.whatsappName, lang)}
+                        <span class="contact__sub">{contact.phone ?? `+${contact.whatsapp}`}</span>
+                      </>
+                    ) : (
+                      (contact.phone ?? `+${contact.whatsapp}`)
+                    )
+                  }
+                  <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
+                </span>
               </a>
             </li>
           )
@@ -196,6 +209,13 @@ const config = {
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--muted);
+  }
+  .contact__sub {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
     color: var(--muted);
   }
   .contact__icon {
