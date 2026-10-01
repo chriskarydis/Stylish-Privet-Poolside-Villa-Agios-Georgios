@@ -47,6 +47,9 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 
 ## Hosting (Cloudflare Pages)
 
+- Production (`main`): https://stylish-privet-poolside-villa-agios-georgios.pages.dev
+- Preview (`develop`): https://develop.stylish-privet-poolside-villa-agios-georgios.pages.dev
+
 | Setting | Value |
 | --- | --- |
 | Production branch | `main` (every merge deploys; `develop` gets a preview URL) |
