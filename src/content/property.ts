@@ -96,11 +96,53 @@ export const property = {
     directUrl: null as string | null,
   },
 
-  /** Contact details — NOT yet supplied. Each item is hidden while null. */
+  /**
+   * Forms (https://formspree.io). Paste each form's ID — the part after
+   * `formspree.io/f/`. While an ID is null, the form opens the visitor's email
+   * app with the message prefilled to `contact.email` instead.
+   */
+  forms: {
+    generalFormId: null as string | null,
+    bookingFormId: null as string | null,
+  },
+
+  /**
+   * Availability calendar. Booked dates come from the Airbnb / Booking.com
+   * iCal links, which are stored as secret environment variables on
+   * Cloudflare (ICAL_AIRBNB, ICAL_BOOKING) — never in this repository.
+   * Without them the calendar still works for choosing dates and guests.
+   */
+  availability: {
+    endpoint: '/api/availability',
+    /** How many months ahead guests can select. */
+    monthsAhead: 12,
+  },
+
+  /** Contact details. Each item is hidden while null. */
   contact: {
-    email: null as string | null,
-    phone: null as string | null, // international format, e.g. '+30 69x xxx xxxx'
-    whatsapp: null as string | null, // digits only, e.g. '3069xxxxxxxx'
+    email: 'chriskaridis76@gmail.com' as string | null,
+    phone: '+30 690 654 2839' as string | null, // international format
+    whatsapp: '306906542839' as string | null, // digits only, with country code
+  },
+
+  /**
+   * Operator / data controller — used in the legal pages and the footer.
+   * Fill in when the owner supplies them. While any is null, the legal pages
+   * show "[to be completed]" markers and stay hidden from search engines.
+   */
+  operator: {
+    /** Full legal name of the person or company running the rental. */
+    legalName: null as string | null,
+    address: null as Localized | null,
+    /** ΑΦΜ (Greek tax ID). */
+    vatNumber: null as string | null,
+    /**
+     * ΑΜΑ — short-term rental property registry number (mandatory on every
+     * advertisement of the property). Use `mhteNumber` instead if the property
+     * is licensed as tourist accommodation (ΜΗ.Τ.Ε., EOT).
+     */
+    amaNumber: null as string | null,
+    mhteNumber: null as string | null,
   },
 
   /**

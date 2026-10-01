@@ -4,10 +4,11 @@ import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { property } from '@content/property';
-import type { LegalPage } from '@content/legal';
+import { legalPages, type LegalPage } from '@content/legal';
 import type { Locale } from '@/i18n/config';
 import { fill, localizePath, t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
+import { hasMissing, resolveText } from '@/lib/legal';
 
 interface Props {
   lang: Locale;
@@ -16,24 +17,60 @@ interface Props {
 const { lang, page } = Astro.props;
 const path = `/${page.slug}`;
 const title = t(page.title, lang);
+const siteUrl = Astro.site!.host; // e.g. "www.example.com" — shown as {site} in the texts
+const blocks = page.body ? t(page.body, lang) : null;
+const incomplete = !blocks || hasMissing(blocks, lang, siteUrl);
+const draft = incomplete || !page.lastUpdated;
+const seg = (text: string) => resolveText(text, lang, siteUrl);
+const dateFmt = new Intl.DateTimeFormat(lang === 'el' ? 'el-GR' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
-<BaseLayout lang={lang} path={path} title={`${title} | ${property.name}`} description={`${title} — ${property.name}`} noindex={!page.body}>
+<BaseLayout lang={lang} path={path} title={`${title} | ${property.name}`} description={`${title} — ${property.name}`} noindex={draft}>
   <Header lang={lang} path={path} />
   <main id="main" tabindex="-1" class="legal section">
     <div class="container legal__inner">
       <h1>{title}</h1>
-      {page.lastUpdated && <p class="legal__meta">{fill(t(ui.lastUpdated, lang), { date: page.lastUpdated })}</p>}
+      {page.lastUpdated && <p class="legal__meta">{fill(t(ui.lastUpdated, lang), { date: dateFmt.format(new Date(page.lastUpdated)) })}</p>}
       {
-        page.body ? (
-          <div class="prose">{t(page.body, lang).map((p) => <p>{p}</p>)}</div>
-        ) : (
+        draft && (
           <p class="legal__pending">
             <Icon name="info" size={20} />
-            <span>{t(ui.legalPending, lang)}</span>
+            <span>{t(blocks ? ui.legalDraft : ui.legalPending, lang)}</span>
           </p>
         )
       }
+      {
+        blocks && (
+          <div class="legal__body">
+            {blocks.map((b) =>
+              'h' in b ? (
+                <h2>{b.h}</h2>
+              ) : 'p' in b ? (
+                <p>{seg(b.p).map((s) => (typeof s === 'string' ? s : <mark>{s.missing}</mark>))}</p>
+              ) : (
+                <ul>
+                  {b.ul.map((item) => (
+                    <li>{seg(item).map((s) => (typeof s === 'string' ? s : <mark>{s.missing}</mark>))}</li>
+                  ))}
+                </ul>
+              ),
+            )}
+          </div>
+        )
+      }
+      <nav class="legal__other" aria-label={t({ en: 'Other legal pages', el: 'Άλλα νομικά κείμενα' }, lang)}>
+        <ul role="list">
+          {
+            legalPages
+              .filter((p) => p.slug !== page.slug)
+              .map((p) => (
+                <li>
+                  <a class="text-link" href={localizePath(`/${p.slug}`, lang)}>{t(p.title, lang)}</a>
+                </li>
+              ))
+          }
+        </ul>
+      </nav>
       <a class="text-link" href={localizePath('/', lang)}>
         <Icon name="chevron-left" size={18} />
         {t(ui.backHome, lang)}
@@ -69,5 +106,35 @@ const title = t(page.title, lang);
     flex: none;
     margin-top: 0.2rem;
     color: var(--sea);
+  }
+  .legal__body {
+    display: grid;
+    gap: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .legal__body h2 {
+    margin-top: 1.25rem;
+    font-size: var(--fs-h4);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .legal__body ul {
+    display: grid;
+    gap: 0.4rem;
+    padding-left: 1.25rem;
+  }
+  .legal__body mark {
+    padding: 0 0.25em;
+    border-radius: 3px;
+    background: #fbe7c6;
+    color: #6b3d00;
+  }
+  .legal__other ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    margin: 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
   }
 </style>

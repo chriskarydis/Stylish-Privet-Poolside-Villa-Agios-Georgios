@@ -1,0 +1,907 @@
+---
+/**
+ * Availability calendar + booking options.
+ * - Booked dates come from /api/availability (Cloudflare function reading the
+ *   Airbnb / Booking.com iCal feeds). Without it, dates can still be chosen.
+ * - Sends guests to Airbnb / Booking.com with dates and guests prefilled, or
+ *   lets them send a booking request (Formspree / email) or a WhatsApp message.
+ */
+import { home } from '@content/home';
+import { property } from '@content/property';
+import { legalPages } from '@content/legal';
+import type { Locale } from '@/i18n/config';
+import { fill, localizePath, t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const w = home.booking.widget;
+const f = home.forms;
+const max = property.facts.maxGuests;
+const privacyHref = localizePath(`/${legalPages.find((p) => p.slug === 'privacy-policy')!.slug}`, lang);
+const [privacyBefore, privacyAfter] = t(f.privacy, lang).split('{link}');
+
+// Everything the browser script needs, already in the page language.
+const config = {
+  locale: lang === 'el' ? 'el-GR' : 'en-GB',
+  maxGuests: max,
+  monthsAhead: property.availability.monthsAhead,
+  endpoint: property.availability.endpoint,
+  airbnb: property.booking.airbnb[lang],
+  bookingCom: property.booking.bookingCom[lang],
+  whatsapp: property.contact.whatsapp,
+  email: property.contact.email,
+  formId: property.forms.bookingFormId,
+  checkInTime: property.rules.checkIn,
+  checkOutTime: property.rules.checkOut,
+  s: {
+    ...Object.fromEntries(Object.entries({ ...w, ...f }).map(([k, v]) => [k, t(v as { en: string; el: string }, lang)])),
+    whatsappGeneral: t(home.contact.whatsappMessage, lang),
+  } as Record<string, string>,
+};
+---
+
+<div class="bw" data-booking-widget>
+  <script type="application/json" data-bw-config set:html={JSON.stringify(config)} />
+
+  <div class="bw__head">
+    <h3 class="bw__title" id="bw-title">{t(home.booking.cta, lang)}</h3>
+    <button type="button" class="bw__clear" data-bw-clear hidden>{t(w.clear, lang)}</button>
+  </div>
+
+  <div class="bw__dates" aria-hidden="true">
+    <div class="bw__date" data-bw-in-box>
+      <span class="bw__date-label">{t(w.checkIn, lang)}</span>
+      <span class="bw__date-value" data-bw-in>{t(w.selectDate, lang)}</span>
+    </div>
+    <span class="bw__arrow"><Icon name="arrow-right" size={18} /></span>
+    <div class="bw__date" data-bw-out-box>
+      <span class="bw__date-label">{t(w.checkOut, lang)}</span>
+      <span class="bw__date-value" data-bw-out>{t(w.selectDate, lang)}</span>
+    </div>
+  </div>
+
+  <div class="bw__cal" role="group" aria-labelledby="bw-title">
+    <div class="bw__nav">
+      <button type="button" class="bw__nav-btn" data-bw-prev>
+        <Icon name="chevron-left" size={20} />
+        <span class="visually-hidden">{t(w.prevMonth, lang)}</span>
+      </button>
+      <button type="button" class="bw__nav-btn" data-bw-next>
+        <Icon name="chevron-right" size={20} />
+        <span class="visually-hidden">{t(w.nextMonth, lang)}</span>
+      </button>
+    </div>
+    <div class="bw__months" data-bw-months>
+      <noscript><p class="bw__noscript">{t(w.notSynced, lang)}</p></noscript>
+    </div>
+    <ul class="bw__legend" role="list">
+      <li><span class="bw__swatch bw__swatch--free"></span>{t(w.legendAvailable, lang)}</li>
+      <li><span class="bw__swatch bw__swatch--booked"></span>{t(w.legendBooked, lang)}</li>
+      <li><span class="bw__swatch bw__swatch--sel"></span>{t(w.legendSelected, lang)}</li>
+    </ul>
+  </div>
+
+  <p class="bw__status" data-bw-status aria-live="polite">{t(w.pickCheckIn, lang)}</p>
+  <p class="bw__note" data-bw-note>{t(w.notSynced, lang)}</p>
+
+  <fieldset class="bw__guests">
+    <legend>{t(w.guests, lang)}</legend>
+    <div class="bw__guest-row">
+      <label>
+        <span>{t(w.adults, lang)}</span>
+        <select data-bw-adults>
+          {Array.from({ length: max }, (_, i) => <option value={i + 1} selected={i === 1}>{i + 1}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>{t(w.children, lang)}</span>
+        <select data-bw-children>
+          {Array.from({ length: max }, (_, i) => <option value={i}>{i}</option>)}
+        </select>
+      </label>
+    </div>
+    <div class="bw__ages" data-bw-ages></div>
+    <p class="bw__hint">{fill(t(w.maxGuests, lang), { n: max })}</p>
+  </fieldset>
+
+  <p class="bw__summary" data-bw-summary aria-live="polite" hidden></p>
+
+  <div class="bw__actions">
+    <a class="btn bw__platform" data-bw-airbnb href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
+      {fill(t(w.continueOn, lang), { platform: 'Airbnb' })}
+      <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+      <Icon name="external-link" size={16} />
+    </a>
+    <a class="btn bw__platform" data-bw-booking href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
+      {fill(t(w.continueOn, lang), { platform: 'Booking.com' })}
+      <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+      <Icon name="external-link" size={16} />
+    </a>
+    <p class="bw__or">{t(w.orDirect, lang)}</p>
+    <div class="bw__direct">
+      <button type="button" class="btn btn--outline" data-bw-request aria-expanded="false" aria-controls="bw-form">
+        <Icon name="mail" size={18} />
+        {t(w.request, lang)}
+      </button>
+      {
+        property.contact.whatsapp && (
+          <a class="btn btn--outline" data-bw-whatsapp href={`https://wa.me/${property.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+            <Icon name="message-circle" size={18} />
+            {t(w.whatsapp, lang)}
+            <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  <form class="bw__form" id="bw-form" data-bw-form hidden novalidate>
+    <p class="bw__form-stay" data-bw-form-stay></p>
+    <div class="field">
+      <label for="bw-name">{t(f.name, lang)} <span aria-hidden="true">*</span></label>
+      <input id="bw-name" name="name" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for="bw-email">{t(f.email, lang)} <span aria-hidden="true">*</span></label>
+      <input id="bw-email" name="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label for="bw-phone">{t(f.phone, lang)}</label>
+      <input id="bw-phone" name="phone" type="tel" autocomplete="tel" />
+    </div>
+    <div class="field">
+      <label for="bw-message">{t(f.messageOptional, lang)}</label>
+      <textarea id="bw-message" name="message" rows="3"></textarea>
+    </div>
+    <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
+    <p class="bw__fine">{t(f.requestNote, lang)}</p>
+    <p class="bw__fine">{privacyBefore}<a href={privacyHref}>{t(f.privacyLink, lang)}</a>{privacyAfter}</p>
+    {!property.forms.bookingFormId && <p class="bw__fine">{t(f.mailFallback, lang)}</p>}
+    <button type="submit" class="btn" data-bw-submit>{t(f.sendRequest, lang)}</button>
+    <p class="form-result" data-bw-result role="status" hidden></p>
+  </form>
+</div>
+
+<script>
+  import {
+    addDays,
+    airbnbLink,
+    blockedNights,
+    bookingComLink,
+    fromIso,
+    nightsBetween,
+    toIso,
+    type AvailabilityResponse,
+    type IsoDate,
+  } from '@/lib/availability';
+  import { formValues, isSpam, sendForm } from '@/lib/forms';
+
+  type Config = {
+    locale: string;
+    maxGuests: number;
+    monthsAhead: number;
+    endpoint: string;
+    airbnb: string;
+    bookingCom: string;
+    whatsapp: string | null;
+    email: string | null;
+    formId: string | null;
+    checkInTime: string;
+    checkOutTime: string;
+    s: Record<string, string>;
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-booking-widget]')) initWidget(root);
+
+  function initWidget(root: HTMLElement) {
+    const cfg = JSON.parse(root.querySelector('[data-bw-config]')!.textContent!) as Config;
+    const s = cfg.s;
+    const fmt = (tpl: string, v: Record<string, string | number>) => tpl.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+
+    const monthsEl = $('[data-bw-months]');
+    const statusEl = $('[data-bw-status]');
+    const summaryEl = $('[data-bw-summary]');
+    const inEl = $('[data-bw-in]');
+    const outEl = $('[data-bw-out]');
+    const clearBtn = $<HTMLButtonElement>('[data-bw-clear]');
+    const adultsSel = $<HTMLSelectElement>('[data-bw-adults]');
+    const childrenSel = $<HTMLSelectElement>('[data-bw-children]');
+    const agesEl = $('[data-bw-ages]');
+    const airbnbA = $<HTMLAnchorElement>('[data-bw-airbnb]');
+    const bookingA = $<HTMLAnchorElement>('[data-bw-booking]');
+    const waA = root.querySelector<HTMLAnchorElement>('[data-bw-whatsapp]');
+    const requestBtn = $<HTMLButtonElement>('[data-bw-request]');
+    const form = $<HTMLFormElement>('[data-bw-form]');
+
+    const today = toIso(new Date());
+    const lastDay = (() => {
+      const d = new Date();
+      d.setMonth(d.getMonth() + cfg.monthsAhead);
+      return toIso(d);
+    })();
+
+    let blocked = new Set<IsoDate>();
+    let checkIn: IsoDate | null = null;
+    let checkOut: IsoDate | null = null;
+    let hover: IsoDate | null = null;
+    let focusDate: IsoDate = today;
+    let view = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    const dfLong = new Intl.DateTimeFormat(cfg.locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const dfShort = new Intl.DateTimeFormat(cfg.locale, { weekday: 'short', day: 'numeric', month: 'short' });
+    const dfMonth = new Intl.DateTimeFormat(cfg.locale, { month: 'long', year: 'numeric' });
+    const dfWeekday = new Intl.DateTimeFormat(cfg.locale, { weekday: 'short' });
+    const dfWeekdayLong = new Intl.DateTimeFormat(cfg.locale, { weekday: 'long' });
+    const cap = (x: string) => x.charAt(0).toLocaleUpperCase(cfg.locale) + x.slice(1);
+
+    // ---------- Rules ----------
+    /** Last date that may be chosen as check-out for the current check-in (the first booked night after it). */
+    const checkoutLimit = (from: IsoDate): IsoDate => {
+      for (let d = addDays(from, 1); d <= lastDay; d = addDays(d, 1)) if (blocked.has(d)) return d;
+      return lastDay;
+    };
+    const selectingOut = () => !!checkIn && !checkOut;
+    const canStart = (d: IsoDate) => d >= today && d < lastDay && !blocked.has(d);
+    const canEnd = (d: IsoDate) => !!checkIn && d > checkIn && d <= checkoutLimit(checkIn);
+    const selectable = (d: IsoDate) => (selectingOut() ? canEnd(d) || canStart(d) : canStart(d));
+
+    // ---------- Rendering ----------
+    function render() {
+      const focused = monthsEl.contains(document.activeElement);
+      monthsEl.replaceChildren();
+      for (let m = 0; m < 2; m++) {
+        const first = new Date(view.getFullYear(), view.getMonth() + m, 1);
+        const wrap = document.createElement('div');
+        wrap.className = 'bw__month';
+        const titleId = `bw-m-${first.getFullYear()}-${first.getMonth()}`;
+        const h = document.createElement('h4');
+        h.id = titleId;
+        h.className = 'bw__month-title';
+        h.textContent = cap(dfMonth.format(first));
+        const table = document.createElement('table');
+        table.setAttribute('role', 'grid');
+        table.setAttribute('aria-labelledby', titleId);
+        const thead = table.createTHead().insertRow();
+        const monday = new Date(2024, 0, 1); // a Monday
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(monday);
+          d.setDate(1 + i);
+          const th = document.createElement('th');
+          th.scope = 'col';
+          th.abbr = dfWeekdayLong.format(d);
+          th.textContent = dfWeekday.format(d).slice(0, 2);
+          thead.append(th);
+        }
+        const body = table.createTBody();
+        const offset = (first.getDay() + 6) % 7; // Monday-first
+        const days = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+        let row = body.insertRow();
+        for (let i = 0; i < offset; i++) row.insertCell();
+        for (let day = 1; day <= days; day++) {
+          if (row.cells.length === 7) row = body.insertRow();
+          const iso = toIso(new Date(first.getFullYear(), first.getMonth(), day));
+          const cell = row.insertCell();
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'bw__day';
+          b.dataset.date = iso;
+          b.textContent = String(day);
+          cell.append(b);
+        }
+        while (row.cells.length < 7) row.insertCell();
+        wrap.append(h, table);
+        monthsEl.append(wrap);
+      }
+      paint();
+      if (focused) monthsEl.querySelector<HTMLButtonElement>(`[data-date="${focusDate}"]`)?.focus();
+    }
+
+    function paint() {
+      const end = checkOut ?? (selectingOut() && hover && canEnd(hover) ? hover : null);
+      const buttons = monthsEl.querySelectorAll<HTMLButtonElement>('.bw__day');
+      const visible = [...buttons].map((b) => b.dataset.date!);
+      if (!visible.includes(focusDate)) focusDate = visible.find((d) => selectable(d)) ?? visible[0];
+      for (const b of buttons) {
+        const d = b.dataset.date!;
+        const past = d < today || d >= lastDay;
+        const booked = blocked.has(d);
+        const ok = !past && selectable(d);
+        const checkoutOnly = booked && selectingOut() && canEnd(d);
+        b.classList.toggle('is-past', past);
+        b.classList.toggle('is-booked', booked && !past && !checkoutOnly);
+        b.classList.toggle('is-today', d === today);
+        b.classList.toggle('is-start', d === checkIn);
+        b.classList.toggle('is-end', d === end);
+        b.classList.toggle('is-range', !!checkIn && !!end && d > checkIn && d < end);
+        b.setAttribute('aria-disabled', String(!ok));
+        b.setAttribute('aria-pressed', String(d === checkIn || d === checkOut));
+        b.tabIndex = d === focusDate ? 0 : -1;
+        const state = past ? '' : checkoutOnly ? s.dayCheckoutOnly : booked ? s.dayBooked : s.dayAvailable;
+        const role = d === checkIn ? `, ${s.checkIn}` : d === checkOut ? `, ${s.checkOut}` : '';
+        b.setAttribute('aria-label', `${dfLong.format(fromIso(d))}${state ? `, ${state}` : ''}${role}`);
+      }
+      const prev = root.querySelector<HTMLButtonElement>('[data-bw-prev]')!;
+      const next = root.querySelector<HTMLButtonElement>('[data-bw-next]')!;
+      const now = new Date();
+      prev.disabled = view.getFullYear() === now.getFullYear() && view.getMonth() === now.getMonth();
+      next.disabled = toIso(new Date(view.getFullYear(), view.getMonth() + 1, 1)) >= lastDay.slice(0, 8) + '01';
+      update();
+    }
+
+    // ---------- Summary, links, messages ----------
+    const guests = () => ({
+      adults: Number(adultsSel.value),
+      childAges: [...agesEl.querySelectorAll<HTMLSelectElement>('select')].map((x) => Number(x.value)),
+    });
+    const guestsText = () => {
+      const g = guests();
+      const a = g.adults === 1 ? s.guestsSummaryAdult : fmt(s.guestsSummaryAdults, { n: g.adults });
+      const c = g.childAges.length === 0 ? '' : g.childAges.length === 1 ? s.guestsSummaryChild : fmt(s.guestsSummaryChildren, { n: g.childAges.length });
+      return c ? `${a}, ${c}` : a;
+    };
+    const nightsText = () => {
+      const n = checkIn && checkOut ? nightsBetween(checkIn, checkOut) : 0;
+      return n === 1 ? s.night : fmt(s.nights, { n });
+    };
+
+    function update() {
+      inEl.textContent = checkIn ? dfShort.format(fromIso(checkIn)) : s.selectDate;
+      outEl.textContent = checkOut ? dfShort.format(fromIso(checkOut)) : s.selectDate;
+      $('[data-bw-in-box]').classList.toggle('is-active', !checkIn);
+      $('[data-bw-out-box]').classList.toggle('is-active', selectingOut());
+      clearBtn.hidden = !checkIn;
+      const complete = !!(checkIn && checkOut);
+      summaryEl.hidden = !complete;
+      if (complete) {
+        summaryEl.textContent = `${dfShort.format(fromIso(checkIn!))} (${cfg.checkInTime}) → ${dfShort.format(fromIso(checkOut!))} (${cfg.checkOutTime}) · ${nightsText()} · ${guestsText()}`;
+      }
+      const g = guests();
+      airbnbA.href = airbnbLink(cfg.airbnb, checkIn && checkOut ? checkIn : null, checkOut, g);
+      bookingA.href = bookingComLink(cfg.bookingCom, checkIn && checkOut ? checkIn : null, checkOut, g);
+      if (waA && cfg.whatsapp) {
+        const text = complete
+          ? fmt(s.whatsappMessage, { in: dfShort.format(fromIso(checkIn!)), out: dfShort.format(fromIso(checkOut!)), nights: nightsText(), guests: guestsText() })
+          : s.whatsappGeneral;
+        waA.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(text)}`;
+      }
+      const stay = root.querySelector('[data-bw-form-stay]');
+      if (stay) stay.textContent = complete ? `${s.stay}: ${summaryEl.textContent}` : '';
+    }
+
+    // ---------- Interaction ----------
+    function choose(d: IsoDate) {
+      if (!selectable(d)) return;
+      if (selectingOut() && canEnd(d)) {
+        checkOut = d;
+      } else {
+        checkIn = d;
+        checkOut = null;
+      }
+      focusDate = d;
+      paint();
+      setStatus();
+    }
+    /** Instruction line: what to do next (or nothing once both dates are chosen). */
+    const setStatus = (text?: string) => {
+      statusEl.textContent = text ?? (selectingOut() ? s.pickCheckOut : checkIn && checkOut ? '' : s.pickCheckIn);
+    };
+
+    monthsEl.addEventListener('click', (e) => {
+      const b = (e.target as Element).closest<HTMLButtonElement>('.bw__day');
+      if (b) choose(b.dataset.date!);
+    });
+    monthsEl.addEventListener('mouseover', (e) => {
+      const d = (e.target as Element).closest<HTMLButtonElement>('.bw__day')?.dataset.date ?? null;
+      if (d !== hover && selectingOut()) {
+        hover = d;
+        paint();
+      }
+    });
+    monthsEl.addEventListener('mouseleave', () => {
+      if (hover) {
+        hover = null;
+        paint();
+      }
+    });
+    monthsEl.addEventListener('keydown', (e) => {
+      const steps: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      let target: IsoDate | null = null;
+      if (e.key in steps) target = addDays(focusDate, steps[e.key]);
+      else if (e.key === 'PageUp') target = addDays(focusDate, -28);
+      else if (e.key === 'PageDown') target = addDays(focusDate, 28);
+      if (!target) return;
+      e.preventDefault();
+      if (target < today) target = today;
+      if (target >= lastDay) target = addDays(lastDay, -1);
+      focusDate = target;
+      const t = fromIso(target);
+      const firstShown = view;
+      const lastShown = new Date(view.getFullYear(), view.getMonth() + 2, 0);
+      if (t < firstShown) view = new Date(t.getFullYear(), t.getMonth(), 1);
+      else if (t > lastShown) view = new Date(t.getFullYear(), t.getMonth() - 1, 1);
+      if (selectingOut()) hover = target;
+      render();
+      monthsEl.querySelector<HTMLButtonElement>(`[data-date="${focusDate}"]`)?.focus();
+    });
+    root.querySelector('[data-bw-prev]')!.addEventListener('click', () => {
+      view = new Date(view.getFullYear(), view.getMonth() - 1, 1);
+      render();
+    });
+    root.querySelector('[data-bw-next]')!.addEventListener('click', () => {
+      view = new Date(view.getFullYear(), view.getMonth() + 1, 1);
+      render();
+    });
+    clearBtn.addEventListener('click', () => {
+      checkIn = checkOut = hover = null;
+      paint();
+      setStatus();
+      monthsEl.querySelector<HTMLButtonElement>('[tabindex="0"]')?.focus();
+    });
+
+    // Guests
+    function syncGuests() {
+      const adults = Number(adultsSel.value);
+      const maxChildren = cfg.maxGuests - adults;
+      for (const o of childrenSel.options) o.disabled = Number(o.value) > maxChildren;
+      if (Number(childrenSel.value) > maxChildren) childrenSel.value = String(maxChildren);
+      const n = Number(childrenSel.value);
+      const existing = [...agesEl.querySelectorAll('label')];
+      existing.slice(n).forEach((l) => l.remove());
+      for (let i = existing.length; i < n; i++) {
+        const label = document.createElement('label');
+        const span = document.createElement('span');
+        span.textContent = fmt(s.childAge, { n: i + 1 });
+        const sel = document.createElement('select');
+        for (let age = 0; age <= 17; age++) {
+          const o = document.createElement('option');
+          o.value = String(age);
+          o.textContent = age === 0 ? s.under1 : age === 1 ? s.year1 : fmt(s.years, { n: age });
+          if (age === 8) o.selected = true;
+          sel.append(o);
+        }
+        sel.addEventListener('change', update);
+        label.append(span, sel);
+        agesEl.append(label);
+      }
+      update();
+    }
+    adultsSel.addEventListener('change', syncGuests);
+    childrenSel.addEventListener('change', syncGuests);
+
+    // Direct booking request
+    requestBtn.addEventListener('click', () => {
+      if (!checkIn || !checkOut) {
+        statusEl.textContent = s.needDates;
+        monthsEl.querySelector<HTMLButtonElement>('[tabindex="0"]')?.focus();
+        return;
+      }
+      form.hidden = !form.hidden;
+      requestBtn.setAttribute('aria-expanded', String(!form.hidden));
+      if (!form.hidden) form.querySelector<HTMLInputElement>('input[name="name"]')?.focus();
+    });
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const result = form.querySelector<HTMLElement>('[data-bw-result]')!;
+      const submit = form.querySelector<HTMLButtonElement>('[data-bw-submit]')!;
+      result.hidden = true;
+      if (!checkIn || !checkOut) {
+        showResult(result, s.needDates, false);
+        return;
+      }
+      if (!form.checkValidity()) {
+        const firstInvalid = form.querySelector<HTMLInputElement>(':invalid');
+        showResult(result, firstInvalid?.type === 'email' && firstInvalid.value ? s.invalidEmail : s.fillRequired, false);
+        firstInvalid?.focus();
+        return;
+      }
+      if (isSpam(form)) return;
+      const v = formValues(form);
+      const g = guests();
+      submit.disabled = true;
+      submit.textContent = s.sending;
+      const res = await sendForm({
+        formId: cfg.formId,
+        fallbackEmail: cfg.email,
+        subject: fmt(s.subjectBooking, { in: checkIn, out: checkOut }),
+        data: {
+          name: v.name,
+          email: v.email,
+          phone: v.phone,
+          check_in: checkIn,
+          check_out: checkOut,
+          nights: String(nightsBetween(checkIn, checkOut)),
+          adults: String(g.adults),
+          children: String(g.childAges.length),
+          children_ages: g.childAges.join(', '),
+          message: v.message,
+          language: document.documentElement.lang,
+        },
+        labels: { name: s.name, email: s.email, phone: s.phone, check_in: s.checkIn, check_out: s.checkOut, adults: s.adults, children: s.children, message: s.message },
+      });
+      submit.disabled = false;
+      submit.textContent = s.sendRequest;
+      if (res === 'sent') {
+        form.reset();
+        showResult(result, s.requestSuccess, true);
+      } else if (res === 'error') showResult(result, s.error, false);
+    });
+    function showResult(el: HTMLElement, text: string, ok: boolean) {
+      el.textContent = text;
+      el.classList.toggle('is-error', !ok);
+      el.hidden = false;
+    }
+
+    // ---------- Availability ----------
+    const noteEl = $('[data-bw-note]');
+    let loaded = false;
+    async function loadAvailability() {
+      if (loaded) return;
+      loaded = true;
+      noteEl.textContent = s.loading;
+      let synced = false;
+      try {
+        const res = await fetch(cfg.endpoint, { headers: { Accept: 'application/json' } });
+        const data = (await res.json()) as AvailabilityResponse;
+        blocked = blockedNights(data.blocked ?? []);
+        synced = data.configured && !!data.updated;
+      } catch {
+        // Local development, or the function is not deployed: dates can still be chosen.
+      }
+      noteEl.textContent = synced ? s.synced : s.notSynced;
+      // Drop a selection that turned out to overlap a booking.
+      if (checkIn && blocked.has(checkIn)) checkIn = checkOut = null;
+      if (checkIn && checkOut && !canEnd(checkOut)) checkOut = null;
+      paint();
+      setStatus();
+    }
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          loadAvailability();
+        }
+      }, { rootMargin: '600px 0px' });
+      io.observe(root);
+    } else loadAvailability();
+    root.addEventListener('pointerdown', loadAvailability, { once: true });
+    root.addEventListener('focusin', loadAvailability, { once: true });
+
+    render();
+    syncGuests();
+  }
+</script>
+
+<style>
+  .bw {
+    container-type: inline-size;
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.25rem, 0.8rem + 2vw, 2rem);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.45);
+  }
+  .bw :focus-visible {
+    outline-color: var(--sea);
+  }
+  .bw__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .bw__title {
+    font-size: 1.6rem;
+  }
+  .bw__clear {
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border: 0;
+    background: none;
+    color: var(--sea);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .bw__dates {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bw__date {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .bw__date.is-active {
+    border-color: var(--sea);
+    box-shadow: inset 0 0 0 1px var(--sea);
+  }
+  .bw__date-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bw__date-value {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bw__arrow {
+    color: var(--muted);
+  }
+
+  .bw__cal {
+    position: relative;
+  }
+  .bw__nav {
+    position: absolute;
+    inset: -0.35rem 0 auto;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+  .bw__nav-btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    pointer-events: auto;
+  }
+  .bw__nav-btn:hover:not(:disabled) {
+    border-color: var(--ink);
+  }
+  .bw__nav-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .bw__months {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+  @container (max-width: 34rem) {
+    .bw__months {
+      grid-template-columns: 1fr;
+    }
+    .bw__months :global(.bw__month:nth-child(2)) {
+      display: none;
+    }
+  }
+  .bw__months :global(.bw__month-title) {
+    margin-bottom: 0.5rem;
+    padding-top: 0.35rem;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 32px;
+  }
+  .bw__months :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .bw__months :global(th) {
+    padding-bottom: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bw__months :global(td) {
+    padding: 1px 0;
+  }
+  .bw__months :global(.bw__day) {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    min-height: 36px;
+    max-height: 48px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink);
+    font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .bw__months :global(.bw__day[aria-disabled='false']:hover) {
+    box-shadow: inset 0 0 0 1px var(--ink);
+  }
+  .bw__months :global(.bw__day[aria-disabled='true']) {
+    cursor: default;
+  }
+  .bw__months :global(.bw__day.is-past) {
+    color: #b3a999;
+  }
+  .bw__months :global(.bw__day.is-booked) {
+    color: #9c9184;
+    background: repeating-linear-gradient(135deg, transparent 0 5px, rgb(0 0 0 / 0.05) 5px 6px);
+    text-decoration: line-through;
+  }
+  .bw__months :global(.bw__day.is-today) {
+    font-weight: 700;
+  }
+  .bw__months :global(.bw__day.is-today::after) {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .bw__months :global(.bw__day.is-range) {
+    border-radius: 0;
+    background: var(--sea-tint);
+  }
+  .bw__months :global(.bw__day.is-start),
+  .bw__months :global(.bw__day.is-end) {
+    background: var(--sea);
+    color: var(--on-dark);
+    font-weight: 700;
+  }
+
+  .bw__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    margin: 0.75rem 0 0;
+    font-size: var(--fs-xs);
+    color: var(--muted);
+  }
+  .bw__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .bw__swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+  .bw__swatch--booked {
+    background: repeating-linear-gradient(135deg, transparent 0 3px, rgb(0 0 0 / 0.18) 3px 4px);
+  }
+  .bw__swatch--sel {
+    background: var(--sea);
+    border-color: var(--sea);
+  }
+  .bw__status {
+    font-weight: 600;
+    color: var(--sea-deep);
+  }
+  .bw__note,
+  .bw__noscript {
+    margin-top: -0.6rem;
+    font-size: var(--fs-xs);
+    color: var(--muted);
+  }
+
+  .bw__guests {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 1rem 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  .bw__guests legend {
+    padding: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bw__guest-row,
+  .bw__ages {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 0.75rem;
+  }
+  .bw__guests label,
+  .bw__ages :global(label) {
+    display: grid;
+    gap: 0.3rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  /* :global — the children's age selects are created by the script */
+  .bw :global(select) {
+    min-height: 44px;
+    padding: 0 0.75rem;
+    border: 1px solid var(--stone);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    font-size: 1rem;
+  }
+  .bw__hint {
+    font-size: var(--fs-xs);
+    color: var(--muted);
+  }
+  .bw__summary {
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius);
+    background: var(--sea-tint);
+    color: var(--sea-deep);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .bw__actions {
+    display: grid;
+    gap: 0.6rem;
+  }
+  .bw__platform {
+    width: 100%;
+  }
+  .bw__or {
+    margin-top: 0.4rem;
+    text-align: center;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bw__direct {
+    display: grid;
+    gap: 0.6rem;
+  }
+  @container (min-width: 30rem) {
+    .bw__actions {
+      grid-template-columns: 1fr 1fr;
+    }
+    .bw__or,
+    .bw__direct {
+      grid-column: 1 / -1;
+    }
+    .bw__direct {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .bw__form {
+    display: grid;
+    gap: 0.9rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .bw__form-stay {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--sea-deep);
+  }
+  .bw__fine {
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .bw__fine a {
+    color: var(--sea);
+  }
+</style>

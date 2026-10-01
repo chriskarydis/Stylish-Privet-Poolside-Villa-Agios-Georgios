@@ -45,9 +45,35 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 - The villa has **no direct sea view** — the sea is visible from the property; main views are garden and pool.
 - No invented address, coordinates, prices, availability, distances, fees or reviews. Ratings are aggregate platform scores and are **not** in structured data.
 
+## Hosting (Cloudflare Pages)
+
+- Production (`main`): https://stylish-privet-poolside-villa-agios-georgios.pages.dev
+- Preview (`develop`): https://develop.stylish-privet-poolside-villa-agios-georgios.pages.dev
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` (every merge deploys; `develop` gets a preview URL) |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Environment variables | `NODE_VERSION=22`, `PUBLIC_SITE_URL=https://<your-domain>` |
+| Secrets (encrypted) | `ICAL_AIRBNB`, `ICAL_BOOKING` — the private iCal export links (never commit them) |
+
+`functions/api/availability.ts` runs on Cloudflare and serves `/api/availability` (booked dates only, cached 30 min).
+
+Test it locally with real Cloudflare tooling:
+
+```bash
+npm run build
+npx wrangler pages dev dist --binding ICAL_AIRBNB=<url> --binding ICAL_BOOKING=<url>
+```
+
+## Forms (Formspree)
+
+Create two forms at formspree.io (general enquiries, booking requests) and put their IDs in `src/content/property.ts` → `forms`. Until then, the forms open the visitor's email app addressed to `contact.email`.
+
 ## Booking
 
-The final booking flow is still to be decided. For now "Book Now" / "Check Availability" lead to the official Airbnb and Booking.com listings (`src/content/property.ts` → `booking`). Setting `booking.directUrl` makes a direct booking/enquiry link the primary button.
+The booking section has an availability calendar (booked dates synced from Airbnb and Booking.com via iCal). After choosing dates and guests, visitors can continue on Airbnb or Booking.com with everything prefilled, send a booking request (Formspree), or message on WhatsApp. Online payment / direct booking is a planned later phase; `booking.directUrl` in `src/content/property.ts` can already point to it.
 
 ## Structure
 
