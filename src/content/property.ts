@@ -126,6 +126,26 @@ export const property = {
   },
 
   /**
+   * Operator / data controller — used in the legal pages and the footer.
+   * Fill in when the owner supplies them. While any is null, the legal pages
+   * show "[to be completed]" markers and stay hidden from search engines.
+   */
+  operator: {
+    /** Full legal name of the person or company running the rental. */
+    legalName: null as string | null,
+    address: null as Localized | null,
+    /** ΑΦΜ (Greek tax ID). */
+    vatNumber: null as string | null,
+    /**
+     * ΑΜΑ — short-term rental property registry number (mandatory on every
+     * advertisement of the property). Use `mhteNumber` instead if the property
+     * is licensed as tourist accommodation (ΜΗ.Τ.Ε., EOT).
+     */
+    amaNumber: null as string | null,
+    mhteNumber: null as string | null,
+  },
+
+  /**
    * Aggregate ratings as displayed on the booking platforms.
    * Update these values when the platform scores change.
    * They are intentionally NOT added to structured data.
