@@ -123,6 +123,8 @@ export const property = {
     email: 'chriskaridis76@gmail.com' as string | null,
     phone: '+30 690 654 2839' as string | null, // international format
     whatsapp: '306906542839' as string | null, // digits only, with country code
+    /** Name of the person answering on WhatsApp (shown on the WhatsApp contact card). */
+    whatsappName: { en: 'Christos Spyridon Karydis', el: 'Χρήστος Σπυρίδων Καρύδης' } as Localized | null,
   },
 
   /**
