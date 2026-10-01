@@ -110,26 +110,17 @@ const config = {
 
   <p class="bw__summary" data-bw-summary aria-live="polite" hidden></p>
 
-  <div class="bw__actions">
-    <a class="btn bw__platform" data-bw-airbnb href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
-      {fill(t(w.continueOn, lang), { platform: 'Airbnb' })}
-      <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
-      <Icon name="external-link" size={16} />
-    </a>
-    <a class="btn bw__platform" data-bw-booking href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
-      {fill(t(w.continueOn, lang), { platform: 'Booking.com' })}
-      <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
-      <Icon name="external-link" size={16} />
-    </a>
-    <p class="bw__or">{t(w.orDirect, lang)}</p>
-    <div class="bw__direct">
-      <button type="button" class="btn btn--outline" data-bw-request aria-expanded="false" aria-controls="bw-form">
+  <!-- 1. Direct booking first (primary), 2. platforms second (secondary). -->
+  <div class="bw__group">
+    <p class="bw__group-title">{t(w.bookDirect, lang)}</p>
+    <div class="bw__pair">
+      <button type="button" class="btn" data-bw-request aria-expanded="false" aria-controls="bw-form">
         <Icon name="mail" size={18} />
         {t(w.request, lang)}
       </button>
       {
         property.contact.whatsapp && (
-          <a class="btn btn--outline" data-bw-whatsapp href={`https://wa.me/${property.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
+          <a class="btn" data-bw-whatsapp href={`https://wa.me/${property.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
             <Icon name="message-circle" size={18} />
             {t(w.whatsapp, lang)}
             <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
@@ -164,6 +155,22 @@ const config = {
     <button type="submit" class="btn" data-bw-submit>{t(f.sendRequest, lang)}</button>
     <p class="form-result" data-bw-result role="status" hidden></p>
   </form>
+
+  <div class="bw__group bw__group--platforms">
+    <p class="bw__group-title">{t(w.orPlatforms, lang)}</p>
+    <div class="bw__pair">
+      <a class="btn btn--outline" data-bw-airbnb href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
+        {fill(t(w.continueOn, lang), { platform: 'Airbnb' })}
+        <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        <Icon name="external-link" size={16} />
+      </a>
+      <a class="btn btn--outline" data-bw-booking href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
+        {fill(t(w.continueOn, lang), { platform: 'Booking.com' })}
+        <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        <Icon name="external-link" size={16} />
+      </a>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -852,15 +859,15 @@ const config = {
     line-height: 1.5;
   }
 
-  .bw__actions {
+  .bw__group {
     display: grid;
     gap: 0.6rem;
   }
-  .bw__platform {
-    width: 100%;
+  .bw__group--platforms {
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
   }
-  .bw__or {
-    margin-top: 0.4rem;
+  .bw__group-title {
     text-align: center;
     font-size: var(--fs-xs);
     font-weight: 700;
@@ -868,19 +875,15 @@ const config = {
     text-transform: uppercase;
     color: var(--muted);
   }
-  .bw__direct {
+  .bw__group:not(.bw__group--platforms) .bw__group-title {
+    color: var(--sea-deep);
+  }
+  .bw__pair {
     display: grid;
     gap: 0.6rem;
   }
   @container (min-width: 30rem) {
-    .bw__actions {
-      grid-template-columns: 1fr 1fr;
-    }
-    .bw__or,
-    .bw__direct {
-      grid-column: 1 / -1;
-    }
-    .bw__direct {
+    .bw__pair {
       grid-template-columns: 1fr 1fr;
     }
   }

@@ -247,11 +247,12 @@ export const home = {
         el: 'Οι κλεισμένες ημερομηνίες συγχρονίζονται από Airbnb και Booking.com. Η διαθεσιμότητα επιβεβαιώνεται κατά την κράτηση.',
       },
       notSynced: {
-        en: 'Choose your dates and guests, then check availability on Airbnb or Booking.com, or send us a request.',
-        el: 'Επιλέξτε ημερομηνίες και άτομα και δείτε τη διαθεσιμότητα στο Airbnb ή στο Booking.com, ή στείλτε μας αίτημα.',
+        en: 'Choose your dates and guests and send us a booking request, or check availability on Airbnb or Booking.com.',
+        el: 'Επιλέξτε ημερομηνίες και άτομα και στείλτε μας αίτημα κράτησης, ή δείτε τη διαθεσιμότητα στο Airbnb ή στο Booking.com.',
       },
       continueOn: { en: 'Continue on {platform}', el: 'Συνέχεια στο {platform}' },
-      orDirect: { en: 'Or book directly with us', el: 'Ή κλείστε απευθείας μαζί μας' },
+      bookDirect: { en: 'Book directly with us', el: 'Κλείστε απευθείας μαζί μας' },
+      orPlatforms: { en: 'Or book via Airbnb or Booking.com', el: 'Ή κλείστε μέσω Airbnb ή Booking.com' },
       request: { en: 'Send a booking request', el: 'Αίτημα κράτησης' },
       whatsapp: { en: 'Ask on WhatsApp', el: 'Ρωτήστε στο WhatsApp' },
       whatsappMessage: {
