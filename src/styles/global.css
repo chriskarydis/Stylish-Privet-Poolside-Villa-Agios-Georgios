@@ -314,6 +314,62 @@ p {
   text-decoration-color: currentColor;
 }
 
+/* ---------- Forms ---------- */
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+.field label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1rem; /* ≥16px prevents iOS zoom on focus */
+  line-height: 1.5;
+}
+.field textarea {
+  resize: vertical;
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--sea);
+  outline-offset: 0;
+  border-color: var(--sea);
+}
+.field input:user-invalid,
+.field textarea:user-invalid {
+  border-color: #b3261e;
+}
+/* Honeypot field for spam bots — invisible to people and screen readers. */
+.hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.form-result {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  background: var(--sea-tint);
+  color: var(--sea-deep);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.form-result.is-error {
+  background: #fbe9e7;
+  color: #8c1d18;
+}
+
 /* ---------- Focus ---------- */
 :focus-visible {
   outline: 2px solid var(--sea);
