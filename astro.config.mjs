@@ -14,7 +14,7 @@ const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 const SITE_URL = env.PUBLIC_SITE_URL || 'https://www.example.com';
 
 // Pages that are placeholders and must not be indexed yet (see src/content/legal.ts).
-const NOINDEX = ['/privacy-policy', '/cookie-policy', '/terms-and-conditions'];
+const NOINDEX = ['/privacy-policy', '/cookie-policy', '/terms-and-conditions', '/booking-terms'];
 
 export default defineConfig({
   site: SITE_URL,

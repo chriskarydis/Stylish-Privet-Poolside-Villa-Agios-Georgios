@@ -8,7 +8,7 @@ import { legalPages, type LegalPage } from '@content/legal';
 import type { Locale } from '@/i18n/config';
 import { fill, localizePath, t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
-import { hasMissing, resolveText } from '@/lib/legal';
+import { hasMissing, isLinkable, resolveText } from '@/lib/legal';
 
 interface Props {
   lang: Locale;
@@ -62,7 +62,7 @@ const dateFmt = new Intl.DateTimeFormat(lang === 'el' ? 'el-GR' : 'en-GB', { day
         <ul role="list">
           {
             legalPages
-              .filter((p) => p.slug !== page.slug)
+              .filter((p) => p.slug !== page.slug && isLinkable(p, lang))
               .map((p) => (
                 <li>
                   <a class="text-link" href={localizePath(`/${p.slug}`, lang)}>{t(p.title, lang)}</a>
