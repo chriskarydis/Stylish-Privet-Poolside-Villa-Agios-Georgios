@@ -200,6 +200,23 @@ export const home = {
     },
   },
 
+  rates: {
+    eyebrow: { en: 'Rates', el: 'Τιμές' },
+    title: { en: 'Rates by Season', el: 'Τιμές ανά περίοδο' },
+    season: { en: 'Season', el: 'Περίοδος' },
+    dates: { en: 'Dates', el: 'Ημερομηνίες' },
+    perNight: { en: 'Per night', el: 'Ανά νύχτα' },
+    minStay: { en: 'Minimum stay', el: 'Ελάχιστη διαμονή' },
+    nights: { en: '{n} nights', el: '{n} νύχτες' },
+    night: { en: '1 night', el: '1 νύχτα' },
+    cleaning: { en: 'Cleaning fee: {price} per stay.', el: 'Τέλος καθαριότητας: {price} ανά διαμονή.' },
+    direct: {
+      en: 'Rates apply to direct bookings. Choose your dates below for an indicative total.',
+      el: 'Οι τιμές ισχύουν για απευθείας κρατήσεις. Επιλέξτε ημερομηνίες παρακάτω για ενδεικτικό σύνολο.',
+    },
+    cta: { en: 'Check dates', el: 'Δείτε ημερομηνίες' },
+  },
+
   faq: {
     eyebrow: { en: 'FAQ', el: 'Συχνές ερωτήσεις' },
     title: { en: 'Good to Know', el: 'Χρήσιμες πληροφορίες' },
@@ -272,6 +289,12 @@ export const home = {
       guestsSummaryAdult: { en: '1 adult', el: '1 ενήλικα' },
       guestsSummaryChildren: { en: '{n} children', el: '{n} παιδιά' },
       guestsSummaryChild: { en: '1 child', el: '1 παιδί' },
+      minStay: { en: 'Minimum stay: {n} nights.', el: 'Ελάχιστη διαμονή: {n} νύχτες.' },
+      estimate: { en: 'Indicative total: {price}', el: 'Ενδεικτικό σύνολο: {price}' },
+      inclCleaning: { en: 'incl. cleaning fee {price}', el: 'με τέλος καθαριότητας {price}' },
+      estimateNote: { en: 'The final price is confirmed with your booking.', el: 'Η τελική τιμή επιβεβαιώνεται με την κράτηση.' },
+      priceOnRequest: { en: 'Price on request for these dates.', el: 'Τιμή κατόπιν αιτήματος για αυτές τις ημερομηνίες.' },
+      termsLink: { en: 'Booking terms', el: 'Όροι κράτησης' },
       needDates: { en: 'Select check-in and check-out dates first.', el: 'Επιλέξτε πρώτα ημερομηνίες άφιξης και αναχώρησης.' },
     },
   },

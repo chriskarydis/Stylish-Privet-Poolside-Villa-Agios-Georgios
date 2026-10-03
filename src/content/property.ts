@@ -7,6 +7,15 @@
  */
 import type { Localized } from '@/i18n/config';
 
+/** One price period. `from` / `to` are the first and last night (inclusive), as 'YYYY-MM-DD'. */
+export interface RateSeason {
+  name: Localized;
+  from: string;
+  to: string;
+  perNight: number;
+  minNights?: number;
+}
+
 export const property = {
   /** Official listing name (kept identical in all languages). */
   name: 'Stylish Private Poolside Villa',
@@ -121,6 +130,40 @@ export const property = {
     endpoint: '/api/availability',
     /** How many months ahead guests can select. */
     monthsAhead: 12,
+  },
+
+  /**
+   * RATES — not supplied yet. While `seasons` is empty nothing about prices is
+   * shown. Once filled in, a "Rates" section appears and the calendar shows an
+   * indicative total for the selected dates.
+   * Example season:
+   *   { name: { en: 'High season', el: 'Υψηλή περίοδος' }, from: '2027-07-01', to: '2027-08-31', perNight: 180, minNights: 5 }
+   * `from` / `to` are the first and last NIGHT of the season (inclusive).
+   */
+  rates: {
+    currency: 'EUR',
+    seasons: [] as RateSeason[],
+    /** One-off cleaning fee per stay, or null if included / none. */
+    cleaningFee: null as number | null,
+    /** Free text shown under the rates, e.g. what the price includes. */
+    note: null as Localized | null,
+  },
+
+  /**
+   * BOOKING TERMS for direct bookings — not supplied yet. Each text appears on
+   * the "Booking Terms" page; the page (and its links) stay hidden until all
+   * of them are filled in. `minNights` also limits the calendar selection.
+   */
+  bookingTerms: {
+    /** Minimum stay enforced by the calendar (a season's own minNights overrides it). */
+    minNights: null as number | null,
+    minimumStay: null as Localized | null, // e.g. 'Minimum stay is 3 nights (5 nights in July and August).'
+    deposit: null as Localized | null, // e.g. 'A 30% deposit is required to confirm the booking.'
+    balance: null as Localized | null, // e.g. 'The balance is paid 14 days before arrival.'
+    paymentMethods: null as Localized | null, // e.g. 'Bank transfer or cash on arrival.'
+    cancellation: null as Localized | null,
+    damageDeposit: null as Localized | null, // e.g. 'No damage deposit is required.'
+    touristTax: null as Localized | null, // e.g. 'The climate resilience fee is paid on arrival.'
   },
 
   /** Contact details. Each item is hidden while null. */

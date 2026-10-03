@@ -13,6 +13,7 @@ import type { Locale } from '@/i18n/config';
 import { fill, localizePath, t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
 import Icon from '@/components/ui/Icon.astro';
+import { isLinkable } from '@/lib/legal';
 
 interface Props {
   lang: Locale;
@@ -23,6 +24,8 @@ const f = home.forms;
 const max = property.facts.maxGuests;
 const privacyHref = localizePath(`/${legalPages.find((p) => p.slug === 'privacy-policy')!.slug}`, lang);
 const [privacyBefore, privacyAfter] = t(f.privacy, lang).split('{link}');
+const bookingTermsPage = legalPages.find((p) => p.slug === 'booking-terms');
+const termsHref = bookingTermsPage && isLinkable(bookingTermsPage, lang) ? localizePath(`/${bookingTermsPage.slug}`, lang) : null;
 
 // Everything the browser script needs, already in the page language.
 const config = {
@@ -35,6 +38,10 @@ const config = {
   whatsapp: property.contact.whatsapp,
   email: property.contact.email,
   formId: property.forms.bookingFormId,
+  seasons: property.rates.seasons.map(({ from, to, perNight, minNights }) => ({ from, to, perNight, minNights })),
+  cleaningFee: property.rates.cleaningFee,
+  currency: property.rates.currency,
+  minNights: property.bookingTerms.minNights,
   checkInTime: property.rules.checkIn,
   checkOutTime: property.rules.checkOut,
   s: {
@@ -109,6 +116,7 @@ const config = {
   </fieldset>
 
   <p class="bw__summary" data-bw-summary aria-live="polite" hidden></p>
+  <p class="bw__price" data-bw-price aria-live="polite" hidden></p>
 
   <!-- 1. Direct booking first (primary), 2. platforms second (secondary). -->
   <div class="bw__group">
@@ -149,7 +157,10 @@ const config = {
       <textarea id="bw-message" name="message" rows="3"></textarea>
     </div>
     <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
-    <p class="bw__fine">{t(f.requestNote, lang)}</p>
+    <p class="bw__fine">
+      {t(f.requestNote, lang)}
+      {termsHref && <> <a href={termsHref}>{t(w.termsLink, lang)}</a>.</>}
+    </p>
     <p class="bw__fine">{privacyBefore}<a href={privacyHref}>{t(f.privacyLink, lang)}</a>{privacyAfter}</p>
     {!property.forms.bookingFormId && <p class="bw__fine">{t(f.mailFallback, lang)}</p>}
     <button type="submit" class="btn" data-bw-submit>{t(f.sendRequest, lang)}</button>
@@ -179,11 +190,14 @@ const config = {
     airbnbLink,
     blockedNights,
     bookingComLink,
+    estimatePrice,
     fromIso,
+    minNightsFor,
     nightsBetween,
     toIso,
     type AvailabilityResponse,
     type IsoDate,
+    type PriceSeason,
   } from '@/lib/availability';
   import { formValues, isSpam, sendForm } from '@/lib/forms';
 
@@ -197,6 +211,10 @@ const config = {
     whatsapp: string | null;
     email: string | null;
     formId: string | null;
+    seasons: PriceSeason[];
+    cleaningFee: number | null;
+    currency: string;
+    minNights: number | null;
     checkInTime: string;
     checkOutTime: string;
     s: Record<string, string>;
@@ -216,6 +234,8 @@ const config = {
     const inEl = $('[data-bw-in]');
     const outEl = $('[data-bw-out]');
     const clearBtn = $<HTMLButtonElement>('[data-bw-clear]');
+    const priceEl = $('[data-bw-price]');
+    let priceText = '';
     const adultsSel = $<HTMLSelectElement>('[data-bw-adults]');
     const childrenSel = $<HTMLSelectElement>('[data-bw-children]');
     const agesEl = $('[data-bw-ages]');
@@ -254,8 +274,14 @@ const config = {
     };
     const selectingOut = () => !!checkIn && !checkOut;
     const canStart = (d: IsoDate) => d >= today && d < lastDay && !blocked.has(d);
-    const canEnd = (d: IsoDate) => !!checkIn && d > checkIn && d <= checkoutLimit(checkIn);
-    const selectable = (d: IsoDate) => (selectingOut() ? canEnd(d) || canStart(d) : canStart(d));
+    const minStay = (from: IsoDate) => minNightsFor(from, cfg.seasons, cfg.minNights);
+    const canEnd = (d: IsoDate) => !!checkIn && d >= addDays(checkIn, minStay(checkIn)) && d <= checkoutLimit(checkIn);
+    const money = new Intl.NumberFormat(cfg.locale, { style: 'currency', currency: cfg.currency, maximumFractionDigits: 0 });
+    // While choosing check-out: later days are selectable only as a valid check-out
+    // (so days inside the minimum stay are disabled); earlier days, or days beyond the
+    // next booking, start a new selection.
+    const selectable = (d: IsoDate) =>
+      selectingOut() ? canEnd(d) || (canStart(d) && (d <= checkIn! || d > checkoutLimit(checkIn!))) : canStart(d);
 
     // ---------- Rendering ----------
     function render() {
@@ -367,6 +393,12 @@ const config = {
       if (complete) {
         summaryEl.textContent = `${dfShort.format(fromIso(checkIn!))} (${cfg.checkInTime}) → ${dfShort.format(fromIso(checkOut!))} (${cfg.checkOutTime}) · ${nightsText()} · ${guestsText()}`;
       }
+      const price = complete ? estimatePrice(checkIn!, checkOut!, cfg.seasons, cfg.cleaningFee) : null;
+      priceText = !complete || !cfg.seasons.length ? '' : price
+        ? `${fmt(s.estimate, { price: money.format(price.total) })}${price.cleaning ? ` (${fmt(s.inclCleaning, { price: money.format(price.cleaning) })})` : ''}. ${s.estimateNote}`
+        : s.priceOnRequest;
+      priceEl.textContent = priceText;
+      priceEl.hidden = !priceText;
       const g = guests();
       airbnbA.href = airbnbLink(cfg.airbnb, checkIn && checkOut ? checkIn : null, checkOut, g);
       bookingA.href = bookingComLink(cfg.bookingCom, checkIn && checkOut ? checkIn : null, checkOut, g);
@@ -395,7 +427,9 @@ const config = {
     }
     /** Instruction line: what to do next (or nothing once both dates are chosen). */
     const setStatus = (text?: string) => {
-      statusEl.textContent = text ?? (selectingOut() ? s.pickCheckOut : checkIn && checkOut ? '' : s.pickCheckIn);
+      const min = checkIn ? minStay(checkIn) : 1;
+      const pickOut = min > 1 ? `${s.pickCheckOut} ${fmt(s.minStay, { n: min })}` : s.pickCheckOut;
+      statusEl.textContent = text ?? (selectingOut() ? pickOut : checkIn && checkOut ? '' : s.pickCheckIn);
     };
 
     monthsEl.addEventListener('click', (e) => {
@@ -525,6 +559,7 @@ const config = {
           adults: String(g.adults),
           children: String(g.childAges.length),
           children_ages: g.childAges.join(', '),
+          estimate: priceText,
           message: v.message,
           language: document.documentElement.lang,
         },
@@ -859,6 +894,12 @@ const config = {
     line-height: 1.5;
   }
 
+  .bw__price {
+    margin-top: -0.5rem;
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
   .bw__group {
     display: grid;
     gap: 0.6rem;

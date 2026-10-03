@@ -115,3 +115,41 @@ export function bookingComLink(base: string, checkIn: IsoDate | null, checkOut: 
   u.searchParams.set('no_rooms', '1');
   return u.href;
 }
+
+// ---------- Rates ----------
+
+export interface PriceSeason {
+  /** First and last night of the season (inclusive). */
+  from: IsoDate;
+  to: IsoDate;
+  perNight: number;
+  minNights?: number;
+}
+
+const seasonFor = (night: IsoDate, seasons: PriceSeason[]) => seasons.find((s) => night >= s.from && night <= s.to);
+
+/**
+ * Indicative price of a stay: each night at its season's rate, plus the
+ * cleaning fee. Returns null when any night has no rate (price on request).
+ */
+export function estimatePrice(
+  checkIn: IsoDate,
+  checkOut: IsoDate,
+  seasons: PriceSeason[],
+  cleaningFee: number | null,
+): { accommodation: number; cleaning: number; total: number } | null {
+  if (!seasons.length) return null;
+  let accommodation = 0;
+  for (let d = checkIn; d < checkOut; d = addDays(d, 1)) {
+    const s = seasonFor(d, seasons);
+    if (!s) return null;
+    accommodation += s.perNight;
+  }
+  const cleaning = cleaningFee ?? 0;
+  return { accommodation, cleaning, total: accommodation + cleaning };
+}
+
+/** Minimum stay for a given check-in: the season's own minimum, else the general one, else 1. */
+export function minNightsFor(checkIn: IsoDate, seasons: PriceSeason[], general: number | null): number {
+  return Math.max(1, seasonFor(checkIn, seasons)?.minNights ?? general ?? 1);
+}
