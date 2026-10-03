@@ -3,6 +3,19 @@
    Mediterranean contemporary: warm linen, limestone, olive and Ionian sea.
    ========================================================================== */
 
+/* Fallback fonts sized to match the web fonts, so the swap does not move the layout
+   (measured: EB Garamond ≈ 93–97% of Times New Roman, Manrope ≈ 103–104% of Arial). */
+@font-face {
+  font-family: 'EB Garamond Fallback';
+  src: local('Times New Roman'), local('Times');
+  size-adjust: 95%;
+}
+@font-face {
+  font-family: 'Manrope Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  size-adjust: 103.4%;
+}
+
 :root {
   /* Palette */
   --linen: #f7f2ea;
@@ -24,8 +37,8 @@
   --on-dark-muted: #cfd9d6;
 
   /* Type */
-  --font-serif: 'EB Garamond Variable', 'EB Garamond', Garamond, 'Times New Roman', serif;
-  --font-sans: 'Manrope Variable', Manrope, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: 'EB Garamond Variable', 'EB Garamond', 'EB Garamond Fallback', Garamond, 'Times New Roman', serif;
+  --font-sans: 'Manrope Variable', Manrope, 'Manrope Fallback', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --fs-xs: 0.78rem;
   --fs-sm: 0.9rem;
   --fs-base: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);

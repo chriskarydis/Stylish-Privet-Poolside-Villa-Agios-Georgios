@@ -41,6 +41,11 @@ export const property = {
     bathrooms: 2,
     sizeSqm: 90, // approximately
     beachDistanceM: 500, // approximately
+    /**
+     * Walking time to the beach in minutes, e.g. '5' or '5–7'. NOT confirmed —
+     * while null the site says "a short walk" instead of a number.
+     */
+    beachWalkMinutes: null as string | null,
   },
 
   sleeping: [
