@@ -1,0 +1,172 @@
+---
+/**
+ * Map with a pin on the villa (OpenStreetMap via Leaflet — no tracking cookies)
+ * and a "Directions" button that opens Google Maps.
+ * Renders nothing until exact coordinates are set in
+ * src/content/property.ts → location.coordinates (they are never guessed).
+ * Leaflet is loaded only when the map scrolls near the viewport.
+ */
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import Icon from '@/components/ui/Icon.astro';
+// Emitted as its own file and loaded on demand (page CSS is inlined, see astro.config.mjs).
+import leafletCss from 'leaflet/dist/leaflet.css?url';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const c = property.location.coordinates;
+const m = home.location.map;
+const dest = c ? `${c.lat},${c.lng}` : '';
+---
+
+{
+  c && (
+    <figure class="vmap">
+      <figcaption class="vmap__title">{t(m.title, lang)}</figcaption>
+      <div
+        class="vmap__canvas"
+        role="group"
+        aria-label={t(m.label, lang)}
+        data-villa-map
+        data-lat={c.lat}
+        data-lng={c.lng}
+        data-pin={property.name}
+        data-css={leafletCss}
+        data-hint={t(m.tapHint, lang)}
+      >
+        <noscript>{t(m.noscript, lang)}</noscript>
+      </div>
+      <div class="vmap__actions">
+        <a class="btn" href={`https://www.google.com/maps/dir/?api=1&destination=${dest}`} target="_blank" rel="noopener noreferrer">
+          <Icon name="compass" size={18} />
+          {t(m.directions, lang)}
+          <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        </a>
+        <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${dest}`} target="_blank" rel="noopener noreferrer">
+          <Icon name="map-pin" size={18} />
+          {t(m.openMaps, lang)}
+          <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        </a>
+      </div>
+    </figure>
+  )
+}
+
+<script>
+  const el = document.querySelector<HTMLElement>('[data-villa-map]');
+  if (el) {
+    const init = async () => {
+      const css = new Promise<void>((resolve) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = el.dataset.css!;
+        link.onload = link.onerror = () => resolve();
+        document.head.append(link);
+      });
+      const [{ default: L }] = await Promise.all([import('leaflet'), css]);
+      const pos: [number, number] = [Number(el.dataset.lat), Number(el.dataset.lng)];
+      const touch = matchMedia('(pointer: coarse)').matches;
+      const map = L.map(el, {
+        center: pos,
+        zoom: 16,
+        scrollWheelZoom: false, // never hijack page scrolling
+        dragging: !touch, // on phones: enabled after a tap, so the page can still be scrolled
+      });
+      map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener noreferrer">Leaflet</a>');
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>',
+      }).addTo(map);
+      const icon = L.divIcon({
+        className: 'vmap__pin',
+        html: '<svg viewBox="0 0 32 42" width="32" height="42" aria-hidden="true"><path d="M16 1C7.7 1 1 7.6 1 15.8 1 26.6 16 41 16 41s15-14.4 15-25.2C31 7.6 24.3 1 16 1z" fill="#1d4b52" stroke="#fff" stroke-width="2"/><circle cx="16" cy="16" r="5.5" fill="#fff"/></svg>',
+        iconSize: [32, 42],
+        iconAnchor: [16, 41],
+      });
+      L.marker(pos, { icon, alt: el.dataset.pin, title: el.dataset.pin, keyboard: false }).addTo(map);
+      if (touch) {
+        const hint = document.createElement('p');
+        hint.className = 'vmap__hint';
+        hint.textContent = el.dataset.hint ?? '';
+        el.append(hint);
+        map.once('click', () => {
+          map.dragging.enable();
+          hint.remove();
+        });
+      }
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect();
+            init();
+          }
+        },
+        { rootMargin: '400px 0px' },
+      );
+      io.observe(el);
+    } else init();
+  }
+</script>
+
+<style>
+  .vmap {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+  }
+  .vmap__title {
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .vmap__canvas {
+    position: relative;
+    z-index: 0; /* keep Leaflet's layers below the sticky header */
+    height: clamp(18rem, 12rem + 26vw, 28rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--sand);
+  }
+  .vmap__canvas :global(.vmap__pin) {
+    background: none;
+    border: 0;
+    filter: drop-shadow(0 3px 4px rgb(0 0 0 / 0.3));
+  }
+  .vmap__canvas :global(.vmap__hint) {
+    position: absolute;
+    inset: auto 0.75rem 0.75rem;
+    z-index: 500;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: rgb(38 34 29 / 0.82);
+    color: #fff;
+    font-size: var(--fs-xs);
+    text-align: center;
+    pointer-events: none;
+  }
+  .vmap__canvas :global(.leaflet-control-attribution) {
+    font-size: 11px;
+  }
+  .vmap__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  @media (max-width: 30em) {
+    .vmap__actions {
+      display: grid;
+    }
+  }
+</style>
