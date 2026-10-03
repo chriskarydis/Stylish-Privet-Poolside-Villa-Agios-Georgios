@@ -157,6 +157,15 @@ export const home = {
       en: 'Map shows the village area, not the exact location of the villa.',
       el: 'Ο χάρτης δείχνει την περιοχή του χωριού, όχι την ακριβή θέση της βίλας.',
     },
+    /** Illustrated walk from the villa to the beach. */
+    route: {
+      title: { en: 'From the villa to the beach', el: 'Από τη βίλα στην παραλία' },
+      villa: { en: 'The villa', el: 'Η βίλα' },
+      beach: { en: 'Agios Georgios Beach', el: 'Παραλία Αγίου Γεωργίου' },
+      distance: { en: 'approx. {n} m', el: 'περίπου {n} μ.' },
+      walkGeneric: { en: 'a short walk', el: 'λίγα λεπτά με τα πόδια' },
+      walkTime: { en: 'about {n} min on foot', el: 'περίπου {n} λεπτά με τα πόδια' },
+    },
   },
 
   explore: {
