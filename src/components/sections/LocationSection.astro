@@ -6,6 +6,7 @@ import { t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
 import SmartImage from '@/components/ui/SmartImage.astro';
 import Icon from '@/components/ui/Icon.astro';
+import BeachRoute from '@/components/ui/BeachRoute.astro';
 
 interface Props {
   lang: Locale;
@@ -57,6 +58,9 @@ const loc = property.location;
         <p class="loc__map-note">{t(home.location.mapNote, lang)}</p>
       </div>
     </div>
+  </div>
+  <div class="container loc__route">
+    <BeachRoute lang={lang} />
   </div>
 </section>
 
@@ -142,6 +146,9 @@ const loc = property.location;
     font-size: var(--fs-sm);
     font-weight: 500;
     background: var(--linen);
+  }
+  .loc__route {
+    margin-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
   }
   .loc__map-note {
     font-size: var(--fs-xs);
