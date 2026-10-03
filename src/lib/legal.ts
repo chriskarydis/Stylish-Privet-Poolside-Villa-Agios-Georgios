@@ -16,6 +16,13 @@ const missingLabels: Record<string, Localized> = {
   registry: { en: 'ΑΜΑ or ΜΗΤΕ number', el: 'αριθμός ΑΜΑ ή ΜΗΤΕ' },
   email: { en: 'email', el: 'email' },
   phone: { en: 'phone', el: 'τηλέφωνο' },
+  minimumStay: { en: 'minimum stay', el: 'ελάχιστη διαμονή' },
+  deposit: { en: 'deposit amount and when it is paid', el: 'ποσό προκαταβολής και πότε καταβάλλεται' },
+  balance: { en: 'when the balance is paid', el: 'πότε εξοφλείται το υπόλοιπο' },
+  paymentMethods: { en: 'payment methods', el: 'τρόποι πληρωμής' },
+  cancellation: { en: 'cancellation policy', el: 'πολιτική ακύρωσης' },
+  damageDeposit: { en: 'damage deposit', el: 'εγγύηση ζημιών' },
+  touristTax: { en: 'tourist tax / fees', el: 'φόρος διαμονής / τέλη' },
 };
 const toComplete: Localized = { en: 'to be completed', el: 'προς συμπλήρωση' };
 
@@ -28,8 +35,19 @@ export function registryNumber(): string | null {
 }
 
 function values(lang: Locale, siteUrl: string): Record<string, string | null> {
-  const { operator, contact } = property;
+  const { operator, contact, bookingTerms: bt, rules, facts } = property;
+  const loc = (v: Localized | null) => (v ? t(v, lang) : null);
   return {
+    minimumStay: loc(bt.minimumStay),
+    deposit: loc(bt.deposit),
+    balance: loc(bt.balance),
+    paymentMethods: loc(bt.paymentMethods),
+    cancellation: loc(bt.cancellation),
+    damageDeposit: loc(bt.damageDeposit),
+    touristTax: loc(bt.touristTax),
+    checkIn: rules.checkIn,
+    checkOut: rules.checkOut,
+    maxGuests: String(facts.maxGuests),
     name: operator.legalName,
     address: operator.address ? t(operator.address, lang) : null,
     vat: operator.vatNumber,
@@ -60,4 +78,10 @@ export function resolveText(text: string, lang: Locale, siteUrl: string): Segmen
 export function hasMissing(blocks: LegalBlock[], lang: Locale, siteUrl: string): boolean {
   const texts = blocks.flatMap((b) => ('h' in b ? [b.h] : 'p' in b ? [b.p] : b.ul));
   return texts.some((x) => resolveText(x, lang, siteUrl).some((s) => typeof s !== 'string'));
+}
+
+/** Legal pages that may be linked from menus (drafts flagged `hideUntilComplete` are left out). */
+export function isLinkable(page: { body: Localized<LegalBlock[]> | null; hideUntilComplete?: boolean }, lang: Locale): boolean {
+  if (!page.hideUntilComplete) return true;
+  return !!page.body && !hasMissing(t(page.body, lang), lang, '');
 }

@@ -8,7 +8,7 @@ import { nav, ui } from '@/i18n/ui';
 import Logo from '@/components/layout/Logo.astro';
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher.astro';
 import Icon from '@/components/ui/Icon.astro';
-import { registryNumber } from '@/lib/legal';
+import { isLinkable, registryNumber } from '@/lib/legal';
 
 interface Props {
   lang: Locale;
@@ -117,7 +117,7 @@ const registry = registryNumber();
       <nav aria-label={t(ui.legal, lang)}>
         <ul role="list" class="footer__legal">
           {
-            legalPages.map((p) => (
+            legalPages.filter((p) => isLinkable(p, lang)).map((p) => (
               <li>
                 <a href={localizePath(`/${p.slug}`, lang)}>{t(p.title, lang)}</a>
               </li>

@@ -10,11 +10,18 @@
  *   {name} {address} {vat} {registry} → property.operator
  *   {email} {phone}                   → property.contact
  *   {site}                            → the website address
+ *   {minimumStay} {deposit} {balance} {paymentMethods} {cancellation}
+ *   {damageDeposit} {touristTax}      → property.bookingTerms
+ *   {checkIn} {checkOut} {maxGuests}  → property.rules / property.facts
  * Missing values are shown as "[to be completed]" and the page is noindex.
  * When everything is final: set `lastUpdated`, and remove the slug from
  * NOINDEX in astro.config.mjs so the page enters the sitemap.
  */
 import type { Localized } from '@/i18n/config';
+import { property } from './property';
+
+/** The embedded map is only on the site once the villa's coordinates are set. */
+const hasMap = property.location.coordinates !== null;
 
 /** A block of a legal page: a heading, a paragraph or a bullet list. */
 export type LegalBlock = { h: string } | { p: string } | { ul: string[] };
@@ -25,6 +32,8 @@ export interface LegalPage {
   body: Localized<LegalBlock[]> | null;
   /** ISO date of the final version, e.g. '2026-11-01'. null = draft. */
   lastUpdated: string | null;
+  /** Keep the page out of menus and links until every placeholder has a value. */
+  hideUntilComplete?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -62,6 +71,7 @@ const privacyEn: LegalBlock[] = [
       'Cloudflare, Inc. — website hosting and security.',
       'Formspree, Inc. — delivery of the contact and booking request forms to our email.',
       'Our email provider — receipt and storage of the emails you send us.',
+      ...(hasMap ? ['OpenStreetMap Foundation — the map images in the location map are loaded from its servers, which receive your IP address. No cookies are set.'] : []),
     ],
   },
   { p: 'If you choose to contact us on WhatsApp, or follow a link to Airbnb, Booking.com or Google Maps, those services process your data under their own privacy policies.' },
@@ -118,6 +128,7 @@ const privacyEl: LegalBlock[] = [
       'Cloudflare, Inc. — φιλοξενία και ασφάλεια της ιστοσελίδας.',
       'Formspree, Inc. — αποστολή των φορμών επικοινωνίας και κράτησης στο email μας.',
       'Ο πάροχος email μας — παραλαβή και αποθήκευση των μηνυμάτων που μας στέλνετε.',
+      ...(hasMap ? ['OpenStreetMap Foundation — οι εικόνες του χάρτη τοποθεσίας φορτώνονται από τους διακομιστές του, οι οποίοι λαμβάνουν τη διεύθυνση IP σας. Δεν ορίζονται cookies.'] : []),
     ],
   },
   { p: 'Αν επιλέξετε να επικοινωνήσετε μαζί μας μέσω WhatsApp ή ακολουθήσετε σύνδεσμο προς το Airbnb, το Booking.com ή τους Χάρτες Google, οι υπηρεσίες αυτές επεξεργάζονται τα δεδομένα σας σύμφωνα με τις δικές τους πολιτικές απορρήτου.' },
@@ -256,6 +267,61 @@ const termsEl: LegalBlock[] = [
   { p: 'Ενδέχεται να ενημερώνουμε τους παρόντες όρους. Η ημερομηνία της τελευταίας έκδοσης εμφανίζεται στην αρχή της σελίδας.' },
 ];
 
+// ---------------------------------------------------------------------------
+// Booking Terms (direct bookings) — texts come from property.bookingTerms
+// ---------------------------------------------------------------------------
+const bookingEn: LegalBlock[] = [
+  { p: 'These Booking Terms apply to stays booked directly with us — through this website, by email, by phone or on WhatsApp. Bookings made on Airbnb or Booking.com are governed by the terms of those platforms.' },
+  { h: '1. Booking and confirmation' },
+  { p: 'A booking request is not a confirmed booking. Your booking is confirmed only when we confirm it to you in writing.' },
+  { h: '2. Minimum stay' },
+  { p: '{minimumStay}' },
+  { h: '3. Deposit' },
+  { p: '{deposit}' },
+  { h: '4. Payment of the balance' },
+  { p: '{balance}' },
+  { h: '5. Payment methods' },
+  { p: '{paymentMethods}' },
+  { h: '6. Cancellation' },
+  { p: '{cancellation}' },
+  { h: '7. Damage deposit' },
+  { p: '{damageDeposit}' },
+  { h: '8. Taxes and fees' },
+  { p: '{touristTax}' },
+  { h: '9. Arrival and departure' },
+  { p: 'Check-in is from {checkIn} and check-out is before {checkOut}. The villa accommodates up to {maxGuests} guests.' },
+  { h: '10. House rules' },
+  { p: 'Pets are not allowed, smoking is not permitted inside the villa, and parties or events are not allowed. Children are welcome.' },
+  { h: '11. Other terms' },
+  { p: 'The Terms of Use and the Privacy Policy of this website also apply. In case of a discrepancy between language versions, the Greek version prevails.' },
+];
+
+const bookingEl: LegalBlock[] = [
+  { p: 'Οι παρόντες Όροι Κράτησης ισχύουν για διαμονές που κλείνονται απευθείας σε εμάς — μέσω της ιστοσελίδας, με email, τηλεφωνικά ή μέσω WhatsApp. Οι κρατήσεις μέσω Airbnb ή Booking.com διέπονται από τους όρους των πλατφορμών αυτών.' },
+  { h: '1. Κράτηση και επιβεβαίωση' },
+  { p: 'Το αίτημα κράτησης δεν αποτελεί επιβεβαιωμένη κράτηση. Η κράτησή σας επιβεβαιώνεται μόνο όταν σας την επιβεβαιώσουμε γραπτώς.' },
+  { h: '2. Ελάχιστη διαμονή' },
+  { p: '{minimumStay}' },
+  { h: '3. Προκαταβολή' },
+  { p: '{deposit}' },
+  { h: '4. Εξόφληση' },
+  { p: '{balance}' },
+  { h: '5. Τρόποι πληρωμής' },
+  { p: '{paymentMethods}' },
+  { h: '6. Ακύρωση' },
+  { p: '{cancellation}' },
+  { h: '7. Εγγύηση ζημιών' },
+  { p: '{damageDeposit}' },
+  { h: '8. Φόροι και τέλη' },
+  { p: '{touristTax}' },
+  { h: '9. Άφιξη και αναχώρηση' },
+  { p: 'Η άφιξη (check-in) είναι από τις {checkIn} και η αναχώρηση (check-out) έως τις {checkOut}. Η βίλα φιλοξενεί έως {maxGuests} άτομα.' },
+  { h: '10. Κανόνες διαμονής' },
+  { p: 'Δεν επιτρέπονται τα κατοικίδια, το κάπνισμα στους εσωτερικούς χώρους και τα πάρτι ή οι εκδηλώσεις. Τα παιδιά είναι ευπρόσδεκτα.' },
+  { h: '11. Λοιποί όροι' },
+  { p: 'Ισχύουν επίσης οι Όροι Χρήσης και η Πολιτική Απορρήτου της ιστοσελίδας. Σε περίπτωση απόκλισης μεταξύ των γλωσσικών εκδόσεων, υπερισχύει η ελληνική.' },
+];
+
 export const legalPages: LegalPage[] = [
   {
     slug: 'privacy-policy',
@@ -274,5 +340,12 @@ export const legalPages: LegalPage[] = [
     title: { en: 'Terms of Use', el: 'Όροι Χρήσης' },
     body: { en: termsEn, el: termsEl },
     lastUpdated: null,
+  },
+  {
+    slug: 'booking-terms',
+    title: { en: 'Booking Terms', el: 'Όροι Κράτησης' },
+    body: { en: bookingEn, el: bookingEl },
+    lastUpdated: null,
+    hideUntilComplete: true,
   },
 ];

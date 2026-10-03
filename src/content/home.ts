@@ -157,6 +157,15 @@ export const home = {
       en: 'Map shows the village area, not the exact location of the villa.',
       el: 'Ο χάρτης δείχνει την περιοχή του χωριού, όχι την ακριβή θέση της βίλας.',
     },
+    /** Map with the villa's pin (shown once coordinates are set). */
+    map: {
+      title: { en: 'Find us', el: 'Πού βρισκόμαστε' },
+      label: { en: 'Map showing the location of the villa', el: 'Χάρτης με τη θέση της βίλας' },
+      directions: { en: 'Get directions', el: 'Οδηγίες' },
+      openMaps: { en: 'Open in Google Maps', el: 'Άνοιγμα στους Χάρτες Google' },
+      tapHint: { en: 'Tap the map to move it', el: 'Πατήστε στον χάρτη για να τον μετακινήσετε' },
+      noscript: { en: 'The map needs JavaScript. Use the buttons below to open the location in Google Maps.', el: 'Ο χάρτης χρειάζεται JavaScript. Χρησιμοποιήστε τα κουμπιά παρακάτω για να ανοίξετε την τοποθεσία στους Χάρτες Google.' },
+    },
     /** Illustrated walk from the villa to the beach. */
     route: {
       title: { en: 'From the villa to the beach', el: 'Από τη βίλα στην παραλία' },
@@ -198,6 +207,23 @@ export const home = {
       en: 'Aggregate ratings as shown on Airbnb and Booking.com. Current scores and full reviews are available on each platform.',
       el: 'Συνολικές βαθμολογίες όπως εμφανίζονται στο Airbnb και στο Booking.com. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
     },
+  },
+
+  rates: {
+    eyebrow: { en: 'Rates', el: 'Τιμές' },
+    title: { en: 'Rates by Season', el: 'Τιμές ανά περίοδο' },
+    season: { en: 'Season', el: 'Περίοδος' },
+    dates: { en: 'Dates', el: 'Ημερομηνίες' },
+    perNight: { en: 'Per night', el: 'Ανά νύχτα' },
+    minStay: { en: 'Minimum stay', el: 'Ελάχιστη διαμονή' },
+    nights: { en: '{n} nights', el: '{n} νύχτες' },
+    night: { en: '1 night', el: '1 νύχτα' },
+    cleaning: { en: 'Cleaning fee: {price} per stay.', el: 'Τέλος καθαριότητας: {price} ανά διαμονή.' },
+    direct: {
+      en: 'Rates apply to direct bookings. Choose your dates below for an indicative total.',
+      el: 'Οι τιμές ισχύουν για απευθείας κρατήσεις. Επιλέξτε ημερομηνίες παρακάτω για ενδεικτικό σύνολο.',
+    },
+    cta: { en: 'Check dates', el: 'Δείτε ημερομηνίες' },
   },
 
   faq: {
@@ -272,6 +298,12 @@ export const home = {
       guestsSummaryAdult: { en: '1 adult', el: '1 ενήλικα' },
       guestsSummaryChildren: { en: '{n} children', el: '{n} παιδιά' },
       guestsSummaryChild: { en: '1 child', el: '1 παιδί' },
+      minStay: { en: 'Minimum stay: {n} nights.', el: 'Ελάχιστη διαμονή: {n} νύχτες.' },
+      estimate: { en: 'Indicative total: {price}', el: 'Ενδεικτικό σύνολο: {price}' },
+      inclCleaning: { en: 'incl. cleaning fee {price}', el: 'με τέλος καθαριότητας {price}' },
+      estimateNote: { en: 'The final price is confirmed with your booking.', el: 'Η τελική τιμή επιβεβαιώνεται με την κράτηση.' },
+      priceOnRequest: { en: 'Price on request for these dates.', el: 'Τιμή κατόπιν αιτήματος για αυτές τις ημερομηνίες.' },
+      termsLink: { en: 'Booking terms', el: 'Όροι κράτησης' },
       needDates: { en: 'Select check-in and check-out dates first.', el: 'Επιλέξτε πρώτα ημερομηνίες άφιξης και αναχώρησης.' },
     },
   },
