@@ -19,6 +19,8 @@ const NOINDEX = ['/privacy-policy', '/cookie-policy', '/terms-and-conditions'];
 export default defineConfig({
   site: SITE_URL,
   trailingSlash: 'ignore',
+  // The page CSS is small (~16 KB): inline it so the first paint needs no extra requests.
+  build: { inlineStylesheets: 'always' },
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'el'],
