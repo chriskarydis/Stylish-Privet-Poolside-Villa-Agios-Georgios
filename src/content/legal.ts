@@ -18,6 +18,10 @@
  * NOINDEX in astro.config.mjs so the page enters the sitemap.
  */
 import type { Localized } from '@/i18n/config';
+import { property } from './property';
+
+/** The embedded map is only on the site once the villa's coordinates are set. */
+const hasMap = property.location.coordinates !== null;
 
 /** A block of a legal page: a heading, a paragraph or a bullet list. */
 export type LegalBlock = { h: string } | { p: string } | { ul: string[] };
@@ -67,6 +71,7 @@ const privacyEn: LegalBlock[] = [
       'Cloudflare, Inc. — website hosting and security.',
       'Formspree, Inc. — delivery of the contact and booking request forms to our email.',
       'Our email provider — receipt and storage of the emails you send us.',
+      ...(hasMap ? ['OpenStreetMap Foundation — the map images in the location map are loaded from its servers, which receive your IP address. No cookies are set.'] : []),
     ],
   },
   { p: 'If you choose to contact us on WhatsApp, or follow a link to Airbnb, Booking.com or Google Maps, those services process your data under their own privacy policies.' },
@@ -123,6 +128,7 @@ const privacyEl: LegalBlock[] = [
       'Cloudflare, Inc. — φιλοξενία και ασφάλεια της ιστοσελίδας.',
       'Formspree, Inc. — αποστολή των φορμών επικοινωνίας και κράτησης στο email μας.',
       'Ο πάροχος email μας — παραλαβή και αποθήκευση των μηνυμάτων που μας στέλνετε.',
+      ...(hasMap ? ['OpenStreetMap Foundation — οι εικόνες του χάρτη τοποθεσίας φορτώνονται από τους διακομιστές του, οι οποίοι λαμβάνουν τη διεύθυνση IP σας. Δεν ορίζονται cookies.'] : []),
     ],
   },
   { p: 'Αν επιλέξετε να επικοινωνήσετε μαζί μας μέσω WhatsApp ή ακολουθήσετε σύνδεσμο προς το Airbnb, το Booking.com ή τους Χάρτες Google, οι υπηρεσίες αυτές επεξεργάζονται τα δεδομένα σας σύμφωνα με τις δικές τους πολιτικές απορρήτου.' },

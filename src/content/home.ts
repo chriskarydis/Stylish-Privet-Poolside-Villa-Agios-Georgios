@@ -157,6 +157,15 @@ export const home = {
       en: 'Map shows the village area, not the exact location of the villa.',
       el: 'Ο χάρτης δείχνει την περιοχή του χωριού, όχι την ακριβή θέση της βίλας.',
     },
+    /** Map with the villa's pin (shown once coordinates are set). */
+    map: {
+      title: { en: 'Find us', el: 'Πού βρισκόμαστε' },
+      label: { en: 'Map showing the location of the villa', el: 'Χάρτης με τη θέση της βίλας' },
+      directions: { en: 'Get directions', el: 'Οδηγίες' },
+      openMaps: { en: 'Open in Google Maps', el: 'Άνοιγμα στους Χάρτες Google' },
+      tapHint: { en: 'Tap the map to move it', el: 'Πατήστε στον χάρτη για να τον μετακινήσετε' },
+      noscript: { en: 'The map needs JavaScript. Use the buttons below to open the location in Google Maps.', el: 'Ο χάρτης χρειάζεται JavaScript. Χρησιμοποιήστε τα κουμπιά παρακάτω για να ανοίξετε την τοποθεσία στους Χάρτες Google.' },
+    },
     /** Illustrated walk from the villa to the beach. */
     route: {
       title: { en: 'From the villa to the beach', el: 'Από τη βίλα στην παραλία' },
