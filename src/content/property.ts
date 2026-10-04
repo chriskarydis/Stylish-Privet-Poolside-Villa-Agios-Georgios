@@ -133,6 +133,17 @@ export const property = {
   },
 
   /**
+   * Visit statistics. Cloudflare Web Analytics is switched on in the Cloudflare
+   * dashboard (Pages project → Metrics → Web Analytics); it is cookieless, so no
+   * consent banner is needed. Set this to true once it is enabled there, so the
+   * Privacy and Cookie policies mention it. (Google Analytics would need a cookie
+   * consent banner and different policy texts.)
+   */
+  analytics: {
+    cloudflareWebAnalytics: false,
+  },
+
+  /**
    * RATES — not supplied yet. While `seasons` is empty nothing about prices is
    * shown. Once filled in, a "Rates" section appears and the calendar shows an
    * indicative total for the selected dates.
