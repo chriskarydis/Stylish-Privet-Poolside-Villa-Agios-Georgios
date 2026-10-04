@@ -36,10 +36,10 @@ export const property = {
     streetAddress: null as Localized | null,
     postalCode: null as string | null,
     /**
-     * GPS coordinates — NOT confirmed. Leave null until supplied by the owner.
+     * GPS coordinates of the villa (shown as the map pin; set to null to hide the map).
      * When set, structured data includes `geo`.
      */
-    coordinates: null as { lat: number; lng: number } | null,
+    coordinates: { lat: 39.429333, lng: 19.94425 } as { lat: number; lng: number } | null, // 39°25'45.6"N 19°56'39.3"E — confirmed by the owner
     /** Area-level map search (village, not the property). Used for "View area on map". */
     areaMapUrl: 'https://www.google.com/maps/search/?api=1&query=Agios+Georgios+Argyrades+Corfu+Greece',
   },
@@ -130,6 +130,17 @@ export const property = {
     endpoint: '/api/availability',
     /** How many months ahead guests can select. */
     monthsAhead: 12,
+  },
+
+  /**
+   * Visit statistics. Cloudflare Web Analytics is switched on in the Cloudflare
+   * dashboard (Pages project → Metrics → Web Analytics); it is cookieless, so no
+   * consent banner is needed. Set this to true once it is enabled there, so the
+   * Privacy and Cookie policies mention it. (Google Analytics would need a cookie
+   * consent banner and different policy texts.)
+   */
+  analytics: {
+    cloudflareWebAnalytics: true,
   },
 
   /**

@@ -22,6 +22,8 @@ import { property } from './property';
 
 /** The embedded map is only on the site once the villa's coordinates are set. */
 const hasMap = property.location.coordinates !== null;
+/** Visit statistics are mentioned only when they are actually switched on. */
+const hasAnalytics = property.analytics.cloudflareWebAnalytics;
 
 /** A block of a legal page: a heading, a paragraph or a bullet list. */
 export type LegalBlock = { h: string } | { p: string } | { ul: string[] };
@@ -51,6 +53,7 @@ const privacyEn: LegalBlock[] = [
       'Booking request: the above, plus your chosen dates, the number of adults and children and the children’s ages.',
       'Direct contact: if you call us, email us or message us on WhatsApp, we receive the details you share in that communication.',
       'Technical data: when you visit the website, our hosting provider processes your IP address, browser type and the pages requested, in order to deliver the site and protect it against abuse.',
+      ...(hasAnalytics ? ['Visit statistics: we use Cloudflare Web Analytics to see, in aggregate, how many people visit the website, which pages they view and which website referred them. It works without cookies and does not identify or follow individual visitors.'] : []),
     ],
   },
   { p: 'The availability calendar does not collect any data about you. It only shows which dates are already booked, based on calendar feeds from Airbnb and Booking.com that contain dates only.' },
@@ -61,6 +64,7 @@ const privacyEn: LegalBlock[] = [
       'To arrange and carry out your stay if you book directly with us — performance of a contract (Art. 6(1)(b) GDPR).',
       'To comply with legal obligations, for example tax and accounting rules that apply to bookings (Art. 6(1)(c) GDPR).',
       'To operate the website securely — our legitimate interest in a reliable and secure website (Art. 6(1)(f) GDPR).',
+      ...(hasAnalytics ? ['To understand how the website is used and improve it, using aggregate statistics only — our legitimate interest (Art. 6(1)(f) GDPR).'] : []),
     ],
   },
   { p: 'We do not use your data for marketing or advertising, we do not sell it, and we do not use automated decision-making or profiling.' },
@@ -68,7 +72,7 @@ const privacyEn: LegalBlock[] = [
   { p: 'We use the following service providers, who process data on our behalf and only as needed for their service:' },
   {
     ul: [
-      'Cloudflare, Inc. — website hosting and security.',
+      hasAnalytics ? 'Cloudflare, Inc. — website hosting, security and aggregate visit statistics.' : 'Cloudflare, Inc. — website hosting and security.',
       'Formspree, Inc. — delivery of the contact and booking request forms to our email.',
       'Our email provider — receipt and storage of the emails you send us.',
       ...(hasMap ? ['OpenStreetMap Foundation — the map images in the location map are loaded from its servers, which receive your IP address. No cookies are set.'] : []),
@@ -108,6 +112,7 @@ const privacyEl: LegalBlock[] = [
       'Αίτημα κράτησης: τα παραπάνω, καθώς και τις ημερομηνίες που επιλέξατε, τον αριθμό ενηλίκων και παιδιών και τις ηλικίες των παιδιών.',
       'Απευθείας επικοινωνία: αν μας τηλεφωνήσετε, μας στείλετε email ή μήνυμα στο WhatsApp, λαμβάνουμε τα στοιχεία που μοιράζεστε σε αυτή την επικοινωνία.',
       'Τεχνικά δεδομένα: όταν επισκέπτεστε την ιστοσελίδα, ο πάροχος φιλοξενίας επεξεργάζεται τη διεύθυνση IP σας, τον τύπο του προγράμματος περιήγησης και τις σελίδες που ζητήθηκαν, ώστε να εμφανίζεται η ιστοσελίδα και να προστατεύεται από κακόβουλη χρήση.',
+      ...(hasAnalytics ? ['Στατιστικά επισκεψιμότητας: χρησιμοποιούμε το Cloudflare Web Analytics για να βλέπουμε, συγκεντρωτικά, πόσοι επισκέπτονται την ιστοσελίδα, ποιες σελίδες βλέπουν και από ποια ιστοσελίδα ήρθαν. Λειτουργεί χωρίς cookies και δεν ταυτοποιεί ούτε παρακολουθεί μεμονωμένους επισκέπτες.'] : []),
     ],
   },
   { p: 'Το ημερολόγιο διαθεσιμότητας δεν συλλέγει κανένα δεδομένο για εσάς. Εμφανίζει μόνο ποιες ημερομηνίες είναι ήδη κλεισμένες, με βάση ημερολόγια από το Airbnb και το Booking.com που περιέχουν μόνο ημερομηνίες.' },
@@ -118,6 +123,7 @@ const privacyEl: LegalBlock[] = [
       'Για την οργάνωση και πραγματοποίηση της διαμονής σας, αν κάνετε κράτηση απευθείας σε εμάς — εκτέλεση σύμβασης (άρθρο 6 παρ. 1 στ. β΄ ΓΚΠΔ).',
       'Για τη συμμόρφωση με νομικές υποχρεώσεις, όπως η φορολογική και λογιστική νομοθεσία που ισχύει για τις κρατήσεις (άρθρο 6 παρ. 1 στ. γ΄ ΓΚΠΔ).',
       'Για την ασφαλή λειτουργία της ιστοσελίδας — έννομο συμφέρον μας για μια αξιόπιστη και ασφαλή ιστοσελίδα (άρθρο 6 παρ. 1 στ. στ΄ ΓΚΠΔ).',
+      ...(hasAnalytics ? ['Για να κατανοούμε πώς χρησιμοποιείται η ιστοσελίδα και να τη βελτιώνουμε, μόνο με συγκεντρωτικά στατιστικά — έννομο συμφέρον μας (άρθρο 6 παρ. 1 στ. στ΄ ΓΚΠΔ).'] : []),
     ],
   },
   { p: 'Δεν χρησιμοποιούμε τα δεδομένα σας για διαφήμιση ή προώθηση, δεν τα πουλάμε και δεν λαμβάνουμε αυτοματοποιημένες αποφάσεις ούτε κάνουμε κατάρτιση προφίλ.' },
@@ -125,7 +131,7 @@ const privacyEl: LegalBlock[] = [
   { p: 'Συνεργαζόμαστε με τους παρακάτω παρόχους, οι οποίοι επεξεργάζονται δεδομένα για λογαριασμό μας και μόνο στο μέτρο που απαιτείται για την υπηρεσία τους:' },
   {
     ul: [
-      'Cloudflare, Inc. — φιλοξενία και ασφάλεια της ιστοσελίδας.',
+      hasAnalytics ? 'Cloudflare, Inc. — φιλοξενία, ασφάλεια και συγκεντρωτικά στατιστικά επισκεψιμότητας της ιστοσελίδας.' : 'Cloudflare, Inc. — φιλοξενία και ασφάλεια της ιστοσελίδας.',
       'Formspree, Inc. — αποστολή των φορμών επικοινωνίας και κράτησης στο email μας.',
       'Ο πάροχος email μας — παραλαβή και αποθήκευση των μηνυμάτων που μας στέλνετε.',
       ...(hasMap ? ['OpenStreetMap Foundation — οι εικόνες του χάρτη τοποθεσίας φορτώνονται από τους διακομιστές του, οι οποίοι λαμβάνουν τη διεύθυνση IP σας. Δεν ορίζονται cookies.'] : []),
@@ -159,7 +165,9 @@ const privacyEl: LegalBlock[] = [
 const cookiesEn: LegalBlock[] = [
   { p: 'This Cookie Policy explains how {site} uses cookies and similar technologies.' },
   { h: '1. Our approach' },
-  { p: 'This website does not use cookies for analytics, advertising or tracking, and does not include third-party tracking tools. For this reason no cookie consent banner is shown.' },
+  { p: hasAnalytics
+      ? 'This website does not use cookies for analytics, advertising or tracking. Visit statistics are collected with Cloudflare Web Analytics, which works without cookies and does not identify individual visitors. For this reason no cookie consent banner is shown.'
+      : 'This website does not use cookies for analytics, advertising or tracking, and does not include third-party tracking tools. For this reason no cookie consent banner is shown.' },
   { h: '2. What the website stores on your device' },
   {
     ul: [
@@ -181,7 +189,9 @@ const cookiesEn: LegalBlock[] = [
 const cookiesEl: LegalBlock[] = [
   { p: 'Η παρούσα Πολιτική Cookies εξηγεί πώς το {site} χρησιμοποιεί cookies και παρόμοιες τεχνολογίες.' },
   { h: '1. Η προσέγγισή μας' },
-  { p: 'Η ιστοσελίδα δεν χρησιμοποιεί cookies για στατιστικά, διαφήμιση ή παρακολούθηση και δεν περιλαμβάνει εργαλεία παρακολούθησης τρίτων. Για τον λόγο αυτό δεν εμφανίζεται μήνυμα συγκατάθεσης για cookies.' },
+  { p: hasAnalytics
+      ? 'Η ιστοσελίδα δεν χρησιμοποιεί cookies για στατιστικά, διαφήμιση ή παρακολούθηση. Τα στατιστικά επισκεψιμότητας συλλέγονται με το Cloudflare Web Analytics, το οποίο λειτουργεί χωρίς cookies και δεν ταυτοποιεί μεμονωμένους επισκέπτες. Για τον λόγο αυτό δεν εμφανίζεται μήνυμα συγκατάθεσης για cookies.'
+      : 'Η ιστοσελίδα δεν χρησιμοποιεί cookies για στατιστικά, διαφήμιση ή παρακολούθηση και δεν περιλαμβάνει εργαλεία παρακολούθησης τρίτων. Για τον λόγο αυτό δεν εμφανίζεται μήνυμα συγκατάθεσης για cookies.' },
   { h: '2. Τι αποθηκεύει η ιστοσελίδα στη συσκευή σας' },
   {
     ul: [

@@ -1,0 +1,26 @@
+# HTTP response headers for Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Content-Security-Policy — which origins the site may talk to:
+#   scripts   own files + inline (Astro inlines small scripts and JSON-LD)
+#             + Cloudflare Web Analytics beacon
+#   images    own files + OpenStreetMap tiles (location map)
+#   fonts     own files + data: (Vite inlines very small font subsets)
+#   connect   own API (/api/availability) + Formspree (forms)
+#             + Cloudflare Web Analytics reporting
+#   forms     only to this site or Formspree
+# When a new third-party service is added to the site, add it here too,
+# otherwise the browser will block it.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://tile.openstreetmap.org; font-src 'self' data:; connect-src 'self' https://formspree.io https://cloudflareinsights.com; form-action 'self' https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# Files under /_astro/ have a content hash in their name, so they never change:
+# let browsers keep them for a year.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
