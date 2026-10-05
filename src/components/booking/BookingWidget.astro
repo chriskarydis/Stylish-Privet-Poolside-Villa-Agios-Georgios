@@ -45,9 +45,14 @@ const config = {
   checkInTime: property.rules.checkIn,
   checkOutTime: property.rules.checkOut,
   s: {
-    ...Object.fromEntries(Object.entries({ ...w, ...f }).map(([k, v]) => [k, t(v as { en: string; el: string }, lang)])),
+    ...Object.fromEntries(
+      Object.entries({ ...w, ...f })
+        .filter(([k]) => k !== 'owner')
+        .map(([k, v]) => [k, t(v as { en: string; el: string }, lang)]),
+    ),
     whatsappGeneral: t(home.contact.whatsappMessage, lang),
   } as Record<string, string>,
+  owner: f.owner,
 };
 ---
 
@@ -58,6 +63,8 @@ const config = {
     <h3 class="bw__title" id="bw-title">{t(home.booking.cta, lang)}</h3>
     <button type="button" class="bw__clear" data-bw-clear hidden>{t(w.clear, lang)}</button>
   </div>
+
+  <p class="bw__step"><span aria-hidden="true">1</span>{t(w.stepDates, lang)}</p>
 
   <div class="bw__dates" aria-hidden="true">
     <div class="bw__date" data-bw-in-box>
@@ -86,17 +93,21 @@ const config = {
       <noscript><p class="bw__noscript">{t(w.notSynced, lang)}</p></noscript>
     </div>
     <ul class="bw__legend" role="list">
-      <li><span class="bw__swatch bw__swatch--free"></span>{t(w.legendAvailable, lang)}</li>
-      <li><span class="bw__swatch bw__swatch--booked"></span>{t(w.legendBooked, lang)}</li>
+      <li data-bw-legend-free hidden><span class="bw__swatch bw__swatch--free"></span>{t(w.legendAvailable, lang)}</li>
+      <li data-bw-legend-booked hidden><span class="bw__swatch bw__swatch--booked"></span>{t(w.legendBooked, lang)}</li>
       <li><span class="bw__swatch bw__swatch--sel"></span>{t(w.legendSelected, lang)}</li>
     </ul>
   </div>
 
   <p class="bw__status" data-bw-status aria-live="polite">{t(w.pickCheckIn, lang)}</p>
+  <p class="bw__warn" data-bw-warn role="status" hidden>
+    <Icon name="info" size={18} />
+    <span>{t(w.unknown, lang)}</span>
+  </p>
   <p class="bw__note" data-bw-note>{t(w.notSynced, lang)}</p>
 
   <fieldset class="bw__guests">
-    <legend>{t(w.guests, lang)}</legend>
+    <legend class="bw__step"><span aria-hidden="true">2</span>{t(w.guests, lang)}</legend>
     <div class="bw__guest-row">
       <label>
         <span>{t(w.adults, lang)}</span>
@@ -118,7 +129,9 @@ const config = {
   <p class="bw__summary" data-bw-summary aria-live="polite" hidden></p>
   <p class="bw__price" data-bw-price aria-live="polite" hidden></p>
 
-  <!-- 1. Direct booking first (primary), 2. platforms second (secondary). -->
+  <p class="bw__step"><span aria-hidden="true">3</span>{t(w.stepBook, lang)}</p>
+
+  <!-- Direct booking first (primary), platforms second (secondary). -->
   <div class="bw__group">
     <p class="bw__group-title">{t(w.bookDirect, lang)}</p>
     <div class="bw__pair">
@@ -196,6 +209,7 @@ const config = {
     nightsBetween,
     toIso,
     type AvailabilityResponse,
+    type AvailabilityStatus,
     type IsoDate,
     type PriceSeason,
   } from '@/lib/availability';
@@ -218,6 +232,7 @@ const config = {
     checkInTime: string;
     checkOutTime: string;
     s: Record<string, string>;
+    owner: Record<string, string> & { languages: Record<string, string> };
   };
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-booking-widget]')) initWidget(root);
@@ -253,6 +268,7 @@ const config = {
     })();
 
     let blocked = new Set<IsoDate>();
+    let status: AvailabilityStatus = 'unconfigured';
     let checkIn: IsoDate | null = null;
     let checkOut: IsoDate | null = null;
     let hover: IsoDate | null = null;
@@ -354,7 +370,8 @@ const config = {
         b.setAttribute('aria-disabled', String(!ok));
         b.setAttribute('aria-pressed', String(d === checkIn || d === checkOut));
         b.tabIndex = d === focusDate ? 0 : -1;
-        const state = past ? '' : checkoutOnly ? s.dayCheckoutOnly : booked ? s.dayBooked : s.dayAvailable;
+        // Never call a day "available" unless every calendar was read successfully.
+        const state = past ? '' : checkoutOnly ? s.dayCheckoutOnly : booked ? s.dayBooked : status === 'ok' ? s.dayAvailable : '';
         const role = d === checkIn ? `, ${s.checkIn}` : d === checkOut ? `, ${s.checkOut}` : '';
         b.setAttribute('aria-label', `${dfLong.format(fromIso(d))}${state ? `, ${state}` : ''}${role}`);
       }
@@ -545,25 +562,30 @@ const config = {
       const g = guests();
       submit.disabled = true;
       submit.textContent = s.sending;
+      const o = cfg.owner;
+      const ownerDate = new Intl.DateTimeFormat(o.locale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+      const total = g.adults + g.childAges.length;
+      const totalText = total === 1 ? o.guestsOne : o.guestsMany.replace('{n}', String(total));
+      const ages = g.childAges.map((age) => (age === 0 ? o.under1 : String(age))).join(', ');
       const res = await sendForm({
         formId: cfg.formId,
         fallbackEmail: cfg.email,
-        subject: fmt(s.subjectBooking, { in: checkIn, out: checkOut }),
+        subject: fmt(o.subjectBooking, { in: ownerDate.format(fromIso(checkIn)), out: ownerDate.format(fromIso(checkOut)), guests: totalText, name: v.name }),
+        // Order and labels are what the owner reads in the email.
         data: {
-          name: v.name,
+          [o.checkIn]: `${ownerDate.format(fromIso(checkIn))} (${checkIn})`,
+          [o.checkOut]: `${ownerDate.format(fromIso(checkOut))} (${checkOut})`,
+          [o.nights]: String(nightsBetween(checkIn, checkOut)),
+          [o.adults]: String(g.adults),
+          [o.children]: g.childAges.length ? fmt(o.childrenAges, { n: g.childAges.length, ages }) : '0',
+          [o.totalGuests]: String(total),
+          [o.name]: v.name,
           email: v.email,
-          phone: v.phone,
-          check_in: checkIn,
-          check_out: checkOut,
-          nights: String(nightsBetween(checkIn, checkOut)),
-          adults: String(g.adults),
-          children: String(g.childAges.length),
-          children_ages: g.childAges.join(', '),
-          estimate: priceText,
-          message: v.message,
-          language: document.documentElement.lang,
+          [o.phone]: v.phone,
+          [o.message]: v.message,
+          [o.estimate]: priceText,
+          [o.language]: o.languages[document.documentElement.lang] ?? document.documentElement.lang,
         },
-        labels: { name: s.name, email: s.email, phone: s.phone, check_in: s.checkIn, check_out: s.checkOut, adults: s.adults, children: s.children, message: s.message },
       });
       submit.disabled = false;
       submit.textContent = s.sendRequest;
@@ -585,16 +607,35 @@ const config = {
       if (loaded) return;
       loaded = true;
       noteEl.textContent = s.loading;
-      let synced = false;
       try {
         const res = await fetch(cfg.endpoint, { headers: { Accept: 'application/json' } });
-        const data = (await res.json()) as AvailabilityResponse;
-        blocked = blockedNights(data.blocked ?? []);
-        synced = data.configured && !!data.updated;
+        if (res.status === 404) {
+          status = 'unconfigured'; // the function is not deployed (e.g. local development)
+        } else if (!res.ok) {
+          status = 'unavailable';
+        } else {
+          const data = (await res.json()) as AvailabilityResponse;
+          const known: AvailabilityStatus[] = ['ok', 'partial', 'unavailable', 'unconfigured'];
+          // An answer in the pre-status format may still be cached for a few minutes after a
+          // deploy: "configured: false" meant no calendars; anything else unknown is unsafe.
+          const legacyUnconfigured = (data as { configured?: boolean }).configured === false;
+          status = known.includes(data.status) ? data.status : legacyUnconfigured ? 'unconfigured' : 'unavailable';
+          blocked = blockedNights(Array.isArray(data.blocked) ? data.blocked : []);
+        }
       } catch {
-        // Local development, or the function is not deployed: dates can still be chosen.
+        status = 'unavailable'; // network error or an unreadable answer — never treated as "all free"
       }
-      noteEl.textContent = synced ? s.synced : s.notSynced;
+      // 'ok'           → booked and available days are both known
+      // 'partial'      → known bookings are shown, nothing is called available, warning shown
+      // 'unavailable'  → nothing is known, warning shown
+      // 'unconfigured' → no calendars connected: plain date picker, no availability claims
+      const unsure = status === 'partial' || status === 'unavailable';
+      $('[data-bw-warn]').hidden = !unsure;
+      $('[data-bw-legend-free]').hidden = status !== 'ok';
+      $('[data-bw-legend-booked]').hidden = blocked.size === 0;
+      noteEl.textContent = status === 'ok' ? s.synced : s.notSynced;
+      noteEl.hidden = unsure; // the warning already says what to do
+      root.dataset.availability = status;
       // Drop a selection that turned out to overlap a booking.
       if (checkIn && blocked.has(checkIn)) checkIn = checkOut = null;
       if (checkIn && checkOut && !canEnd(checkOut)) checkOut = null;
@@ -653,6 +694,48 @@ const config = {
     text-underline-offset: 0.2em;
   }
 
+  .bw__step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bw__step span {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--sea);
+    color: var(--on-dark);
+    font-size: 0.75rem;
+    letter-spacing: 0;
+  }
+  p.bw__step {
+    margin-bottom: -0.35rem;
+  }
+  .bw__warn {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    padding: 0.8rem 1rem;
+    border: 1px solid #e3c08a;
+    border-radius: var(--radius);
+    background: #fdf3e0;
+    color: #5c3c00;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .bw__warn :global(.icon) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
   .bw__dates {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -846,11 +929,11 @@ const config = {
     display: grid;
     gap: 0.75rem;
     margin: 0;
-    padding: 1rem 0 0;
+    padding: 0;
     border: 0;
-    border-top: 1px solid var(--line);
   }
   .bw__guests legend {
+    margin-bottom: 0.6rem;
     padding: 0;
     font-size: 0.7rem;
     font-weight: 700;

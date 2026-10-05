@@ -20,8 +20,12 @@ const [privacyBefore, privacyAfter] = t(f.privacy, lang).split('{link}');
 const config = {
   formId: property.forms.generalFormId,
   email: contact.email,
-  subject: t(f.subjectGeneral, lang),
-  s: Object.fromEntries(Object.entries(f).map(([k, v]) => [k, t(v, lang)])),
+  owner: f.owner,
+  s: Object.fromEntries(
+    Object.entries(f)
+      .filter(([k]) => k !== 'owner')
+      .map(([k, v]) => [k, t(v as { en: string; el: string }, lang)]),
+  ),
 };
 ---
 
@@ -119,7 +123,7 @@ const config = {
     const cfg = JSON.parse(form.querySelector('[data-contact-config]')!.textContent!) as {
       formId: string | null;
       email: string | null;
-      subject: string;
+      owner: Record<string, string> & { languages: Record<string, string> };
       s: Record<string, string>;
     };
     const result = form.querySelector<HTMLElement>('[data-cf-result]')!;
@@ -147,9 +151,15 @@ const config = {
       const res = await sendForm({
         formId: cfg.formId,
         fallbackEmail: cfg.email,
-        subject: cfg.subject,
-        data: { name: v.name, email: v.email, phone: v.phone, message: v.message, language: document.documentElement.lang },
-        labels: { name: cfg.s.name, email: cfg.s.email, phone: cfg.s.phone, message: cfg.s.message },
+        subject: cfg.owner.subjectGeneral.replace('{name}', v.name),
+        // Order and labels are what the owner reads in the email.
+        data: {
+          [cfg.owner.name]: v.name,
+          email: v.email,
+          [cfg.owner.phone]: v.phone,
+          [cfg.owner.message]: v.message,
+          [cfg.owner.language]: cfg.owner.languages[document.documentElement.lang] ?? document.documentElement.lang,
+        },
       });
       submit.disabled = false;
       label.textContent = cfg.s.send;

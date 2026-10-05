@@ -309,6 +309,12 @@ export const home = {
       estimateNote: { en: 'The final price is confirmed with your booking.', el: 'Η τελική τιμή επιβεβαιώνεται με την κράτηση.' },
       priceOnRequest: { en: 'Price on request for these dates.', el: 'Τιμή κατόπιν αιτήματος για αυτές τις ημερομηνίες.' },
       termsLink: { en: 'Booking terms', el: 'Όροι κράτησης' },
+      unknown: {
+        en: 'Availability cannot be confirmed right now. Please check it on Airbnb or Booking.com, or contact us.',
+        el: 'Η διαθεσιμότητα δεν μπορεί να επιβεβαιωθεί αυτή τη στιγμή. Δείτε τη στο Airbnb ή στο Booking.com, ή επικοινωνήστε μαζί μας.',
+      },
+      stepDates: { en: 'Dates', el: 'Ημερομηνίες' },
+      stepBook: { en: 'How to book', el: 'Τρόπος κράτησης' },
       needDates: { en: 'Select check-in and check-out dates first.', el: 'Επιλέξτε πρώτα ημερομηνίες άφιξης και αναχώρησης.' },
     },
   },
@@ -370,8 +376,31 @@ export const home = {
       en: 'A request is not a confirmed booking. We will reply to confirm availability and details.',
       el: 'Το αίτημα δεν αποτελεί επιβεβαιωμένη κράτηση. Θα σας απαντήσουμε για να επιβεβαιώσουμε διαθεσιμότητα και λεπτομέρειες.',
     },
-    subjectGeneral: { en: 'Enquiry — Stylish Private Poolside Villa', el: 'Ερώτηση — Stylish Private Poolside Villa' },
-    subjectBooking: { en: 'Booking request {in} – {out}', el: 'Αίτημα κράτησης {in} – {out}' },
+    /**
+     * Texts of the emails the OWNER receives (Formspree). Always Greek, whatever
+     * language the visitor used — change here if the owner prefers another language.
+     */
+    owner: {
+      locale: 'el-GR',
+      subjectGeneral: 'Νέο μήνυμα από το site · {name}',
+      subjectBooking: 'Νέο αίτημα κράτησης: {in} – {out} · {guests} · {name}',
+      guestsOne: '1 άτομο',
+      guestsMany: '{n} άτομα',
+      checkIn: 'Άφιξη',
+      checkOut: 'Αναχώρηση',
+      nights: 'Νύχτες',
+      adults: 'Ενήλικες',
+      children: 'Παιδιά',
+      childrenAges: '{n} (ηλικίες: {ages})',
+      under1: 'κάτω του 1',
+      totalGuests: 'Σύνολο ατόμων',
+      name: 'Όνομα',
+      phone: 'Τηλέφωνο',
+      message: 'Μήνυμα',
+      estimate: 'Ενδεικτική τιμή που είδε ο επισκέπτης',
+      language: 'Γλώσσα επισκέπτη',
+      languages: { en: 'Αγγλικά', el: 'Ελληνικά' } as Record<string, string>,
+    },
     stay: { en: 'Stay', el: 'Διαμονή' },
   },
 };
