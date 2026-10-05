@@ -769,6 +769,15 @@ const config = {
   .bw__arrow {
     color: var(--muted);
   }
+  /* Smallest phones: keep "Select date" / "Thu 22 Oct" on one line without cutting it. */
+  @media (max-width: 22.5em) {
+    .bw__date {
+      padding-inline: 0.6rem;
+    }
+    .bw__date-value {
+      font-size: var(--fs-sm);
+    }
+  }
 
   .bw__cal {
     position: relative;
@@ -904,7 +913,7 @@ const config = {
   .bw__swatch {
     width: 14px;
     height: 14px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--line);
   }
   .bw__swatch--booked {
