@@ -31,7 +31,7 @@ export const home = {
     body: {
       en: [
         'Welcome to Stylish Private Poolside Villa, a comfortable and thoughtfully designed holiday home in Agios Georgios, Southern Corfu.',
-        "A short walk from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu's south.",
+        "A short walk from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu’s south.",
         'With two bedrooms, two bathrooms and a comfortable living area with a sofa bed, the villa can accommodate up to six guests. A fully equipped kitchen, washing machine, air conditioning, Wi-Fi and private parking provide everything you need for a comfortable stay.',
         'Outside, guests can enjoy the garden surroundings, outdoor dining and access to the swimming pool shared exclusively by guests staying at the villa and the neighbouring apartments. Thanks to its proximity to the coast, the sea can be seen from the property.',
       ],
@@ -39,7 +39,7 @@ export const home = {
         'Καλώς ήρθατε στη Stylish Private Poolside Villa, ένα άνετο και προσεγμένο εξοχικό σπίτι στον Άγιο Γεώργιο της Νότιας Κέρκυρας.',
         'Σε μικρή απόσταση με τα πόδια από την παραλία, η βίλα είναι ιδανική βάση για να απολαύσετε τη χαλαρή ατμόσφαιρα και τη φυσική ομορφιά του νότου της Κέρκυρας.',
         'Με δύο υπνοδωμάτια, δύο μπάνια και ένα άνετο σαλόνι με καναπέ-κρεβάτι, η βίλα φιλοξενεί έως έξι άτομα. Η πλήρως εξοπλισμένη κουζίνα, το πλυντήριο ρούχων, ο κλιματισμός, το Wi-Fi και ο ιδιωτικός χώρος στάθμευσης προσφέρουν ό,τι χρειάζεστε για μια άνετη διαμονή.',
-        'Έξω, οι επισκέπτες απολαμβάνουν τον κήπο, το υπαίθριο φαγητό και την πισίνα, την οποία μοιράζονται αποκλειστικά οι επισκέπτες της βίλας και των γειτονικών διαμερισμάτων του ακινήτου. Χάρη στη μικρή απόσταση από την ακτή, η θάλασσα είναι ορατή από το ακίνητο.',
+        'Έξω, οι επισκέπτες απολαμβάνουν τον κήπο, τα γεύματα στον εξωτερικό χώρο και την πισίνα, την οποία μοιράζονται αποκλειστικά οι επισκέπτες της βίλας και των γειτονικών διαμερισμάτων του ακινήτου. Χάρη στη μικρή απόσταση από την ακτή, η θάλασσα είναι ορατή από το ακίνητο.',
       ],
     } satisfies P,
     sizeNote: { en: 'approx. {size} m² of living space', el: 'περίπου {size} τ.μ. εσωτερικός χώρος' },
@@ -66,12 +66,12 @@ export const home = {
     title: { en: 'Fully Equipped Kitchen', el: 'Πλήρως εξοπλισμένη κουζίνα' },
     body: {
       en: 'Prepare breakfast before heading to the beach, enjoy a relaxed dinner at home or simply make yourself a coffee whenever you like. The fully equipped kitchen provides the essentials for a comfortable self-catering holiday.',
-      el: 'Ετοιμάστε πρωινό πριν ξεκινήσετε για την παραλία, απολαύστε ένα χαλαρό δείπνο στο σπίτι ή απλώς φτιάξτε έναν καφέ όποτε θέλετε. Η πλήρως εξοπλισμένη κουζίνα διαθέτει όλα τα απαραίτητα για άνετες διακοπές με αυτοεξυπηρέτηση.',
+      el: 'Ετοιμάστε πρωινό πριν ξεκινήσετε για την παραλία, απολαύστε ένα χαλαρό δείπνο στο σπίτι ή απλώς φτιάξτε έναν καφέ όποτε θέλετε. Η πλήρως εξοπλισμένη κουζίνα διαθέτει όλα τα απαραίτητα για να μαγειρεύετε άνετα στις διακοπές σας.',
     },
   },
 
   pool: {
-    eyebrow: { en: 'Pool & Outdoors', el: 'Πισίνα & Εξωτερικοί χώροι' },
+    eyebrow: { en: 'Pool & Outdoors', el: 'Πισίνα & εξωτερικοί χώροι' },
     title: { en: 'Relax by the Pool', el: 'Χαλαρώστε δίπλα στην πισίνα' },
     badge: { en: 'Guest-Only Pool', el: 'Πισίνα μόνο για επισκέπτες' },
     body: {
@@ -93,7 +93,7 @@ export const home = {
   },
 
   outdoor: {
-    title: { en: 'Outdoor Living', el: 'Ζωή στην ύπαιθρο' },
+    title: { en: 'Outdoor Living', el: 'Εξωτερικοί χώροι' },
     body: {
       en: [
         'Make the most of the Corfu sunshine with comfortable outdoor spaces designed for slow mornings, relaxed afternoons and evenings under the Mediterranean sky.',
@@ -101,7 +101,7 @@ export const home = {
       ],
       el: [
         'Απολαύστε στο έπακρο τον ήλιο της Κέρκυρας σε άνετους εξωτερικούς χώρους, φτιαγμένους για ήρεμα πρωινά, χαλαρά απογεύματα και βραδιές κάτω από τον μεσογειακό ουρανό.',
-        'Χαρείτε τον κήπο, το υπαίθριο φαγητό και τον χώρο της πισίνας, ενώ η κοντινή θάλασσα συμπληρώνει την ατμόσφαιρα αυτού του ήσυχου παραθαλάσσιου τοπίου.',
+        'Χαρείτε τον κήπο, τα γεύματα στον εξωτερικό χώρο και τον χώρο της πισίνας, ενώ η κοντινή θάλασσα συμπληρώνει την ατμόσφαιρα αυτού του ήσυχου παραθαλάσσιου τοπίου.',
       ],
     } satisfies P,
   },
@@ -138,12 +138,12 @@ export const home = {
       en: [
         'Set in Agios Georgios in Southern Corfu, the villa is ideally positioned for guests looking to combine a relaxing beach holiday with the opportunity to explore the island.',
         'The sandy beach is a short walk away, while restaurants, bars and local shops can be found within easy reach.',
-        "From here, you can enjoy the beautiful coastline of Southern Corfu, discover Lake Korission and explore some of the island's most scenic beaches and cultural attractions.",
+        "From here, you can enjoy the beautiful coastline of Southern Corfu, discover Lake Korission and explore some of the island’s most scenic beaches and cultural attractions.",
       ],
       el: [
         'Στον Άγιο Γεώργιο της Νότιας Κέρκυρας, η βίλα βρίσκεται στο ιδανικό σημείο για όσους θέλουν να συνδυάσουν χαλαρές διακοπές δίπλα στη θάλασσα με την εξερεύνηση του νησιού.',
         'Η αμμουδιά απέχει λίγα λεπτά με τα πόδια, ενώ εστιατόρια, μπαρ και τοπικά καταστήματα βρίσκονται σε κοντινή απόσταση.',
-        'Από εδώ μπορείτε να απολαύσετε την όμορφη ακτογραμμή της Νότιας Κέρκυρας, να ανακαλύψετε τη λίμνη Κορισσίων και να εξερευνήσετε μερικές από τις πιο γραφικές παραλίες και πολιτιστικά αξιοθέατα του νησιού.',
+        'Από εδώ μπορείτε να απολαύσετε την όμορφη ακτογραμμή της Νότιας Κέρκυρας, να ανακαλύψετε τη λίμνη Κορισσίων και να εξερευνήσετε μερικές από τις πιο γραφικές παραλίες και τα πολιτιστικά αξιοθέατα του νησιού.',
       ],
     } satisfies P,
     highlight: { en: 'from the beach', el: 'από την παραλία' },
@@ -161,7 +161,7 @@ export const home = {
     map: {
       title: { en: 'Find us', el: 'Πού βρισκόμαστε' },
       label: { en: 'Map showing the location of the villa', el: 'Χάρτης με τη θέση της βίλας' },
-      directions: { en: 'Get directions', el: 'Οδηγίες' },
+      directions: { en: 'Get directions', el: 'Οδηγίες διαδρομής' },
       openMaps: { en: 'Open in Google Maps', el: 'Άνοιγμα στους Χάρτες Google' },
       tapHint: { en: 'Tap the map to move it', el: 'Πατήστε στον χάρτη για να τον μετακινήσετε' },
       noscript: { en: 'See the villa’s location in Google Maps using the buttons below.', el: 'Δείτε την τοποθεσία της βίλας στους Χάρτες Google με τα παρακάτω κουμπιά.' },
@@ -200,7 +200,7 @@ export const home = {
     eyebrow: { en: 'Guest Reviews', el: 'Κριτικές επισκεπτών' },
     title: { en: 'Rated by Our Guests', el: 'Η γνώμη των επισκεπτών μας' },
     body: {
-      en: "Our guests consistently highlight the villa's cleanliness, comfort, location and welcoming atmosphere.",
+      en: "Our guests consistently highlight the villa’s cleanliness, comfort, location and welcoming atmosphere.",
       el: 'Οι επισκέπτες μας αναφέρουν σταθερά την καθαριότητα, την άνεση, την τοποθεσία και τη φιλόξενη ατμόσφαιρα της βίλας.',
     },
     quotesTitle: { en: 'In our guests’ words', el: 'Με τα λόγια των επισκεπτών μας' },
@@ -262,7 +262,7 @@ export const home = {
       selectDate: { en: 'Select date', el: 'Επιλέξτε' },
       prevMonth: { en: 'Previous month', el: 'Προηγούμενος μήνας' },
       nextMonth: { en: 'Next month', el: 'Επόμενος μήνας' },
-      clear: { en: 'Clear dates', el: 'Καθαρισμός' },
+      clear: { en: 'Clear dates', el: 'Εκκαθάριση' },
       guests: { en: 'Guests', el: 'Επισκέπτες' },
       adults: { en: 'Adults', el: 'Ενήλικες' },
       children: { en: 'Children', el: 'Παιδιά' },

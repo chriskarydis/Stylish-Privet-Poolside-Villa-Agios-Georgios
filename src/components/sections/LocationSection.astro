@@ -23,7 +23,7 @@ const loc = property.location;
         <SmartImage image="beach" lang={lang} sizes="(min-width: 64em) 48vw, 92vw" />
       </div>
       <div class="loc__stat">
-        <span class="loc__stat-value serif">{property.facts.beachDistanceM}<small> m</small></span>
+        <span class="loc__stat-value serif">{property.facts.beachDistanceM}<small> {lang === 'el' ? 'μ.' : 'm'}</small></span>
         <span class="loc__stat-label">{t(home.location.highlight, lang)}</span>
       </div>
     </div>
@@ -56,7 +56,7 @@ const loc = property.location;
             <a class="text-link" href={loc.areaMapUrl} target="_blank" rel="noopener noreferrer">
               <Icon name="map-pin" size={18} />
               {t(home.location.mapLink, lang)}
-              <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+              <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
               <Icon name="external-link" size={14} />
             </a>
             <p class="loc__map-note">{t(home.location.mapNote, lang)}</p>

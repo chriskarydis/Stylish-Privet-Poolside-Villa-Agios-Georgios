@@ -27,9 +27,9 @@ export const amenityCategories: AmenityCategory[] = [
     items: [
       a('snowflake', 'Air conditioning', 'Κλιματισμός'),
       a('washing-machine', 'Washing machine', 'Πλυντήριο ρούχων'),
-      a('hairdryer', 'Hairdryer', 'Σεσουάρ μαλλιών'),
+      a('hairdryer', 'Hairdryer', 'Πιστολάκι μαλλιών'),
       a('iron', 'Iron and ironing facilities', 'Σίδερο και εξοπλισμός σιδερώματος'),
-      a('linen', 'Bed linen', 'Λευκά είδη κρεβατιού'),
+      a('linen', 'Bed linen', 'Σεντόνια'),
       a('towel', 'Towels', 'Πετσέτες'),
     ],
   },

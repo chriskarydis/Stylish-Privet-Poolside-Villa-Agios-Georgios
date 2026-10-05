@@ -61,9 +61,9 @@ export const ui = {
   checkIn: { en: 'Check-in from {time}', el: 'Άφιξη από τις {time}' },
   checkOut: { en: 'Check-out before {time}', el: 'Αναχώρηση έως τις {time}' },
   childrenWelcome: { en: 'Children welcome', el: 'Τα παιδιά είναι ευπρόσδεκτα' },
-  noPets: { en: 'No pets', el: 'Όχι κατοικίδια' },
+  noPets: { en: 'No pets', el: 'Δεν επιτρέπονται κατοικίδια' },
   noSmoking: { en: 'No smoking inside the villa', el: 'Απαγορεύεται το κάπνισμα στους εσωτερικούς χώρους' },
-  noParties: { en: 'No parties or events', el: 'Όχι πάρτι ή εκδηλώσεις' },
+  noParties: { en: 'No parties or events', el: 'Δεν επιτρέπονται πάρτι ή εκδηλώσεις' },
   // Footer
   footerTagline: {
     en: 'A stylish two-bedroom holiday villa in Agios Georgios, Southern Corfu.',
