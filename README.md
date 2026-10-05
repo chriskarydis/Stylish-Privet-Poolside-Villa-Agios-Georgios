@@ -13,7 +13,7 @@ npm run build      # type-check + production build into dist/
 npm run preview    # serve the production build locally
 ```
 
-Requires Node.js 20+.
+Requires Node.js 22 (the version in `.nvmrc`, used by CI and Cloudflare too).
 
 ## Before going live
 

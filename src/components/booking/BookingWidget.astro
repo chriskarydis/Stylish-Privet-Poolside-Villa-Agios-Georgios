@@ -144,7 +144,7 @@ const config = {
           <a class="btn" data-bw-whatsapp href={`https://wa.me/${property.contact.whatsapp}`} target="_blank" rel="noopener noreferrer">
             <Icon name="message-circle" size={18} />
             {t(w.whatsapp, lang)}
-            <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+            <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
           </a>
         )
       }
@@ -185,12 +185,12 @@ const config = {
     <div class="bw__pair">
       <a class="btn btn--outline" data-bw-airbnb href={property.booking.airbnb[lang]} target="_blank" rel="noopener noreferrer">
         {fill(t(w.continueOn, lang), { platform: 'Airbnb' })}
-        <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
         <Icon name="external-link" size={16} />
       </a>
       <a class="btn btn--outline" data-bw-booking href={property.booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer">
         {fill(t(w.continueOn, lang), { platform: 'Booking.com' })}
-        <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+        <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
         <Icon name="external-link" size={16} />
       </a>
     </div>

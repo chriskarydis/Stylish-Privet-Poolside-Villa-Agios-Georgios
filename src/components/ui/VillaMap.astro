@@ -45,12 +45,12 @@ const dest = c ? `${c.lat},${c.lng}` : '';
         <a class="btn" href={`https://www.google.com/maps/dir/?api=1&destination=${dest}`} target="_blank" rel="noopener noreferrer">
           <Icon name="compass" size={18} />
           {t(m.directions, lang)}
-          <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+          <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
         </a>
         <a class="btn btn--outline" href={`https://www.google.com/maps/search/?api=1&query=${dest}`} target="_blank" rel="noopener noreferrer">
           <Icon name="map-pin" size={18} />
           {t(m.openMaps, lang)}
-          <span class="visually-hidden">{t(ui.opensInNewTab, lang)}</span>
+          <span class="visually-hidden"> {t(ui.opensInNewTab, lang)}</span>
         </a>
       </div>
     </figure>

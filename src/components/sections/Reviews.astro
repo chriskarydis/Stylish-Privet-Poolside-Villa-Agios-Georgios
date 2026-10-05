@@ -47,7 +47,7 @@ const reviewMeta = (r: (typeof guestReviews)[number]) =>
         </div>
         <a class="text-link score__link" href={airbnb.reviewsUrl[lang]} target="_blank" rel="noopener noreferrer">
           {fill(t(ui.readReviewsOn, lang), { platform: 'Airbnb' })}
-          <span class="visually-hidden">{newTab}</span>
+          <span class="visually-hidden"> {newTab}</span>
           <Icon name="external-link" size={14} />
         </a>
       </article>
@@ -75,7 +75,7 @@ const reviewMeta = (r: (typeof guestReviews)[number]) =>
         </dl>
         <a class="text-link score__link" href={bookingCom.reviewsUrl[lang]} target="_blank" rel="noopener noreferrer">
           {fill(t(ui.readReviewsOn, lang), { platform: 'Booking.com' })}
-          <span class="visually-hidden">{newTab}</span>
+          <span class="visually-hidden"> {newTab}</span>
           <Icon name="external-link" size={14} />
         </a>
       </article>

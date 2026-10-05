@@ -82,7 +82,7 @@ const registry = registryNumber();
                 <a href={`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(t(home.contact.whatsappMessage, lang))}`} class="footer__icon-link" target="_blank" rel="noopener noreferrer">
                   <Icon name="message-circle" size={16} />
                   WhatsApp
-                  <span class="visually-hidden">{newTab}</span>
+                  <span class="visually-hidden"> {newTab}</span>
                 </a>
               </li>
             )
@@ -97,13 +97,13 @@ const registry = registryNumber();
         <ul role="list">
           <li>
             <a href={booking.airbnb[lang]} target="_blank" rel="noopener noreferrer" class="footer__icon-link">
-              Airbnb <span class="visually-hidden">{newTab}</span>
+              Airbnb <span class="visually-hidden"> {newTab}</span>
               <Icon name="external-link" size={14} />
             </a>
           </li>
           <li>
             <a href={booking.bookingCom[lang]} target="_blank" rel="noopener noreferrer" class="footer__icon-link">
-              Booking.com <span class="visually-hidden">{newTab}</span>
+              Booking.com <span class="visually-hidden"> {newTab}</span>
               <Icon name="external-link" size={14} />
             </a>
           </li>
