@@ -213,7 +213,7 @@ const config = {
     type IsoDate,
     type PriceSeason,
   } from '@/lib/availability';
-  import { formValues, isSpam, sendForm } from '@/lib/forms';
+  import { formValues, isSpam, markInvalid, sendForm, setBusy, showFormResult } from '@/lib/forms';
 
   type Config = {
     locale: string;
@@ -546,7 +546,9 @@ const config = {
       e.preventDefault();
       const result = form.querySelector<HTMLElement>('[data-bw-result]')!;
       const submit = form.querySelector<HTMLButtonElement>('[data-bw-submit]')!;
+      if (submit.getAttribute('aria-disabled') === 'true') return; // already sending
       result.hidden = true;
+      markInvalid(form);
       if (!checkIn || !checkOut) {
         showResult(result, s.needDates, false);
         return;
@@ -560,7 +562,7 @@ const config = {
       if (isSpam(form)) return;
       const v = formValues(form);
       const g = guests();
-      submit.disabled = true;
+      setBusy(submit, true);
       submit.textContent = s.sending;
       const o = cfg.owner;
       const ownerDate = new Intl.DateTimeFormat(o.locale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
@@ -587,7 +589,7 @@ const config = {
           [o.language]: o.languages[document.documentElement.lang] ?? document.documentElement.lang,
         },
       });
-      submit.disabled = false;
+      setBusy(submit, false);
       submit.textContent = s.sendRequest;
       if (res === 'sent') {
         form.reset();
@@ -595,9 +597,7 @@ const config = {
       } else if (res === 'error') showResult(result, s.error, false);
     });
     function showResult(el: HTMLElement, text: string, ok: boolean) {
-      el.textContent = text;
-      el.classList.toggle('is-error', !ok);
-      el.hidden = false;
+      showFormResult(el, text, ok);
     }
 
     // ---------- Availability ----------

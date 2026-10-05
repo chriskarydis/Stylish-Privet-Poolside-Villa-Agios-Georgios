@@ -53,3 +53,33 @@ export function formValues(form: HTMLFormElement): Record<string, string> {
 
 /** true when the hidden honeypot field was filled in (a bot). */
 export const isSpam = (form: HTMLFormElement) => !!(form.elements.namedItem('_gotcha') as HTMLInputElement | null)?.value;
+
+/** Marks the fields that failed validation for assistive technology; the mark clears as soon as the guest edits the field. */
+export function markInvalid(form: HTMLFormElement): void {
+  for (const field of form.querySelectorAll<HTMLElement>('input, select, textarea')) {
+    if (field.matches(':invalid')) {
+      field.setAttribute('aria-invalid', 'true');
+      field.addEventListener('input', () => field.removeAttribute('aria-invalid'), { once: true });
+    } else field.removeAttribute('aria-invalid');
+  }
+}
+
+/**
+ * Shows the outcome of a form. Errors are announced immediately (role="alert"),
+ * confirmations politely (role="status").
+ */
+export function showFormResult(el: HTMLElement, text: string, ok: boolean): void {
+  el.setAttribute('role', ok ? 'status' : 'alert');
+  el.textContent = text;
+  el.classList.toggle('is-error', !ok);
+  el.hidden = false;
+}
+
+/**
+ * Marks a submit button as busy without disabling it: a disabled button loses
+ * keyboard focus, which throws keyboard and screen-reader users back to the page start.
+ */
+export function setBusy(button: HTMLButtonElement, busy: boolean): void {
+  if (busy) button.setAttribute('aria-disabled', 'true');
+  else button.removeAttribute('aria-disabled');
+}

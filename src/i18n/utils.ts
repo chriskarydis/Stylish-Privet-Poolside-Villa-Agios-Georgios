@@ -7,7 +7,9 @@ export function t<T>(value: Localized<T>, lang: Locale): T {
 
 /** Build a site path for a language, e.g. ('/privacy-policy', 'el') -> '/el/privacy-policy'. */
 export function localizePath(path: string, lang: Locale): string {
-  const clean = path.startsWith('/') ? path : `/${path}`;
+  const rooted = path.startsWith('/') ? path : `/${path}`;
+  // Pages are served with a trailing slash (/privacy-policy/); linking without it costs a redirect.
+  const clean = rooted.endsWith('/') || /\.[a-z0-9]+$/i.test(rooted) ? rooted : `${rooted}/`;
   if (lang === defaultLocale) return clean;
   return clean === '/' ? `/${lang}/` : `/${lang}${clean}`;
 }

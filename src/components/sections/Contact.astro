@@ -117,7 +117,7 @@ const config = {
 </section>
 
 <script>
-  import { formValues, isSpam, sendForm } from '@/lib/forms';
+  import { formValues, isSpam, markInvalid, sendForm, setBusy, showFormResult } from '@/lib/forms';
 
   for (const form of document.querySelectorAll<HTMLFormElement>('[data-contact-form]')) {
     const cfg = JSON.parse(form.querySelector('[data-contact-config]')!.textContent!) as {
@@ -129,15 +129,13 @@ const config = {
     const result = form.querySelector<HTMLElement>('[data-cf-result]')!;
     const submit = form.querySelector<HTMLButtonElement>('[data-cf-submit]')!;
     const label = form.querySelector<HTMLElement>('[data-cf-label]')!;
-    const show = (text: string, ok: boolean) => {
-      result.textContent = text;
-      result.classList.toggle('is-error', !ok);
-      result.hidden = false;
-    };
+    const show = (text: string, ok: boolean) => showFormResult(result, text, ok);
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (submit.getAttribute('aria-disabled') === 'true') return; // already sending
       result.hidden = true;
+      markInvalid(form);
       if (!form.checkValidity()) {
         const bad = form.querySelector<HTMLInputElement>(':invalid');
         show(bad?.type === 'email' && bad.value ? cfg.s.invalidEmail : cfg.s.fillRequired, false);
@@ -146,7 +144,7 @@ const config = {
       }
       if (isSpam(form)) return;
       const v = formValues(form);
-      submit.disabled = true;
+      setBusy(submit, true);
       label.textContent = cfg.s.sending;
       const res = await sendForm({
         formId: cfg.formId,
@@ -161,7 +159,7 @@ const config = {
           [cfg.owner.language]: cfg.owner.languages[document.documentElement.lang] ?? document.documentElement.lang,
         },
       });
-      submit.disabled = false;
+      setBusy(submit, false);
       label.textContent = cfg.s.send;
       if (res === 'sent') {
         form.reset();
