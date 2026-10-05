@@ -91,14 +91,11 @@ const keyFacts: { icon: IconName; text: string }[] = [
     <h1 id="hero-title" class="hero__title">{t(home.hero.title, lang)}</h1>
     <p class="hero__subtitle">{t(home.hero.subtitle, lang)}</p>
 
-    <a
-      class="hero__ratings"
-      href="#reviews"
-      aria-label={fill(t(ui.ratingsLink, lang), { airbnb: nf.format(airbnb.score), airbnbMax: airbnb.outOf, booking: nf.format(bookingCom.score), bookingMax: bookingCom.outOf })}
-    >
+    <a class="hero__ratings" href="#reviews">
       <span><Icon name="star" size={16} /> <strong>{nf.format(airbnb.score)}</strong> Airbnb</span>
       <span aria-hidden="true">·</span>
       <span><strong>{nf.format(bookingCom.score)}</strong> Booking.com</span>
+      <span class="visually-hidden">. {fill(t(ui.ratingsLink, lang), { airbnbMax: airbnb.outOf, bookingMax: bookingCom.outOf })}</span>
     </a>
 
     <ul class="hero__facts" role="list" aria-label={t(ui.heroFacts, lang)}>
