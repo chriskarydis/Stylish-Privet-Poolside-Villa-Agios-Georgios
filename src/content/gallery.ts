@@ -110,7 +110,7 @@ export const galleryCategories = [
   { id: 'bedrooms', label: { en: 'Bedrooms', el: 'Υπνοδωμάτια' } },
   { id: 'kitchen', label: { en: 'Kitchen', el: 'Κουζίνα' } },
   { id: 'bathrooms', label: { en: 'Bathrooms', el: 'Μπάνια' } },
-  { id: 'pool-outdoors', label: { en: 'Pool & Outdoors', el: 'Πισίνα & Εξωτερικοί χώροι' } },
+  { id: 'pool-outdoors', label: { en: 'Pool & Outdoors', el: 'Πισίνα & εξωτερικοί χώροι' } },
   { id: 'beach', label: { en: 'The Beach', el: 'Η παραλία' } },
 ] as const satisfies ReadonlyArray<{ id: string; label: Localized }>;
 
@@ -160,7 +160,7 @@ export const galleryItems: GalleryItem[] = [
     { en: 'Living room', el: 'Σαλόνι' },
     { en: 'Corner sofa and coffee table with the kitchen behind', el: 'Γωνιακός καναπές και τραπεζάκι με την κουζίνα στο βάθος' }) },
   { category: 'interiors', image: slot('interiors/upstairs-landing.jpg', 'stone',
-    { en: 'Upper floor', el: 'Όροφος' },
+    { en: 'Upper floor', el: 'Επάνω όροφος' },
     { en: 'Upper-floor room with TV, air conditioning and doors to the balcony', el: 'Χώρος του ορόφου με τηλεόραση, κλιματισμό και πόρτες προς το μπαλκόνι' }) },
   { category: 'bedrooms', image: slot('bedrooms/bedroom-1-detail.jpg', 'sand',
     { en: 'Breakfast in bed', el: 'Πρωινό στο κρεβάτι' },

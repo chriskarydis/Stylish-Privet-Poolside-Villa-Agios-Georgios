@@ -23,7 +23,7 @@ const loc = property.location;
         <SmartImage image="beach" lang={lang} sizes="(min-width: 64em) 48vw, 92vw" />
       </div>
       <div class="loc__stat">
-        <span class="loc__stat-value serif">{property.facts.beachDistanceM}<small> m</small></span>
+        <span class="loc__stat-value serif">{property.facts.beachDistanceM}<small> {lang === 'el' ? 'μ.' : 'm'}</small></span>
         <span class="loc__stat-label">{t(home.location.highlight, lang)}</span>
       </div>
     </div>

@@ -48,7 +48,7 @@ export const destinations: Destination[] = [
     kind: { en: 'Beach', el: 'Παραλία' },
     description: {
       en: 'A relaxed sandy beach on the southern coast of Corfu, ideal for a slow beach day.',
-      el: 'Χαλαρή αμμουδιά στη νότια ακτή της Κέρκυρας, ιδανική για μια ήρεμη μέρα στη θάλασσα.',
+      el: 'Ήσυχη αμμουδιά στη νότια ακτή της Κέρκυρας, ιδανική για μια ήρεμη μέρα στη θάλασσα.',
     },
     icon: 'sun',
     image: 'marathias',
@@ -72,7 +72,7 @@ export const destinations: Destination[] = [
     kind: { en: 'Culture', el: 'Πολιτισμός' },
     description: {
       en: 'The palace built for Empress Elisabeth of Austria ("Sissi"), with landscaped gardens and classical statues.',
-      el: 'Το ανάκτορο που χτίστηκε για την αυτοκράτειρα Ελισάβετ της Αυστρίας («Σίσσυ»), με διαμορφωμένους κήπους και κλασικά αγάλματα.',
+      el: 'Το ανάκτορο που χτίστηκε για την αυτοκράτειρα Ελισάβετ της Αυστρίας («Σίσι»), με διαμορφωμένους κήπους και κλασικά αγάλματα.',
     },
     icon: 'flower',
     image: 'achilleion',
