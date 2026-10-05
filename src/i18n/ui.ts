@@ -14,7 +14,7 @@ export const nav: { id: string; href: string; label: Localized; primary?: boolea
   { id: 'amenities', href: '#amenities', label: { en: 'Amenities', el: 'Παροχές' }, primary: false },
   { id: 'pool', href: '#pool-outdoors', label: { en: 'Pool & Outdoors', el: 'Πισίνα & Κήπος' } },
   { id: 'location', href: '#location', label: { en: 'Location', el: 'Τοποθεσία' } },
-  { id: 'experiences', href: '#experiences', label: { en: 'Experiences', el: 'Εμπειρίες' }, primary: false },
+  { id: 'explore', href: '#explore', label: { en: 'Explore the Area', el: 'Εξερευνήστε την περιοχή' }, primary: false },
   { id: 'gallery', href: '#gallery', label: { en: 'Gallery', el: 'Φωτογραφίες' } },
   { id: 'reviews', href: '#reviews', label: { en: 'Reviews', el: 'Κριτικές' } },
   { id: 'faq', href: '#faq', label: { en: 'FAQ', el: 'Ερωτήσεις' } },

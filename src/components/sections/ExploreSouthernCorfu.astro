@@ -1,9 +1,15 @@
 ---
+/**
+ * "Explore Southern Corfu": one section answering "what is there to do?" —
+ * places to visit (destination cards) followed by things to do (experiences).
+ * The Location section before it answers "where is the villa?".
+ */
 import { destinations } from '@content/destinations';
 import { home } from '@content/home';
 import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
 import DestinationCard from '@/components/cards/DestinationCard.astro';
+import Experiences from '@/components/sections/Experiences.astro';
 
 interface Props {
   lang: Locale;
@@ -18,9 +24,10 @@ const { lang } = Astro.props;
       <h2 id="explore-title">{t(home.explore.title, lang)}</h2>
       <p class="lead">{t(home.explore.body, lang)}</p>
     </div>
+    <h3 class="explore__sub" id="explore-places">{t(home.explore.placesTitle, lang)}</h3>
   </div>
   <div class="container dest-rail-wrap">
-    <div class="dest-rail" role="list" tabindex="0" aria-labelledby="explore-title">
+    <div class="dest-rail" role="list" tabindex="0" aria-labelledby="explore-places">
       {
         destinations.map((d, i) => (
           <div role="listitem">
@@ -30,9 +37,26 @@ const { lang } = Astro.props;
       }
     </div>
   </div>
+  <div class="container explore__todo">
+    <Experiences lang={lang} />
+  </div>
 </section>
 
 <style>
+  /* Sub-headings shared with the Experiences block below. */
+  .explore__sub,
+  .explore__todo :global(.explore__sub) {
+    margin-bottom: 1.5rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .explore__todo {
+    margin-top: clamp(3rem, 2rem + 4vw, 5rem);
+  }
   /* Mobile: horizontal scroll-snap rail. Desktop: 5-column grid. */
   .dest-rail {
     display: grid;
