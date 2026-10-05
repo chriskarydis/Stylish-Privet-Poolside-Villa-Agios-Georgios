@@ -1,0 +1,146 @@
+---
+/**
+ * Sticky call-to-action bar for phones (where the header button is hidden).
+ * Shown after the hero has scrolled away; hidden while the booking calendar,
+ * the contact section or the footer is on screen, while a dialog (menu,
+ * lightbox) is open and while the visitor is typing in a field — so it never
+ * covers the thing it leads to, a form, or the on-screen keyboard.
+ */
+import { home } from '@content/home';
+import { property } from '@content/property';
+import type { Locale } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { ui } from '@/i18n/ui';
+import Icon from '@/components/ui/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const wa = property.contact.whatsapp;
+---
+
+<div class="mcta" role="region" aria-label={t(ui.quickActions, lang)} data-mobile-cta inert>
+  <a class="btn mcta__main" href="#book">
+    <Icon name="clock" size={18} />
+    {t(home.booking.cta, lang)}
+  </a>
+  {
+    wa && (
+      <a
+        class="mcta__wa"
+        href={`https://wa.me/${wa}?text=${encodeURIComponent(t(home.contact.whatsappMessage, lang))}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${t(ui.whatsapp, lang)} ${t(ui.opensInNewTab, lang)}`}
+      >
+        <Icon name="message-circle" size={22} />
+      </a>
+    )
+  }
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-mobile-cta]');
+  if (bar && 'IntersectionObserver' in window) {
+    const hero = document.querySelector('.hero');
+    const hideNear = [...document.querySelectorAll('#book, #contact, footer')];
+    let pastHero = !hero;
+    let typing = false;
+    const covering = new Set<Element>();
+
+    const update = () => {
+      const show = pastHero && covering.size === 0 && !typing;
+      bar.classList.toggle('is-visible', show);
+      bar.inert = !show; // out of the tab order and hidden from screen readers when not shown
+    };
+
+    if (hero) {
+      new IntersectionObserver(([e]) => {
+        pastHero = !e.isIntersecting;
+        update();
+      }).observe(hero);
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.isIntersecting ? covering.add(e.target) : covering.delete(e.target);
+        update();
+      },
+      { rootMargin: '0px 0px -15% 0px' },
+    );
+    hideNear.forEach((el) => io.observe(el));
+
+    // Keep clear of the on-screen keyboard while a field is being edited.
+    document.addEventListener('focusin', (e) => {
+      typing = !!(e.target as Element).closest?.('input, textarea, select');
+      update();
+    });
+    document.addEventListener('focusout', () => {
+      typing = false;
+      update();
+    });
+  }
+</script>
+
+<style>
+  .mcta {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 40; /* below the header (50) and native dialogs (top layer) */
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.6rem var(--gutter) calc(0.6rem + env(safe-area-inset-bottom));
+    padding-left: calc(var(--gutter) + env(safe-area-inset-left));
+    padding-right: calc(var(--gutter) + env(safe-area-inset-right));
+    background: rgb(247 242 234 / 0.96);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -8px 24px -18px rgb(38 34 29 / 0.5);
+    transform: translateY(110%);
+    visibility: hidden;
+    transition:
+      transform 0.3s var(--ease),
+      visibility 0s 0.3s;
+  }
+  .mcta.is-visible {
+    transform: none;
+    visibility: visible;
+    transition:
+      transform 0.3s var(--ease),
+      visibility 0s;
+  }
+  /* A menu or photo viewer is open: stay out of the way. */
+  :global(html:has(dialog[open])) .mcta {
+    transform: translateY(110%);
+    visibility: hidden;
+  }
+  .mcta__main {
+    flex: 1;
+  }
+  .mcta__wa {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--sea);
+    border-radius: var(--radius-sm);
+    color: var(--sea);
+  }
+  /* Phones only: from 40em up the header shows the same button. */
+  @media (min-width: 40em) {
+    .mcta {
+      display: none;
+    }
+  }
+  /* Very short screens (phone in landscape): keep the bar slim. */
+  @media (max-height: 26em) {
+    .mcta {
+      padding-block: 0.35rem calc(0.35rem + env(safe-area-inset-bottom));
+    }
+    .mcta__main,
+    .mcta__wa {
+      min-height: 40px;
+      height: 40px;
+    }
+  }
+</style>

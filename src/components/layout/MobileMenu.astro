@@ -38,7 +38,7 @@ const { lang, path, links } = Astro.props;
   </nav>
 
   <div class="mobile-menu__foot">
-    <a class="btn" href={`${localizePath('/', lang)}#book`} data-menu-link>{t(ui.bookNow, lang)}</a>
+    <a class="btn" href={`${localizePath('/', lang)}#book`} data-menu-link>{t(ui.checkAvailability, lang)}</a>
     <p class="mobile-menu__place">
       <Icon name="map-pin" size={16} />
       {t(property.location.locality, lang)}, {t(property.location.region, lang)}
@@ -62,7 +62,7 @@ const { lang, path, links } = Astro.props;
       if (e.target === dialog) dialog.close();
     });
     // Close if the viewport grows to the desktop layout.
-    matchMedia('(min-width: 80em)').addEventListener('change', (m) => m.matches && dialog.open && dialog.close());
+    matchMedia('(min-width: 70em)').addEventListener('change', (m) => m.matches && dialog.open && dialog.close());
   }
 </script>
 

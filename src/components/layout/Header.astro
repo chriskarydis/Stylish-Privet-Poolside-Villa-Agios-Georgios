@@ -28,7 +28,7 @@ const links = nav.map((n) => ({ ...n, href: `${home}${n.href}`, text: t(n.label,
       <ul role="list">
         {
           links
-            .filter((l) => l.id !== 'home')
+            .filter((l) => l.id !== 'home' && l.primary !== false)
             .map((l) => (
               <li>
                 <a href={l.href} data-nav-link={l.href.split('#')[1]}>
@@ -41,7 +41,7 @@ const links = nav.map((n) => ({ ...n, href: `${home}${n.href}`, text: t(n.label,
     </nav>
 
     <div class="site-header__actions">
-      <a class="btn site-header__book" href={`${home}#book`}>{t(ui.bookNow, lang)}</a>
+      <a class="btn site-header__book" href={`${home}#book`}>{t(ui.checkAvailability, lang)}</a>
       <LanguageSwitcher lang={lang} path={path} class="site-header__lang" />
       <button
         type="button"
@@ -201,7 +201,7 @@ const links = nav.map((n) => ({ ...n, href: `${home}${n.href}`, text: t(n.label,
       margin-right: 0.5rem;
     }
   }
-  @media (min-width: 80em) {
+  @media (min-width: 70em) {
     .site-header__nav {
       display: block;
       flex: 1;
