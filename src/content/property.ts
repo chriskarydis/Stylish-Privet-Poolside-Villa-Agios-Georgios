@@ -177,7 +177,14 @@ export const property = {
     touristTax: null as Localized | null, // e.g. 'The climate resilience fee is paid on arrival.'
   },
 
-  /** Contact details. Each item is hidden while null. */
+  /**
+   * Contact details. Each item is hidden while null.
+   *
+   * TODO before launch: these are the developer's own details, used as temporary
+   * placeholders. Replace all four with the owner's business contact details —
+   * every place on the site (contact section, footer, WhatsApp buttons, forms'
+   * e-mail fallback, structured data) reads them from here.
+   */
   contact: {
     email: 'chriskaridis76@gmail.com' as string | null,
     phone: '+30 690 654 2839' as string | null, // international format

@@ -91,7 +91,9 @@ const registry = registryNumber();
       </div>
 
       <div class="footer__col">
-        <h2 class="footer__title">{t(ui.bookOn, lang)}</h2>
+        <h2 class="footer__title">{t(ui.footerBooking, lang)}</h2>
+        <a class="btn btn--light footer__cta" href={`${home_}#book`}>{t(ui.checkAvailability, lang)}</a>
+        <p class="footer__text footer__via">{t(ui.footerOrVia, lang)}</p>
         <ul role="list">
           <li>
             <a href={booking.airbnb[lang]} target="_blank" rel="noopener noreferrer" class="footer__icon-link">
@@ -189,6 +191,16 @@ const registry = registryNumber();
   }
   .footer__icon-link {
     gap: 0.5rem;
+  }
+  .footer__col a.footer__cta {
+    min-height: 48px;
+  }
+  .footer a.footer__cta:hover {
+    color: var(--btn-fg);
+    text-decoration: none;
+  }
+  .footer__via {
+    margin: 1rem 0 0;
   }
   .footer__text {
     max-width: 22rem;
