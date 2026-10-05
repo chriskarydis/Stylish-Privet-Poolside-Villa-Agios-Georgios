@@ -20,9 +20,9 @@ Recommended: landscape, at least **2400 px wide** (hero: 2560 px+), JPG quality 
 | outdoorDining   | `outdoors/outdoor-dining.jpg`      | Outdoor living, gallery         |
 | balcony         | `outdoors/balcony.jpg`             | Outdoor living, gallery         |
 | beach           | `location/beach.jpg`               | Location, gallery               |
-| agiosGeorgios   | `location/agios-georgios.jpg`      | Booking section background      |
-| southernCorfu   | `location/southern-corfu.jpg`      | Gallery                         |
-| lakeKorission   | `location/lake-korission.jpg`      | Explore card, gallery           |
+| agiosGeorgios   | `location/agios-georgios.jpg`      | Booking background, gallery     |
+| southernCorfu   | `location/southern-corfu.jpg`      | Not shown at the moment         |
+| lakeKorission   | `location/lake-korission.jpg`      | Explore card                    |
 | issos           | `location/issos-beach.jpg`         | Explore card                    |
 | marathias       | `location/marathias-beach.jpg`     | Explore card                    |
 | corfuTown       | `location/corfu-town.jpg`          | Explore card                    |

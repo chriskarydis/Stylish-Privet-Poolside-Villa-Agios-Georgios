@@ -111,7 +111,7 @@ export const galleryCategories = [
   { id: 'kitchen', label: { en: 'Kitchen', el: 'Κουζίνα' } },
   { id: 'bathrooms', label: { en: 'Bathrooms', el: 'Μπάνια' } },
   { id: 'pool-outdoors', label: { en: 'Pool & Outdoors', el: 'Πισίνα & Εξωτερικοί χώροι' } },
-  { id: 'location', label: { en: 'Location', el: 'Τοποθεσία' } },
+  { id: 'beach', label: { en: 'The Beach', el: 'Η παραλία' } },
 ] as const satisfies ReadonlyArray<{ id: string; label: Localized }>;
 
 export type GalleryCategory = (typeof galleryCategories)[number]['id'];
@@ -174,27 +174,17 @@ export const galleryItems: GalleryItem[] = [
   { category: 'kitchen', image: slot('kitchen/kitchen-detail.jpg', 'sand',
     { en: 'Kitchen detail', el: 'Λεπτομέρεια κουζίνας' },
     { en: 'Fruit bowl on the kitchen worktop', el: 'Φρουτιέρα στον πάγκο της κουζίνας' }) },
-  { category: 'location', image: 'beach' },
-  { category: 'location', image: 'lakeKorission' },
-  { category: 'location', image: 'agiosGeorgios' },
-  { category: 'location', image: slot('location/beach-footprints.jpg', 'sand',
+  // The beach: only Agios Georgios Beach, the villa's own beach. Other destinations
+  // (Issos, Lake Korission, Marathias, Corfu Town, Achilleion) are shown in the
+  // "Explore Southern Corfu" section, not in the property gallery.
+  // Photos still in src/assets/images/location/ but no longer shown anywhere:
+  // lake-korission-heron, sea-sun, beach-driftwood, southern-corfu — add an entry to show one again.
+  { category: 'beach', image: 'beach' },
+  { category: 'beach', image: slot('location/beach-footprints.jpg', 'sand',
     { en: 'Footprints in the sand', el: 'Πατημασιές στην άμμο' },
     { en: 'Footprints along the shoreline of Agios Georgios Beach', el: 'Πατημασιές στην ακροθαλασσιά της παραλίας του Αγίου Γεωργίου' }) },
-  { category: 'location', image: 'issos' },
-  { category: 'location', image: slot('location/lake-korission-heron.jpg', 'olive',
-    { en: 'Lake Korission', el: 'Λίμνη Κορισσίων' },
-    { en: 'A heron among the coastal vegetation of Lake Korission', el: 'Ερωδιός ανάμεσα στη βλάστηση της λίμνης Κορισσίων' }) },
-  { category: 'location', image: slot('location/beach-dunes.jpg', 'sand',
+  { category: 'beach', image: slot('location/beach-dunes.jpg', 'sand',
     { en: 'Agios Georgios Beach', el: 'Παραλία Αγίου Γεωργίου' },
     { en: 'The wide sandy beach of Agios Georgios backed by green vegetation', el: 'Η φαρδιά αμμουδιά του Αγίου Γεωργίου με πράσινη βλάστηση' }) },
-  { category: 'location', image: 'southernCorfu' },
-  { category: 'location', image: slot('location/sea-sun.jpg', 'sea',
-    { en: 'Clear water', el: 'Καθαρά νερά' },
-    { en: 'Calm, clear sea on a sunny day', el: 'Ήρεμη, καθαρή θάλασσα σε μια ηλιόλουστη μέρα' }) },
-  { category: 'location', image: 'corfuTown' },
-  { category: 'location', image: 'achilleion' },
-  { category: 'location', image: 'marathias' },
-  { category: 'location', image: slot('location/beach-driftwood.jpg', 'sand',
-    { en: 'Driftwood on the beach', el: 'Ξύλο στην αμμουδιά' },
-    { en: 'Driftwood on the sand at Agios Georgios Beach', el: 'Ξύλο ξεβρασμένο στην αμμουδιά του Αγίου Γεωργίου' }) },
+  { category: 'beach', image: 'agiosGeorgios' },
 ];
