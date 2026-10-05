@@ -38,6 +38,7 @@ export const ui = {
   bedrooms: { en: '{n} bedrooms', el: '{n} υπνοδωμάτια' },
   bathrooms: { en: '{n} bathrooms', el: '{n} μπάνια' },
   beach: { en: '{n} m from the beach', el: '{n} μ. από την παραλία' },
+  guestPool: { en: 'Guest-only pool', el: 'Πισίνα για επισκέπτες' },
   size: { en: 'approx. {n} m²', el: 'περίπου {n} τ.μ.' },
   heroFacts: { en: 'Villa key facts', el: 'Βασικά στοιχεία της βίλας' },
   photoComingSoon: { en: 'Photo coming soon', el: 'Η φωτογραφία έρχεται σύντομα' },
@@ -64,8 +65,8 @@ export const ui = {
   noParties: { en: 'No parties or events', el: 'Όχι πάρτι ή εκδηλώσεις' },
   // Footer
   footerTagline: {
-    en: 'A stylish two-bedroom holiday villa, 500 m from the beach in Agios Georgios, Southern Corfu.',
-    el: 'Κομψή βίλα δύο υπνοδωματίων, 500 μ. από την παραλία στον Άγιο Γεώργιο, Νότια Κέρκυρα.',
+    en: 'A stylish two-bedroom holiday villa in Agios Georgios, Southern Corfu.',
+    el: 'Κομψή βίλα δύο υπνοδωματίων στον Άγιο Γεώργιο, Νότια Κέρκυρα.',
   },
   explore: { en: 'Explore', el: 'Περιηγηθείτε' },
   bookOn: { en: 'Book on', el: 'Κράτηση μέσω' },

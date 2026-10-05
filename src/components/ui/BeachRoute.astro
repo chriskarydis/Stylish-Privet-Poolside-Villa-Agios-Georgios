@@ -2,7 +2,8 @@
 /**
  * Illustrated walk from the villa to the beach: two markers joined by a
  * path, with a dot walking along it. Purely schematic — not a map.
- * The walking time is shown only when confirmed (property.facts.beachWalkMinutes).
+ * The walking time is shown only when confirmed (property.facts.beachWalkMinutes);
+ * the distance itself is shown once, on the photo badge above (LocationSection).
  */
 import { home } from '@content/home';
 import { property } from '@content/property';
@@ -14,8 +15,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const r = home.location.route;
-const { beachDistanceM, beachWalkMinutes } = property.facts;
-const distance = fill(t(r.distance, lang), { n: beachDistanceM });
+const { beachWalkMinutes } = property.facts;
 const walk = beachWalkMinutes ? fill(t(r.walkTime, lang), { n: beachWalkMinutes }) : t(r.walkGeneric, lang);
 // The same curve is drawn as the dashed path and followed by the walking dot.
 const PATH = 'M50 62 C 105 18, 150 104, 200 62 S 296 22, 350 60';
@@ -63,8 +63,7 @@ const PATH = 'M50 62 C 105 18, 150 104, 200 62 S 296 22, 350 60';
   <div class="route__labels">
     <span class="route__place">{t(r.villa, lang)}</span>
     <span class="route__info">
-      <strong>{distance}</strong>
-      <span>{walk}</span>
+      <strong>{walk}</strong>
     </span>
     <span class="route__place route__place--end">{t(r.beach, lang)}</span>
   </div>
