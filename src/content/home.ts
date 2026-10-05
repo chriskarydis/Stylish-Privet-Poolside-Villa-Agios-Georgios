@@ -31,15 +31,15 @@ export const home = {
     body: {
       en: [
         'Welcome to Stylish Private Poolside Villa, a comfortable and thoughtfully designed holiday home in Agios Georgios, Southern Corfu.',
-        "Located just 500 metres from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu's south.",
+        "A short walk from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu's south.",
         'With two bedrooms, two bathrooms and a comfortable living area with a sofa bed, the villa can accommodate up to six guests. A fully equipped kitchen, washing machine, air conditioning, Wi-Fi and private parking provide everything you need for a comfortable stay.',
-        'Outside, guests can enjoy the garden surroundings, outdoor dining and access to the swimming pool shared exclusively by guests staying at the villa and the neighbouring apartments. The property does not have a direct sea view, although the sea can be seen from the property due to its proximity to the coast.',
+        'Outside, guests can enjoy the garden surroundings, outdoor dining and access to the swimming pool shared exclusively by guests staying at the villa and the neighbouring apartments. Thanks to its proximity to the coast, the sea can be seen from the property.',
       ],
       el: [
         'Καλώς ήρθατε στη Stylish Private Poolside Villa, ένα άνετο και προσεγμένο εξοχικό σπίτι στον Άγιο Γεώργιο της Νότιας Κέρκυρας.',
-        'Μόλις 500 μέτρα από την παραλία, η βίλα είναι ιδανική βάση για να απολαύσετε τη χαλαρή ατμόσφαιρα και τη φυσική ομορφιά του νότου της Κέρκυρας.',
+        'Σε μικρή απόσταση με τα πόδια από την παραλία, η βίλα είναι ιδανική βάση για να απολαύσετε τη χαλαρή ατμόσφαιρα και τη φυσική ομορφιά του νότου της Κέρκυρας.',
         'Με δύο υπνοδωμάτια, δύο μπάνια και ένα άνετο σαλόνι με καναπέ-κρεβάτι, η βίλα φιλοξενεί έως έξι άτομα. Η πλήρως εξοπλισμένη κουζίνα, το πλυντήριο ρούχων, ο κλιματισμός, το Wi-Fi και ο ιδιωτικός χώρος στάθμευσης προσφέρουν ό,τι χρειάζεστε για μια άνετη διαμονή.',
-        'Έξω, οι επισκέπτες απολαμβάνουν τον κήπο, το υπαίθριο φαγητό και την πισίνα, την οποία μοιράζονται αποκλειστικά οι επισκέπτες της βίλας και των γειτονικών διαμερισμάτων του ακινήτου. Η βίλα δεν έχει άμεση θέα στη θάλασσα, ωστόσο η θάλασσα είναι ορατή από το ακίνητο λόγω της μικρής απόστασης από την ακτή.',
+        'Έξω, οι επισκέπτες απολαμβάνουν τον κήπο, το υπαίθριο φαγητό και την πισίνα, την οποία μοιράζονται αποκλειστικά οι επισκέπτες της βίλας και των γειτονικών διαμερισμάτων του ακινήτου. Χάρη στη μικρή απόσταση από την ακτή, η θάλασσα είναι ορατή από το ακίνητο.',
       ],
     } satisfies P,
     sizeNote: { en: 'approx. {size} m² of living space', el: 'περίπου {size} τ.μ. εσωτερικός χώρος' },
@@ -137,12 +137,12 @@ export const home = {
     body: {
       en: [
         'Set in Agios Georgios in Southern Corfu, the villa is ideally positioned for guests looking to combine a relaxing beach holiday with the opportunity to explore the island.',
-        'The sandy beach is approximately 500 metres away, while restaurants, bars and local shops can be found within easy reach.',
+        'The sandy beach is a short walk away, while restaurants, bars and local shops can be found within easy reach.',
         "From here, you can enjoy the beautiful coastline of Southern Corfu, discover Lake Korission and explore some of the island's most scenic beaches and cultural attractions.",
       ],
       el: [
         'Στον Άγιο Γεώργιο της Νότιας Κέρκυρας, η βίλα βρίσκεται στο ιδανικό σημείο για όσους θέλουν να συνδυάσουν χαλαρές διακοπές δίπλα στη θάλασσα με την εξερεύνηση του νησιού.',
-        'Η αμμουδιά απέχει περίπου 500 μέτρα, ενώ εστιατόρια, μπαρ και τοπικά καταστήματα βρίσκονται σε κοντινή απόσταση.',
+        'Η αμμουδιά απέχει λίγα λεπτά με τα πόδια, ενώ εστιατόρια, μπαρ και τοπικά καταστήματα βρίσκονται σε κοντινή απόσταση.',
         'Από εδώ μπορείτε να απολαύσετε την όμορφη ακτογραμμή της Νότιας Κέρκυρας, να ανακαλύψετε τη λίμνη Κορισσίων και να εξερευνήσετε μερικές από τις πιο γραφικές παραλίες και πολιτιστικά αξιοθέατα του νησιού.',
       ],
     } satisfies P,
@@ -171,9 +171,8 @@ export const home = {
       title: { en: 'From the villa to the beach', el: 'Από τη βίλα στην παραλία' },
       villa: { en: 'The villa', el: 'Η βίλα' },
       beach: { en: 'Agios Georgios Beach', el: 'Παραλία Αγίου Γεωργίου' },
-      distance: { en: 'approx. {n} m', el: 'περίπου {n} μ.' },
-      walkGeneric: { en: 'a short walk', el: 'λίγα λεπτά με τα πόδια' },
-      walkTime: { en: 'about {n} min on foot', el: 'περίπου {n} λεπτά με τα πόδια' },
+      walkGeneric: { en: 'A short walk', el: 'Λίγα λεπτά με τα πόδια' },
+      walkTime: { en: 'About {n} min on foot', el: 'Περίπου {n} λεπτά με τα πόδια' },
     },
   },
 
@@ -241,11 +240,11 @@ export const home = {
     body: {
       en: [
         'Make Stylish Private Poolside Villa your base for a relaxing stay in Southern Corfu.',
-        'Just 500 metres from the beach, with comfortable accommodation for up to six guests and everything you need for a carefree island holiday.',
+        'Close to the beach, with comfortable accommodation for up to six guests and everything you need for a carefree island holiday.',
       ],
       el: [
         'Κάντε τη Stylish Private Poolside Villa τη βάση σας για μια χαλαρή διαμονή στη Νότια Κέρκυρα.',
-        'Μόλις 500 μέτρα από την παραλία, με άνετη φιλοξενία για έως έξι άτομα και ό,τι χρειάζεστε για ξέγνοιαστες διακοπές στο νησί.',
+        'Κοντά στην παραλία, με άνετη φιλοξενία για έως έξι άτομα και ό,τι χρειάζεστε για ξέγνοιαστες διακοπές στο νησί.',
       ],
     } satisfies P,
     cta: { en: 'Check Availability', el: 'Ελέγξτε διαθεσιμότητα' },
