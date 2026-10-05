@@ -1,10 +1,12 @@
 ---
 /**
- * Aggregate platform ratings only — no testimonials are shown because no
- * verified review texts have been supplied. Scores live in src/content/property.ts.
+ * Aggregate platform ratings (src/content/property.ts → ratings) and real guest
+ * reviews quoted verbatim (src/content/reviews.ts). Nothing here goes into
+ * structured data.
  */
 import { home } from '@content/home';
 import { property } from '@content/property';
+import { guestReviews } from '@content/reviews';
 import type { Locale } from '@/i18n/config';
 import { fill, t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
@@ -17,6 +19,11 @@ const { lang } = Astro.props;
 const { airbnb, bookingCom } = property.ratings;
 const nf = new Intl.NumberFormat(lang === 'el' ? 'el-GR' : 'en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const newTab = t(ui.opensInNewTab, lang);
+const monthFmt = new Intl.DateTimeFormat(lang === 'el' ? 'el-GR' : 'en-GB', { month: 'long', year: 'numeric' });
+const reviewMeta = (r: (typeof guestReviews)[number]) =>
+  [fill(t(home.reviews.guestOf, lang), { platform: r.platform }), r.country ? t(r.country, lang) : null, r.date ? monthFmt.format(new Date(`${r.date}-15`)) : null]
+    .filter(Boolean)
+    .join(' · ');
 ---
 
 <section id="reviews" class="section section--surface" aria-labelledby="reviews-title">
@@ -73,6 +80,29 @@ const newTab = t(ui.opensInNewTab, lang);
         </a>
       </article>
     </div>
+
+    {
+      guestReviews.length > 0 && (
+        <div class="quotes">
+          <h3 class="quotes__title">{t(home.reviews.quotesTitle, lang)}</h3>
+          <ul role="list" class="quotes__list">
+            {guestReviews.map((r, i) => (
+              <li data-reveal style={`--reveal-delay:${(i % 2) * 80}ms`}>
+                <figure class="quote">
+                  <blockquote lang={r.lang !== lang ? r.lang : undefined}>
+                    <p>{r.text}</p>
+                  </blockquote>
+                  <figcaption>
+                    <span class="quote__author">{r.author}</span>
+                    <span class="quote__meta">{reviewMeta(r)}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
 
     <p class="scores__note">{t(home.reviews.disclaimer, lang)}</p>
   </div>
@@ -182,6 +212,65 @@ const newTab = t(ui.opensInNewTab, lang);
   }
   .score__link {
     margin-top: auto;
+  }
+  .quotes {
+    max-width: 62rem;
+    margin: clamp(2.5rem, 2rem + 2vw, 3.5rem) auto 0;
+  }
+  .quotes__title {
+    margin-bottom: 1.25rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+  .quotes__list {
+    display: grid;
+    gap: 1.25rem;
+    margin: 0;
+  }
+  .quote {
+    display: grid;
+    align-content: space-between;
+    gap: 1.25rem;
+    height: 100%;
+    margin: 0;
+    padding: clamp(1.4rem, 1rem + 1.5vw, 2rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--linen);
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .quote blockquote p::before {
+    content: '“';
+  }
+  .quote blockquote p::after {
+    content: '”';
+  }
+  .quote figcaption {
+    display: grid;
+    gap: 0.1rem;
+    font-size: var(--fs-sm);
+  }
+  .quote__author {
+    font-weight: 700;
+  }
+  .quote__meta {
+    color: var(--muted);
+  }
+  @media (min-width: 48em) {
+    .quotes__list {
+      grid-template-columns: 1fr 1fr;
+    }
   }
   .scores__note {
     max-width: 44rem;

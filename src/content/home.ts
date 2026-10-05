@@ -17,7 +17,7 @@ export const home = {
       en: 'A stylish two-bedroom villa in Agios Georgios, Southern Corfu, combining modern comfort, outdoor living and pool access for an unforgettable island getaway.',
       el: 'Μια κομψή βίλα δύο υπνοδωματίων στον Άγιο Γεώργιο της Νότιας Κέρκυρας, που συνδυάζει σύγχρονη άνεση, ζωή σε εξωτερικούς χώρους και πρόσβαση σε πισίνα για αξέχαστες διακοπές στο νησί.',
     },
-    primaryCta: { en: 'Book Your Stay', el: 'Κάντε κράτηση' },
+    primaryCta: { en: 'Check Availability', el: 'Ελέγξτε διαθεσιμότητα' },
     secondaryCta: { en: 'Explore the Villa', el: 'Γνωρίστε τη βίλα' },
   },
 
@@ -203,9 +203,11 @@ export const home = {
       en: "Our guests consistently highlight the villa's cleanliness, comfort, location and welcoming atmosphere.",
       el: 'Οι επισκέπτες μας αναφέρουν σταθερά την καθαριότητα, την άνεση, την τοποθεσία και τη φιλόξενη ατμόσφαιρα της βίλας.',
     },
+    quotesTitle: { en: 'In our guests’ words', el: 'Με τα λόγια των επισκεπτών μας' },
+    guestOf: { en: '{platform} guest', el: 'Επισκέπτης {platform}' },
     disclaimer: {
-      en: 'Aggregate ratings as shown on Airbnb and Booking.com. Current scores and full reviews are available on each platform.',
-      el: 'Συνολικές βαθμολογίες όπως εμφανίζονται στο Airbnb και στο Booking.com. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
+      en: 'Aggregate ratings and guest reviews as published on Airbnb and Booking.com; reviews are quoted in their original wording. Current scores and all reviews are available on each platform.',
+      el: 'Συνολικές βαθμολογίες και κριτικές επισκεπτών όπως δημοσιεύονται στο Airbnb και στο Booking.com· οι κριτικές παρατίθενται αυτούσιες, στη γλώσσα που γράφτηκαν. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
     },
   },
 

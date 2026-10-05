@@ -19,6 +19,7 @@ import Rates from '@/components/sections/Rates.astro';
 import BookingCTA from '@/components/sections/BookingCTA.astro';
 import Contact from '@/components/sections/Contact.astro';
 import Footer from '@/components/layout/Footer.astro';
+import MobileCta from '@/components/layout/MobileCta.astro';
 import { getImage } from 'astro:assets';
 import type { Locale } from '@/i18n/config';
 import { localizePath } from '@/i18n/utils';
@@ -63,4 +64,5 @@ const schemaImages = await Promise.all(
     <Contact lang={lang} />
   </main>
   <Footer lang={lang} path={path} />
+  <MobileCta lang={lang} />
 </BaseLayout>
