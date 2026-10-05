@@ -164,7 +164,7 @@ export const home = {
       directions: { en: 'Get directions', el: 'Οδηγίες' },
       openMaps: { en: 'Open in Google Maps', el: 'Άνοιγμα στους Χάρτες Google' },
       tapHint: { en: 'Tap the map to move it', el: 'Πατήστε στον χάρτη για να τον μετακινήσετε' },
-      noscript: { en: 'The map needs JavaScript. Use the buttons below to open the location in Google Maps.', el: 'Ο χάρτης χρειάζεται JavaScript. Χρησιμοποιήστε τα κουμπιά παρακάτω για να ανοίξετε την τοποθεσία στους Χάρτες Google.' },
+      noscript: { en: 'See the villa’s location in Google Maps using the buttons below.', el: 'Δείτε την τοποθεσία της βίλας στους Χάρτες Google με τα παρακάτω κουμπιά.' },
     },
     /** Illustrated walk from the villa to the beach. */
     route: {
@@ -179,6 +179,7 @@ export const home = {
   explore: {
     eyebrow: { en: 'Explore Southern Corfu', el: 'Εξερευνήστε τη Νότια Κέρκυρα' },
     title: { en: 'Beaches, Nature & Culture Nearby', el: 'Παραλίες, φύση & πολιτισμός' },
+    placesTitle: { en: 'Places to visit', el: 'Μέρη για επίσκεψη' },
     body: {
       en: 'From long sandy beaches to lagoons and historic sights, the villa is a relaxed base for discovering the south of the island and beyond.',
       el: 'Από μεγάλες αμμουδιές μέχρι λιμνοθάλασσες και ιστορικά αξιοθέατα, η βίλα είναι μια χαλαρή αφετηρία για να γνωρίσετε τον νότο του νησιού και όχι μόνο.',
@@ -186,8 +187,8 @@ export const home = {
   },
 
   experiences: {
-    eyebrow: { en: 'Experiences', el: 'Εμπειρίες' },
-    title: { en: 'Days in Southern Corfu', el: 'Μέρες στη Νότια Κέρκυρα' },
+    /** Sub-heading inside the Explore section. */
+    title: { en: 'Things to do', el: 'Τι να κάνετε' },
   },
 
   gallery: {

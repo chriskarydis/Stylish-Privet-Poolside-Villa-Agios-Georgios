@@ -21,7 +21,7 @@ const { lang, destination: d, index } = Astro.props;
       {t(d.kind, lang)}
     </span>
   </div>
-  <h3 class="dest__name">{t(d.name, lang)}</h3>
+  <h4 class="dest__name">{t(d.name, lang)}</h4>
   {d.distance && <p class="dest__distance">{t(d.distance, lang)}</p>}
   <p class="dest__text">{t(d.description, lang)}</p>
 </article>
@@ -52,6 +52,9 @@ const { lang, destination: d, index } = Astro.props;
     text-transform: uppercase;
   }
   .dest__name {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.2;
     margin-top: 0.35rem;
     font-size: var(--fs-h4);
   }
