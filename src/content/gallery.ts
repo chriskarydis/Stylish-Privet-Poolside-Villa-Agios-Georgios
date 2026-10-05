@@ -57,7 +57,7 @@ export const images = {
     { en: 'Bathroom with marble-effect tiles, stone basin and glass shower', el: 'Μπάνιο με πλακάκια τύπου μαρμάρου, πέτρινο νιπτήρα και γυάλινη ντουζιέρα' }),
   kitchen: slot('kitchen/kitchen.jpg', 'sand',
     { en: 'Kitchen', el: 'Κουζίνα' },
-    { en: 'Modern kitchen with refrigerator, oven, cooktop and wooden worktop', el: 'Σύγχρονη κουζίνα με ψυγείο, φούρνο, εστίες και ξύλινο πάγκο' }),
+    { en: 'Modern kitchen with refrigerator, oven, stovetop and wooden worktop', el: 'Σύγχρονη κουζίνα με ψυγείο, φούρνο, εστίες και ξύλινο πάγκο' }),
 
   // ----- Pool & outdoors -----
   pool: slot('outdoors/pool.jpg', 'sea',

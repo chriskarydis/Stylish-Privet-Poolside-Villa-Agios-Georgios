@@ -31,7 +31,7 @@ export const home = {
     body: {
       en: [
         'Welcome to Stylish Private Poolside Villa, a comfortable and thoughtfully designed holiday home in Agios Georgios, Southern Corfu.',
-        "A short walk from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu's south.",
+        "A short walk from the beach, the villa offers an ideal base for enjoying the relaxed atmosphere and natural beauty of Corfu’s south.",
         'With two bedrooms, two bathrooms and a comfortable living area with a sofa bed, the villa can accommodate up to six guests. A fully equipped kitchen, washing machine, air conditioning, Wi-Fi and private parking provide everything you need for a comfortable stay.',
         'Outside, guests can enjoy the garden surroundings, outdoor dining and access to the swimming pool shared exclusively by guests staying at the villa and the neighbouring apartments. Thanks to its proximity to the coast, the sea can be seen from the property.',
       ],
@@ -138,7 +138,7 @@ export const home = {
       en: [
         'Set in Agios Georgios in Southern Corfu, the villa is ideally positioned for guests looking to combine a relaxing beach holiday with the opportunity to explore the island.',
         'The sandy beach is a short walk away, while restaurants, bars and local shops can be found within easy reach.',
-        "From here, you can enjoy the beautiful coastline of Southern Corfu, discover Lake Korission and explore some of the island's most scenic beaches and cultural attractions.",
+        "From here, you can enjoy the beautiful coastline of Southern Corfu, discover Lake Korission and explore some of the island’s most scenic beaches and cultural attractions.",
       ],
       el: [
         'Στον Άγιο Γεώργιο της Νότιας Κέρκυρας, η βίλα βρίσκεται στο ιδανικό σημείο για όσους θέλουν να συνδυάσουν χαλαρές διακοπές δίπλα στη θάλασσα με την εξερεύνηση του νησιού.',
@@ -200,7 +200,7 @@ export const home = {
     eyebrow: { en: 'Guest Reviews', el: 'Κριτικές επισκεπτών' },
     title: { en: 'Rated by Our Guests', el: 'Η γνώμη των επισκεπτών μας' },
     body: {
-      en: "Our guests consistently highlight the villa's cleanliness, comfort, location and welcoming atmosphere.",
+      en: "Our guests consistently highlight the villa’s cleanliness, comfort, location and welcoming atmosphere.",
       el: 'Οι επισκέπτες μας αναφέρουν σταθερά την καθαριότητα, την άνεση, την τοποθεσία και τη φιλόξενη ατμόσφαιρα της βίλας.',
     },
     quotesTitle: { en: 'In our guests’ words', el: 'Με τα λόγια των επισκεπτών μας' },
