@@ -263,7 +263,7 @@ export const property = {
     } satisfies Localized,
     description: {
       en: 'Stay at a stylish 2-bedroom villa in Agios Georgios, Corfu, just 500 m from the beach. Sleeps up to 6 guests with pool access, garden views, Wi-Fi and private parking.',
-      el: 'Μείνετε σε μια κομψή βίλα 2 υπνοδωματίων στον Άγιο Γεώργιο Κέρκυρας, μόλις 500μ. από την παραλία. Φιλοξενεί έως 6 άτομα, με πρόσβαση σε πισίνα, θέα στον κήπο, Wi-Fi και ιδιωτικό πάρκινγκ.',
+      el: 'Μείνετε σε μια κομψή βίλα 2 υπνοδωματίων στον Άγιο Γεώργιο Κέρκυρας, μόλις 500 μ. από την παραλία. Φιλοξενεί έως 6 άτομα, με πρόσβαση σε πισίνα, θέα στον κήπο, Wi-Fi και ιδιωτικό πάρκινγκ.',
     } satisfies Localized,
     keywords: {
       en: [
