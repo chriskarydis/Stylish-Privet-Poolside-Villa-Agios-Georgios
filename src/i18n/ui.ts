@@ -27,7 +27,8 @@ export const ui = {
   checkAvailability: { en: 'Check Availability', el: 'Διαθεσιμότητα' },
   whatsapp: { en: 'Message us on WhatsApp', el: 'Στείλτε μήνυμα στο WhatsApp' },
   quickActions: { en: 'Quick actions', el: 'Γρήγορες ενέργειες' },
-  ratingsLink: { en: 'Guest ratings: {airbnb} out of {airbnbMax} on Airbnb, {booking} out of {bookingMax} on Booking.com. See reviews.', el: 'Βαθμολογίες επισκεπτών: {airbnb} στα {airbnbMax} στο Airbnb, {booking} στα {bookingMax} στο Booking.com. Δείτε τις κριτικές.' },
+  /** Read after the visible "5.0 Airbnb · 8.8 Booking.com", so the spoken name starts with what is on screen. */
+  ratingsLink: { en: 'Guest ratings, out of {airbnbMax} on Airbnb and out of {bookingMax} on Booking.com. See the reviews.', el: 'Βαθμολογίες επισκεπτών, με άριστα το {airbnbMax} στο Airbnb και το {bookingMax} στο Booking.com. Δείτε τις κριτικές.' },
   openMenu: { en: 'Open menu', el: 'Άνοιγμα μενού' },
   closeMenu: { en: 'Close menu', el: 'Κλείσιμο μενού' },
   mainNav: { en: 'Main navigation', el: 'Κύρια πλοήγηση' },
