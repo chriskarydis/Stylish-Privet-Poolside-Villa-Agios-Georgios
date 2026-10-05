@@ -9,11 +9,19 @@
 export type IsoDate = string;
 export type Range = [start: IsoDate, end: IsoDate];
 
+/**
+ * How far the booked dates can be trusted:
+ *  - 'ok'           every configured calendar was read: dates not listed are available
+ *  - 'partial'      at least one calendar failed: `blocked` holds what IS known, but
+ *                   other dates must NOT be presented as available
+ *  - 'unavailable'  no calendar could be read: nothing is known
+ *  - 'unconfigured' no calendar links are set up on the server
+ * Anything other than 'ok' must never be shown as "available".
+ */
+export type AvailabilityStatus = 'ok' | 'partial' | 'unavailable' | 'unconfigured';
+
 export interface AvailabilityResponse {
-  /** false when no iCal links are configured on the server. */
-  configured: boolean;
-  /** true when at least one calendar could not be fetched. */
-  partial?: boolean;
+  status: AvailabilityStatus;
   updated: string | null;
   blocked: Range[];
 }
@@ -45,8 +53,15 @@ export const nightsBetween = (a: IsoDate, b: IsoDate): number =>
 
 // ---------- iCal ----------
 
-/** Extract booked ranges from an iCal (.ics) feed. Only dates are used; no guest data is read. */
+/**
+ * Extract booked ranges from an iCal (.ics) feed. Only dates are used; no guest data is read.
+ * Throws if the text is not an iCal calendar (e.g. an HTML error or login page):
+ * such a response must count as a failure, never as "no bookings".
+ */
 export function parseIcs(ics: string): Range[] {
+  if (!/^﻿?\s*BEGIN:VCALENDAR/i.test(ics) || !/END:VCALENDAR/i.test(ics)) {
+    throw new Error('Not an iCal calendar');
+  }
   const text = ics.replace(/\r?\n[ \t]/g, ''); // unfold continuation lines
   const ranges: Range[] = [];
   for (const chunk of text.split('BEGIN:VEVENT').slice(1)) {

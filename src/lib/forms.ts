@@ -10,13 +10,16 @@ export interface SendOptions {
   formId: string | null;
   fallbackEmail: string | null;
   subject: string;
-  /** Field name → value, in the order they should appear in the email. */
+  /**
+   * Label → value, in the order they should appear in the owner's email.
+   * Keep the key `email` as is: Formspree uses it as the reply-to address.
+   * Empty values are left out.
+   */
   data: Record<string, string>;
-  /** Human-readable labels for the email fallback body. */
-  labels?: Record<string, string>;
 }
 
-export async function sendForm({ formId, fallbackEmail, subject, data, labels = {} }: SendOptions): Promise<SendResult> {
+export async function sendForm({ formId, fallbackEmail, subject, data: raw }: SendOptions): Promise<SendResult> {
+  const data = Object.fromEntries(Object.entries(raw).filter(([, v]) => v !== ''));
   if (formId) {
     try {
       const res = await fetch(`https://formspree.io/f/${encodeURIComponent(formId)}`, {
@@ -31,8 +34,7 @@ export async function sendForm({ formId, fallbackEmail, subject, data, labels = 
   }
   if (fallbackEmail) {
     const body = Object.entries(data)
-      .filter(([, v]) => v)
-      .map(([k, v]) => `${labels[k] ?? k}: ${v}`)
+      .map(([k, v]) => `${k}: ${v}`)
       .join('\n');
     window.location.href = `mailto:${fallbackEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     return 'mail';
