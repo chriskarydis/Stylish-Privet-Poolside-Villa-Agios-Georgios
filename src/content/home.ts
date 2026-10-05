@@ -205,6 +205,9 @@ export const home = {
     },
     quotesTitle: { en: 'In our guests’ words', el: 'Με τα λόγια των επισκεπτών μας' },
     guestOf: { en: '{platform} guest', el: 'Επισκέπτης {platform}' },
+    prevReview: { en: 'Previous review', el: 'Προηγούμενη κριτική' },
+    nextReview: { en: 'Next review', el: 'Επόμενη κριτική' },
+    reviewCount: { en: 'Review {i} of {n}', el: 'Κριτική {i} από {n}' },
     disclaimer: {
       en: 'Aggregate ratings and guest reviews as published on Airbnb and Booking.com; reviews are quoted in their original wording. Current scores and all reviews are available on each platform.',
       el: 'Συνολικές βαθμολογίες και κριτικές επισκεπτών όπως δημοσιεύονται στο Airbnb και στο Booking.com· οι κριτικές παρατίθενται αυτούσιες, στη γλώσσα που γράφτηκαν. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
