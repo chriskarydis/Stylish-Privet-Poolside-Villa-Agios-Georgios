@@ -4,13 +4,17 @@
  */
 import type { Localized } from './config';
 
-export const nav: { id: string; href: string; label: Localized }[] = [
+/**
+ * Page sections. `primary: false` items stay in the mobile menu and the footer
+ * but are left out of the desktop navigation bar to keep it short.
+ */
+export const nav: { id: string; href: string; label: Localized; primary?: boolean }[] = [
   { id: 'home', href: '#top', label: { en: 'Home', el: 'Αρχική' } },
   { id: 'villa', href: '#villa', label: { en: 'The Villa', el: 'Η Βίλα' } },
-  { id: 'amenities', href: '#amenities', label: { en: 'Amenities', el: 'Παροχές' } },
+  { id: 'amenities', href: '#amenities', label: { en: 'Amenities', el: 'Παροχές' }, primary: false },
   { id: 'pool', href: '#pool-outdoors', label: { en: 'Pool & Outdoors', el: 'Πισίνα & Κήπος' } },
   { id: 'location', href: '#location', label: { en: 'Location', el: 'Τοποθεσία' } },
-  { id: 'experiences', href: '#experiences', label: { en: 'Experiences', el: 'Εμπειρίες' } },
+  { id: 'experiences', href: '#experiences', label: { en: 'Experiences', el: 'Εμπειρίες' }, primary: false },
   { id: 'gallery', href: '#gallery', label: { en: 'Gallery', el: 'Φωτογραφίες' } },
   { id: 'reviews', href: '#reviews', label: { en: 'Reviews', el: 'Κριτικές' } },
   { id: 'faq', href: '#faq', label: { en: 'FAQ', el: 'Ερωτήσεις' } },
@@ -19,7 +23,11 @@ export const nav: { id: string; href: string; label: Localized }[] = [
 
 export const ui = {
   skipToContent: { en: 'Skip to main content', el: 'Μετάβαση στο κύριο περιεχόμενο' },
-  bookNow: { en: 'Book Now', el: 'Κράτηση' },
+  /** Main call to action: leads to the availability calendar (not an instant booking). */
+  checkAvailability: { en: 'Check Availability', el: 'Διαθεσιμότητα' },
+  whatsapp: { en: 'Message us on WhatsApp', el: 'Στείλτε μήνυμα στο WhatsApp' },
+  quickActions: { en: 'Quick actions', el: 'Γρήγορες ενέργειες' },
+  ratingsLink: { en: 'Guest ratings: {airbnb} out of {airbnbMax} on Airbnb, {booking} out of {bookingMax} on Booking.com. See reviews.', el: 'Βαθμολογίες επισκεπτών: {airbnb} στα {airbnbMax} στο Airbnb, {booking} στα {bookingMax} στο Booking.com. Δείτε τις κριτικές.' },
   openMenu: { en: 'Open menu', el: 'Άνοιγμα μενού' },
   closeMenu: { en: 'Close menu', el: 'Κλείσιμο μενού' },
   mainNav: { en: 'Main navigation', el: 'Κύρια πλοήγηση' },

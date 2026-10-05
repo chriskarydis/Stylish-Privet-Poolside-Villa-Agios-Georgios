@@ -1,10 +1,12 @@
 ---
 /**
- * Aggregate platform ratings only — no testimonials are shown because no
- * verified review texts have been supplied. Scores live in src/content/property.ts.
+ * Aggregate platform ratings (src/content/property.ts → ratings) and real guest
+ * reviews quoted verbatim (src/content/reviews.ts). Nothing here goes into
+ * structured data.
  */
 import { home } from '@content/home';
 import { property } from '@content/property';
+import { guestReviews } from '@content/reviews';
 import type { Locale } from '@/i18n/config';
 import { fill, t } from '@/i18n/utils';
 import { ui } from '@/i18n/ui';
@@ -17,6 +19,11 @@ const { lang } = Astro.props;
 const { airbnb, bookingCom } = property.ratings;
 const nf = new Intl.NumberFormat(lang === 'el' ? 'el-GR' : 'en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const newTab = t(ui.opensInNewTab, lang);
+const monthFmt = new Intl.DateTimeFormat(lang === 'el' ? 'el-GR' : 'en-GB', { month: 'long', year: 'numeric' });
+const reviewMeta = (r: (typeof guestReviews)[number]) =>
+  [fill(t(home.reviews.guestOf, lang), { platform: r.platform }), r.country ? t(r.country, lang) : null, r.date ? monthFmt.format(new Date(`${r.date}-15`)) : null]
+    .filter(Boolean)
+    .join(' · ');
 ---
 
 <section id="reviews" class="section section--surface" aria-labelledby="reviews-title">
@@ -74,9 +81,80 @@ const newTab = t(ui.opensInNewTab, lang);
       </article>
     </div>
 
+    {
+      guestReviews.length > 0 && (
+        <div class="quotes" data-reveal data-quotes>
+          <h3 class="quotes__title" id="quotes-title">{t(home.reviews.quotesTitle, lang)}</h3>
+          <div class="quotes__frame">
+            <button type="button" class="quotes__nav" data-quotes-prev>
+              <Icon name="chevron-left" size={24} />
+              <span class="visually-hidden">{t(home.reviews.prevReview, lang)}</span>
+            </button>
+            {/* One review per "page": a native scroll-snap track, so swiping works without script. */}
+            <ul role="list" class="quotes__track" aria-labelledby="quotes-title" tabindex="0" data-quotes-track>
+              {guestReviews.map((r) => (
+                <li class="quotes__slide">
+                  <figure class="quote">
+                    <blockquote lang={r.lang !== lang ? r.lang : undefined}>
+                      <p>{r.text}</p>
+                    </blockquote>
+                    <figcaption>
+                      <span class="quote__author">{r.author}</span>
+                      <span class="quote__meta">{reviewMeta(r)}</span>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+            <button type="button" class="quotes__nav" data-quotes-next>
+              <Icon name="chevron-right" size={24} />
+              <span class="visually-hidden">{t(home.reviews.nextReview, lang)}</span>
+            </button>
+          </div>
+          <p class="quotes__count" aria-live="polite" data-quotes-count data-template={t(home.reviews.reviewCount, lang)}>
+            {fill(t(home.reviews.reviewCount, lang), { i: 1, n: guestReviews.length })}
+          </p>
+        </div>
+      )
+    }
+
     <p class="scores__note">{t(home.reviews.disclaimer, lang)}</p>
   </div>
 </section>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-quotes]')) {
+    const track = root.querySelector<HTMLElement>('[data-quotes-track]')!;
+    const count = root.querySelector<HTMLElement>('[data-quotes-count]')!;
+    const n = track.children.length;
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const current = () => Math.round(track.scrollLeft / track.clientWidth);
+    const go = (i: number) => {
+      const target = (i + n) % n; // wrap around at both ends
+      track.scrollTo({ left: target * track.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+    };
+    root.querySelector('[data-quotes-prev]')!.addEventListener('click', () => go(current() - 1));
+    root.querySelector('[data-quotes-next]')!.addEventListener('click', () => go(current() + 1));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(current() - 1);
+      else if (e.key === 'ArrowRight') go(current() + 1);
+      else return;
+      e.preventDefault();
+    });
+    // Counter follows the scroll position (arrows, swipe and keyboard all end up here).
+    let shown = 0;
+    track.addEventListener(
+      'scroll',
+      () => {
+        const i = current();
+        if (i === shown) return;
+        shown = i;
+        count.textContent = count.dataset.template!.replace('{i}', String(i + 1)).replace('{n}', String(n));
+      },
+      { passive: true },
+    );
+  }
+</script>
 
 <style>
   .scores {
@@ -182,6 +260,124 @@ const newTab = t(ui.opensInNewTab, lang);
   }
   .score__link {
     margin-top: auto;
+  }
+  .quotes {
+    max-width: 52rem;
+    margin: clamp(2.5rem, 2rem + 2vw, 3.5rem) auto 0;
+  }
+  .quotes__title {
+    margin-bottom: 1.25rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+  .quotes__frame {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .quotes__track {
+    display: flex;
+    margin: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    border-radius: var(--radius-lg);
+  }
+  .quotes__track::-webkit-scrollbar {
+    display: none;
+  }
+  .quotes__slide {
+    flex: 0 0 100%;
+    display: flex;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+  .quote {
+    display: grid;
+    align-content: center;
+    gap: 1.25rem;
+    width: 100%;
+    margin: 0;
+    padding: clamp(1.5rem, 1rem + 2.5vw, 2.75rem);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--linen);
+    text-align: center;
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem);
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .quote blockquote p::before {
+    content: '“';
+  }
+  .quote blockquote p::after {
+    content: '”';
+  }
+  .quote figcaption {
+    display: grid;
+    gap: 0.1rem;
+    font-size: var(--fs-sm);
+  }
+  .quote__author {
+    font-weight: 700;
+  }
+  .quote__meta {
+    color: var(--muted);
+  }
+  .quotes__nav {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--stone);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    transition:
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+  .quotes__nav:hover {
+    border-color: var(--ink);
+    background: var(--linen);
+  }
+  .quotes__count {
+    margin-top: 0.9rem;
+    text-align: center;
+    font-size: var(--fs-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  /* Phones: the review uses the full width; arrows sit below it, beside the counter. */
+  @media (max-width: 40em) {
+    .quotes__frame {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 0.9rem;
+    }
+    .quotes__track {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+    .quotes__nav {
+      grid-row: 2;
+    }
+    .quotes__nav:first-child {
+      justify-self: end;
+    }
+    .quotes__count {
+      margin-top: 0.5rem;
+    }
   }
   .scores__note {
     max-width: 44rem;
