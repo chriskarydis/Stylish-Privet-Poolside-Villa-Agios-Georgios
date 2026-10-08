@@ -18,6 +18,7 @@ const houseRules: { icon: IconName; text: string; ok: boolean }[] = [
   { icon: 'clock', text: fill(t(ui.checkIn, lang), { time: rules.checkIn }), ok: true },
   { icon: 'clock', text: fill(t(ui.checkOut, lang), { time: rules.checkOut }), ok: true },
   ...(rules.children ? [{ icon: 'baby' as const, text: t(ui.childrenWelcome, lang), ok: true }] : []),
+  ...(!rules.childrenInPool ? [{ icon: 'pool' as const, text: t(ui.noChildrenInPool, lang), ok: false }] : []),
   ...(!rules.pets ? [{ icon: 'paw-print' as const, text: t(ui.noPets, lang), ok: false }] : []),
   ...(!rules.smokingInside ? [{ icon: 'cigarette-off' as const, text: t(ui.noSmoking, lang), ok: false }] : []),
   ...(!rules.parties ? [{ icon: 'party-popper' as const, text: t(ui.noParties, lang), ok: false }] : []),

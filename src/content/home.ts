@@ -86,6 +86,10 @@ export const home = {
         'Είτε προτιμάτε μια δροσιστική βουτιά είτε απλώς να χαλαρώσετε δίπλα στο νερό, είναι το ιδανικό σημείο για να απολαύσετε τον ζεστό ήλιο της Κέρκυρας.',
       ],
     } satisfies P,
+    childrenNote: {
+      en: 'Children are not allowed in the pool. An exception can be requested; the children must then be supervised at all times and be quiet.',
+      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορεί να ζητηθεί εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.',
+    },
     note: {
       en: 'Shared exclusively by guests of the villa and the apartments on the property.',
       el: 'Κοινόχρηστη αποκλειστικά για τους επισκέπτες της βίλας και των διαμερισμάτων του ακινήτου.',
