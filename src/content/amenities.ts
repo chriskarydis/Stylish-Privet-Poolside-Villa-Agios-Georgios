@@ -59,6 +59,7 @@ export const amenityCategories: AmenityCategory[] = [
     title: { en: 'Outdoor', el: 'Στον εξωτερικό χώρο' },
     items: [
       a('pool', 'Swimming pool (guests only)', 'Πισίνα (μόνο για επισκέπτες)'),
+      a('martini', 'Pool bar', 'Μπαρ πισίνας'),
       a('trees', 'Garden', 'Κήπος'),
       a('armchair', 'Outdoor furniture', 'Έπιπλα εξωτερικού χώρου'),
       a('utensils-crossed', 'Outdoor dining', 'Υπαίθρια τραπεζαρία'),
