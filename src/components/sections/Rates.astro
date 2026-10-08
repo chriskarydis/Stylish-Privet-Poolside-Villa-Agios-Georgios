@@ -32,7 +32,7 @@ const termsHref = terms && isLinkable(terms, lang) ? localizePath(`/${terms.slug
 
 {
   rates.seasons.length > 0 && (
-    <section id="rates" class="section section--surface" aria-labelledby="rates-title">
+    <section id="rates" class="section" aria-labelledby="rates-title">
       <div class="container rates">
         <div class="section-head">
           <p class="eyebrow">{t(r.eyebrow, lang)}</p>
@@ -90,7 +90,7 @@ const termsHref = terms && isLinkable(terms, lang) ? localizePath(`/${terms.slug
     overflow-x: auto;
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: var(--linen);
+    background: var(--surface);
   }
   .rates__table {
     width: 100%;
