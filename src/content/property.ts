@@ -189,8 +189,8 @@ export const property = {
     minNights: 3 as number | null,
     minimumStay: { en: 'The minimum stay is 3 nights.', el: 'Η ελάχιστη διαμονή είναι 3 νύχτες.' } as Localized | null,
     deposit: {
-      en: 'A deposit of 50% of the total booking amount is payable within one week of your booking request.',
-      el: 'Προκαταβολή ίση με το 50% του συνολικού ποσού της κράτησης καταβάλλεται εντός μίας εβδομάδας από το αίτημα κράτησης.',
+      en: 'A deposit of 50% of the total booking amount is payable within one week of your booking request. For bookings made less than one week before arrival, the deposit is payable when the booking is confirmed.',
+      el: 'Προκαταβολή ίση με το 50% του συνολικού ποσού της κράτησης καταβάλλεται εντός μίας εβδομάδας από το αίτημα κράτησης. Για κρατήσεις που γίνονται λιγότερο από μία εβδομάδα πριν από την άφιξη, η προκαταβολή καταβάλλεται με την επιβεβαίωση της κράτησης.',
     } as Localized | null,
     balance: {
       en: 'The remaining 50% is payable between one week before arrival and the day of arrival.',
@@ -201,8 +201,8 @@ export const property = {
       el: 'Η πληρωμή γίνεται με τραπεζική μεταφορά ή με άλλον τρόπο που συμφωνείται με τον οικοδεσπότη κατά την επικοινωνία για την κράτηση.',
     } as Localized | null,
     cancellation: {
-      en: 'Cancellation up to 30 days before arrival: full refund. Cancellation from 29 to 14 days before arrival: 50% of the amount paid is refunded. Cancellation 13 days or fewer before arrival: no refund.',
-      el: 'Ακύρωση έως και 30 ημέρες πριν από την άφιξη: πλήρης επιστροφή χρημάτων. Ακύρωση από 29 έως και 14 ημέρες πριν από την άφιξη: επιστρέφεται το 50% του ποσού που έχει καταβληθεί. Ακύρωση 13 ημέρες ή λιγότερο πριν από την άφιξη: δεν επιστρέφονται χρήματα.',
+      en: 'Cancellation up to 30 days before arrival: full refund. Cancellation from 29 to 14 days before arrival: half of the deposit is refunded (25% of the total booking amount). Cancellation 13 days or fewer before arrival: no refund. Bookings made less than one week before arrival cannot be cancelled.',
+      el: 'Ακύρωση έως και 30 ημέρες πριν από την άφιξη: πλήρης επιστροφή χρημάτων. Ακύρωση από 29 έως και 14 ημέρες πριν από την άφιξη: επιστρέφεται η μισή προκαταβολή (το 25% του συνολικού ποσού της κράτησης). Ακύρωση 13 ημέρες ή λιγότερο πριν από την άφιξη: δεν επιστρέφονται χρήματα. Οι κρατήσεις που γίνονται λιγότερο από μία εβδομάδα πριν από την άφιξη δεν μπορούν να ακυρωθούν.',
     } as Localized | null,
     damageDeposit: {
       en: 'No damage deposit is required, and guests are not charged for minor breakages (for example a light bulb, a plate or a glass). For more significant damage (for example a broken window, damage to the kitchen or fire damage), the guest pays the cost of the damage, which is determined in agreement with the host.',
@@ -236,7 +236,8 @@ export const property = {
   operator: {
     /**
      * Full legal name of the company running the rental — STILL NEEDED from the
-     * owner (the registered company name that the ΑΦΜ below belongs to).
+     * owner (the registered company name that the ΑΦΜ below belongs to), together
+     * with the exact address of its registered office (the address below is the area only).
      */
     legalName: null as string | null,
     address: { en: 'Agios Georgios, Southern Corfu, Greece', el: 'Άγιος Γεώργιος, Νότια Κέρκυρα' } as Localized | null,
