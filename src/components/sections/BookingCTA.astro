@@ -17,7 +17,11 @@ interface Props {
   lang: Locale;
 }
 const { lang } = Astro.props;
-const { booking } = property;
+const { booking, rates } = property;
+// Lowest nightly rate, e.g. "€180" — null until rates are configured.
+const fromPrice = rates.seasons.length
+  ? new Intl.NumberFormat(lang === 'el' ? 'el-GR' : 'en-GB', { style: 'currency', currency: rates.currency, maximumFractionDigits: 0 }).format(Math.min(...rates.seasons.map((s) => s.perNight)))
+  : null;
 ---
 
 <section id="book" class="book on-dark" aria-labelledby="book-title">
@@ -43,7 +47,15 @@ const { booking } = property;
           </a>
         )
       }
-      <p class="book__note">{t(home.booking.platformsNote, lang)}</p>
+      {
+        fromPrice === null ? (
+          <p class="book__note">{t(home.booking.platformsNote, lang)}</p>
+        ) : (
+          <p class="book__note">
+            {fill(t(home.booking.ratesNote, lang), { price: fromPrice })} <a href="#rates">{t(home.booking.ratesLink, lang)}</a>
+          </p>
+        )
+      }
       <a class="btn btn--ghost-light book__contact" href="#contact">
         <Icon name="message-circle" size={18} />
         {t(home.booking.secondary, lang)}
@@ -111,6 +123,10 @@ const { booking } = property;
   .book__note {
     font-size: var(--fs-sm);
     color: var(--on-dark-muted);
+  }
+  .book__note a {
+    color: var(--on-dark);
+    font-weight: 600;
   }
   @media (min-width: 64em) {
     .book__grid {

@@ -125,8 +125,8 @@ export const home = {
     title: { en: 'Everything for a Comfortable Stay', el: 'Όλα για μια άνετη διαμονή' },
     servicesTitle: { en: 'Additional services', el: 'Επιπλέον υπηρεσίες' },
     servicesNote: {
-      en: 'May be available on request. Availability is not guaranteed and additional charges may apply — please ask before your stay.',
-      el: 'Ενδέχεται να είναι διαθέσιμες κατόπιν αιτήματος. Η διαθεσιμότητα δεν είναι εγγυημένη και ενδέχεται να υπάρχει επιπλέον χρέωση — ρωτήστε μας πριν από τη διαμονή σας.',
+      en: 'Arranged with your host on request and charged separately. Ask us about these or other services before your stay.',
+      el: 'Κανονίζονται κατόπιν επικοινωνίας με τον οικοδεσπότη και χρεώνονται ξεχωριστά. Ρωτήστε μας για αυτές ή για άλλες υπηρεσίες πριν από τη διαμονή σας.',
     },
     rulesTitle: { en: 'House rules', el: 'Κανόνες διαμονής' },
   },
@@ -216,17 +216,19 @@ export const home = {
 
   rates: {
     eyebrow: { en: 'Rates', el: 'Τιμές' },
-    title: { en: 'Rates by Season', el: 'Τιμές ανά περίοδο' },
+    title: { en: 'Direct Booking Rates', el: 'Τιμές απευθείας κράτησης' },
     season: { en: 'Season', el: 'Περίοδος' },
+    month: { en: 'Month', el: 'Μήνας' },
     dates: { en: 'Dates', el: 'Ημερομηνίες' },
     perNight: { en: 'Per night', el: 'Ανά νύχτα' },
     minStay: { en: 'Minimum stay', el: 'Ελάχιστη διαμονή' },
     nights: { en: '{n} nights', el: '{n} νύχτες' },
     night: { en: '1 night', el: '1 νύχτα' },
     cleaning: { en: 'Cleaning fee: {price} per stay.', el: 'Τέλος καθαριότητας: {price} ανά διαμονή.' },
+    minStayNote: { en: 'Minimum stay: {n} nights.', el: 'Ελάχιστη διαμονή: {n} νύχτες.' },
     direct: {
-      en: 'Rates apply to direct bookings. Choose your dates below for an indicative total.',
-      el: 'Οι τιμές ισχύουν για απευθείας κρατήσεις. Επιλέξτε ημερομηνίες παρακάτω για ενδεικτικό σύνολο.',
+      en: 'These rates apply to bookings made directly with us. Prices on Airbnb and Booking.com are set separately and may differ. Choose your dates in the calendar for an indicative total.',
+      el: 'Οι τιμές αυτές ισχύουν για κρατήσεις απευθείας μαζί μας. Οι τιμές στο Airbnb και στο Booking.com ορίζονται ξεχωριστά και μπορεί να διαφέρουν. Επιλέξτε ημερομηνίες στο ημερολόγιο για ενδεικτικό σύνολο.',
     },
     cta: { en: 'Check dates', el: 'Δείτε ημερομηνίες' },
   },
@@ -254,6 +256,9 @@ export const home = {
       en: 'Prices are shown on the booking platforms.',
       el: 'Οι τιμές εμφανίζονται στις πλατφόρμες κρατήσεων.',
     },
+    /** Shown instead of platformsNote once rates are configured. */
+    ratesNote: { en: 'Direct booking from {price} per night.', el: 'Απευθείας κράτηση από {price} τη νύχτα.' },
+    ratesLink: { en: 'See the rates', el: 'Δείτε τις τιμές' },
     /** Availability calendar & booking widget. */
     widget: {
       title: { en: 'Choose your dates', el: 'Επιλέξτε ημερομηνίες' },
