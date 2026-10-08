@@ -77,15 +77,19 @@ export const home = {
     body: {
       en: [
         'Enjoy relaxing moments by the swimming pool during your stay in Agios Georgios.',
-        'The pool is part of the property and is available exclusively to guests staying at the villa and the apartments within the property. It is not open to the general public.',
+        'The pool is part of the property and is available exclusively to guests staying at the villa and the apartments within the property. It is not open to the general public. Guests of the villa also have access to the pool bar.',
         'Whether you prefer a refreshing swim or simply relaxing by the pool, it is the perfect place to enjoy the warm Corfu sunshine.',
       ],
       el: [
         'Απολαύστε στιγμές χαλάρωσης δίπλα στην πισίνα κατά τη διαμονή σας στον Άγιο Γεώργιο.',
-        'Η πισίνα ανήκει στο ακίνητο και είναι διαθέσιμη αποκλειστικά στους επισκέπτες της βίλας και των διαμερισμάτων του ίδιου ακινήτου. Δεν είναι ανοιχτή στο κοινό.',
+        'Η πισίνα ανήκει στο ακίνητο και είναι διαθέσιμη αποκλειστικά στους επισκέπτες της βίλας και των διαμερισμάτων του ίδιου ακινήτου. Δεν είναι ανοιχτή στο κοινό. Οι επισκέπτες της βίλας έχουν πρόσβαση και στο μπαρ της πισίνας.',
         'Είτε προτιμάτε μια δροσιστική βουτιά είτε απλώς να χαλαρώσετε δίπλα στο νερό, είναι το ιδανικό σημείο για να απολαύσετε τον ζεστό ήλιο της Κέρκυρας.',
       ],
     } satisfies P,
+    childrenNote: {
+      en: 'Children are not allowed in the pool. An exception can be requested; the children must then be supervised at all times and be quiet.',
+      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορεί να ζητηθεί εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.',
+    },
     note: {
       en: 'Shared exclusively by guests of the villa and the apartments on the property.',
       el: 'Κοινόχρηστη αποκλειστικά για τους επισκέπτες της βίλας και των διαμερισμάτων του ακινήτου.',
@@ -210,7 +214,7 @@ export const home = {
     reviewCount: { en: 'Review {i} of {n}', el: 'Κριτική {i} από {n}' },
     disclaimer: {
       en: 'Aggregate ratings and guest reviews as published on Airbnb and Booking.com; reviews are quoted in their original wording. Current scores and all reviews are available on each platform.',
-      el: 'Συνολικές βαθμολογίες και κριτικές επισκεπτών όπως δημοσιεύονται στο Airbnb και στο Booking.com· οι κριτικές παρατίθενται αυτούσιες, στη γλώσσα που γράφτηκαν. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
+      el: 'Συνολικές βαθμολογίες και κριτικές επισκεπτών όπως δημοσιεύονται στο Airbnb και στο Booking.com. Οι κριτικές παρατίθενται αυτούσιες, στη γλώσσα που γράφτηκαν. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
     },
   },
 

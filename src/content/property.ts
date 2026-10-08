@@ -91,8 +91,13 @@ export const property = {
     smokingInside: false,
     parties: false,
     children: true,
-    /** Cots / extra beds — not confirmed. Set to true only when the owner confirms. */
-    cotsAvailable: null as boolean | null,
+    /**
+     * Children are not allowed in the pool. An exception can be requested; the
+     * children must then be supervised at all times and be quiet (owner, October 2026).
+     */
+    childrenInPool: false,
+    /** Cots and high chairs are not available (owner, October 2026). */
+    cotsAvailable: false as boolean | null,
   },
 
   /**
@@ -197,13 +202,24 @@ export const property = {
       el: 'Το υπόλοιπο 50% καταβάλλεται από μία εβδομάδα πριν από την άφιξη έως και την ημέρα της άφιξης.',
     } as Localized | null,
     paymentMethods: {
-      en: 'Payment is made by bank transfer, or by another method agreed with the host when arranging the booking.',
-      el: 'Η πληρωμή γίνεται με τραπεζική μεταφορά ή με άλλον τρόπο που συμφωνείται με τον οικοδεσπότη κατά την επικοινωνία για την κράτηση.',
+      en: 'Payment is made by bank transfer, in cash, or by another method agreed with the host when arranging the booking.',
+      el: 'Η πληρωμή γίνεται με τραπεζική μεταφορά, με μετρητά ή με άλλον τρόπο που συμφωνείται με τον οικοδεσπότη κατά την επικοινωνία για την κράτηση.',
     } as Localized | null,
+    /** One item per case; shown as a bulleted list. */
     cancellation: {
-      en: 'Cancellation up to 30 days before arrival: full refund. Cancellation from 29 to 14 days before arrival: half of the deposit is refunded (25% of the total booking amount). Cancellation 13 days or fewer before arrival: no refund. Bookings made less than one week before arrival cannot be cancelled.',
-      el: 'Ακύρωση έως και 30 ημέρες πριν από την άφιξη: πλήρης επιστροφή χρημάτων. Ακύρωση από 29 έως και 14 ημέρες πριν από την άφιξη: επιστρέφεται η μισή προκαταβολή (το 25% του συνολικού ποσού της κράτησης). Ακύρωση 13 ημέρες ή λιγότερο πριν από την άφιξη: δεν επιστρέφονται χρήματα. Οι κρατήσεις που γίνονται λιγότερο από μία εβδομάδα πριν από την άφιξη δεν μπορούν να ακυρωθούν.',
-    } as Localized | null,
+      en: [
+        'Up to 30 days before arrival: full refund.',
+        'From 29 to 14 days before arrival: half of the deposit is refunded (25% of the total booking amount).',
+        '13 days or fewer before arrival: no refund.',
+        'Bookings made less than one week before arrival cannot be cancelled.',
+      ],
+      el: [
+        'Έως και 30 ημέρες πριν από την άφιξη: πλήρης επιστροφή χρημάτων.',
+        'Από 29 έως και 14 ημέρες πριν από την άφιξη: επιστρέφεται η μισή προκαταβολή (το 25% του συνολικού ποσού της κράτησης).',
+        '13 ημέρες ή λιγότερο πριν από την άφιξη: δεν επιστρέφονται χρήματα.',
+        'Οι κρατήσεις που γίνονται λιγότερο από μία εβδομάδα πριν από την άφιξη δεν μπορούν να ακυρωθούν.',
+      ],
+    } as Localized<string[]> | null,
     damageDeposit: {
       en: 'No damage deposit is required, and guests are not charged for minor breakages (for example a light bulb, a plate or a glass). For more significant damage (for example a broken window, damage to the kitchen or fire damage), the guest pays the cost of the damage, which is determined in agreement with the host.',
       el: 'Δεν απαιτείται εγγύηση για ζημιές και οι επισκέπτες δεν επιβαρύνονται για μικροζημιές (για παράδειγμα μια λάμπα, ένα πιάτο ή ένα ποτήρι). Για σοβαρότερες ζημιές (για παράδειγμα σπασμένο τζάμι, βλάβη στην κουζίνα ή ζημιά από φωτιά), ο επισκέπτης καταβάλλει το κόστος της ζημιάς, το οποίο υπολογίζεται κατόπιν συνεννόησης με τον οικοδεσπότη.',

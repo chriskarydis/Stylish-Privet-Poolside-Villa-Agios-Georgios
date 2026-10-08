@@ -17,7 +17,7 @@ interface Props {
 const { lang, page } = Astro.props;
 const path = `/${page.slug}`;
 const title = t(page.title, lang);
-const siteUrl = Astro.site!.host; // e.g. "www.example.com" — shown as {site} in the texts
+const siteUrl = Astro.site!.host; // e.g. "stylishvillacorfu.com" — shown as {site} in the texts
 const blocks = page.body ? t(page.body, lang) : null;
 const incomplete = !blocks || hasMissing(blocks, lang, siteUrl);
 const draft = incomplete || !page.lastUpdated;
