@@ -11,7 +11,7 @@ const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
  * settings) once the domain is known. Used for canonical URLs, hreflang,
  * Open Graph, sitemap.xml and robots.txt.
  */
-const SITE_URL = env.PUBLIC_SITE_URL || 'https://www.example.com';
+const SITE_URL = env.PUBLIC_SITE_URL || 'https://stylishvillacorfu.com';
 
 // Pages left out of the sitemap, e.g. a legal page that is still a draft (see src/content/legal.ts). None at the moment.
 /** @type {string[]} */
