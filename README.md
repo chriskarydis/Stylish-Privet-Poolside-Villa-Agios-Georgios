@@ -47,6 +47,7 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 
 ## Hosting (Cloudflare Pages)
 
+- Final domain: https://stylishvillacorfu.com (to be connected under Custom domains; until then the site answers on the pages.dev address below, and `PUBLIC_SITE_URL` in Cloudflare must keep pointing to it)
 - Production (`main`): https://stylish-privet-poolside-villa-agios-georgios.pages.dev
 - Preview (`develop`): https://develop.stylish-privet-poolside-villa-agios-georgios.pages.dev
 
@@ -55,7 +56,7 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 | Production branch | `main` (every merge deploys; `develop` gets a preview URL) |
 | Build command | `npm run build` |
 | Output directory | `dist` |
-| Environment variables | `NODE_VERSION=22`, `PUBLIC_SITE_URL=https://<your-domain>` |
+| Environment variables | `NODE_VERSION=22`, `PUBLIC_SITE_URL=https://stylishvillacorfu.com` once the domain is connected |
 | Secrets (encrypted) | `ICAL_AIRBNB`, `ICAL_BOOKING` — the private iCal export links (never commit them) |
 
 `functions/api/availability.ts` runs on Cloudflare and serves `/api/availability` (booked dates only, cached 30 min).
