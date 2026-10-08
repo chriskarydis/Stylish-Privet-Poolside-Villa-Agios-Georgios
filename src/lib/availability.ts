@@ -134,14 +134,18 @@ export function bookingComLink(base: string, checkIn: IsoDate | null, checkOut: 
 // ---------- Rates ----------
 
 export interface PriceSeason {
-  /** First and last night of the season (inclusive). */
-  from: IsoDate;
-  to: IsoDate;
+  /** First and last night of the season (inclusive): 'MM-DD' (every year) or 'YYYY-MM-DD'. */
+  from: string;
+  to: string;
   perNight: number;
   minNights?: number;
 }
 
-const seasonFor = (night: IsoDate, seasons: PriceSeason[]) => seasons.find((s) => night >= s.from && night <= s.to);
+const seasonFor = (night: IsoDate, seasons: PriceSeason[]) =>
+  seasons.find((s) => {
+    const key = s.from.length === 5 ? night.slice(5) : night; // 'MM-DD' periods repeat every year
+    return key >= s.from && key <= s.to;
+  });
 
 /**
  * Indicative price of a stay: each night at its season's rate, plus the

@@ -7,7 +7,10 @@
  */
 import type { Localized } from '@/i18n/config';
 
-/** One price period. `from` / `to` are the first and last night (inclusive), as 'YYYY-MM-DD'. */
+/**
+ * One price period. `from` / `to` are the first and last night (inclusive):
+ * 'MM-DD' for a period that repeats every year, or 'YYYY-MM-DD' for one specific year.
+ */
 export interface RateSeason {
   name: Localized;
   from: string;
@@ -144,53 +147,85 @@ export const property = {
   },
 
   /**
-   * RATES — not supplied yet. While `seasons` is empty nothing about prices is
-   * shown. Once filled in, a "Rates" section appears and the calendar shows an
-   * indicative total for the selected dates.
-   * Example season:
-   *   { name: { en: 'High season', el: 'Υψηλή περίοδος' }, from: '2027-07-01', to: '2027-08-31', perNight: 180, minNights: 5 }
-   * `from` / `to` are the first and last NIGHT of the season (inclusive).
+   * RATES for direct bookings, per night, as supplied by the owner (October 2026).
+   * They feed the "Rates" section and the indicative total in the calendar.
+   * `from` / `to` are the first and last NIGHT of the period (inclusive); 'MM-DD'
+   * repeats every year. Nights outside every period have no price: the calendar
+   * then shows `closedNote` instead of a total.
+   * A period can have its own minimum stay: { ..., minNights: 5 }.
    */
   rates: {
     currency: 'EUR',
-    seasons: [] as RateSeason[],
-    /** One-off cleaning fee per stay, or null if included / none. */
+    seasons: [
+      { name: { en: 'April', el: 'Απρίλιος' }, from: '04-01', to: '04-30', perNight: 180 },
+      { name: { en: 'May', el: 'Μάιος' }, from: '05-01', to: '05-31', perNight: 200 },
+      { name: { en: 'June', el: 'Ιούνιος' }, from: '06-01', to: '06-30', perNight: 230 },
+      { name: { en: 'July', el: 'Ιούλιος' }, from: '07-01', to: '07-31', perNight: 250 },
+      { name: { en: 'August', el: 'Αύγουστος' }, from: '08-01', to: '08-31', perNight: 260 },
+      { name: { en: 'September', el: 'Σεπτέμβριος' }, from: '09-01', to: '09-30', perNight: 230 },
+      { name: { en: 'October', el: 'Οκτώβριος' }, from: '10-01', to: '10-31', perNight: 200 },
+    ] as RateSeason[],
+    /** One-off cleaning fee per stay, or null if included / none. Cleaning is included in the price. */
     cleaningFee: null as number | null,
     /** Free text shown under the rates, e.g. what the price includes. */
-    note: null as Localized | null,
+    note: {
+      en: 'Prices are per night for the villa and include cleaning, the climate resilience fee and all applicable taxes.',
+      el: 'Οι τιμές είναι ανά νύχτα για τη βίλα και περιλαμβάνουν την καθαριότητα, το τέλος ανθεκτικότητας στην κλιματική κρίση και όλους τους φόρους που ισχύουν.',
+    } as Localized | null,
+    /** Shown under the rates, and in the calendar when the chosen dates fall outside the periods above. */
+    closedNote: {
+      en: 'The villa is open from April to October. For a stay in other months, send us a request or contact us and we will let you know whether it can be arranged.',
+      el: 'Η βίλα λειτουργεί από τον Απρίλιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, στείλτε μας αίτημα ή επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
+    } as Localized | null,
   },
 
   /**
-   * BOOKING TERMS for direct bookings — not supplied yet. Each text appears on
-   * the "Booking Terms" page; the page (and its links) stay hidden until all
-   * of them are filled in. `minNights` also limits the calendar selection.
+   * BOOKING TERMS for direct bookings, as supplied by the owner (October 2026).
+   * Each text appears on the "Booking Terms" page; the page (and its links) are
+   * hidden if any of them is null. `minNights` also limits the calendar selection.
    */
   bookingTerms: {
     /** Minimum stay enforced by the calendar (a season's own minNights overrides it). */
-    minNights: null as number | null,
-    minimumStay: null as Localized | null, // e.g. 'Minimum stay is 3 nights (5 nights in July and August).'
-    deposit: null as Localized | null, // e.g. 'A 30% deposit is required to confirm the booking.'
-    balance: null as Localized | null, // e.g. 'The balance is paid 14 days before arrival.'
-    paymentMethods: null as Localized | null, // e.g. 'Bank transfer or cash on arrival.'
-    cancellation: null as Localized | null,
-    damageDeposit: null as Localized | null, // e.g. 'No damage deposit is required.'
-    touristTax: null as Localized | null, // e.g. 'The climate resilience fee is paid on arrival.'
+    minNights: 3 as number | null,
+    minimumStay: { en: 'The minimum stay is 3 nights.', el: 'Η ελάχιστη διαμονή είναι 3 νύχτες.' } as Localized | null,
+    deposit: {
+      en: 'A deposit of 50% of the total booking amount is payable within one week of your booking request.',
+      el: 'Προκαταβολή ίση με το 50% του συνολικού ποσού της κράτησης καταβάλλεται εντός μίας εβδομάδας από το αίτημα κράτησης.',
+    } as Localized | null,
+    balance: {
+      en: 'The remaining 50% is payable between one week before arrival and the day of arrival.',
+      el: 'Το υπόλοιπο 50% καταβάλλεται από μία εβδομάδα πριν από την άφιξη έως και την ημέρα της άφιξης.',
+    } as Localized | null,
+    paymentMethods: {
+      en: 'Payment is made by bank transfer, or by another method agreed with the host when arranging the booking.',
+      el: 'Η πληρωμή γίνεται με τραπεζική μεταφορά ή με άλλον τρόπο που συμφωνείται με τον οικοδεσπότη κατά την επικοινωνία για την κράτηση.',
+    } as Localized | null,
+    cancellation: {
+      en: 'Cancellation up to 30 days before arrival: full refund. Cancellation from 29 to 14 days before arrival: 50% of the amount paid is refunded. Cancellation 13 days or fewer before arrival: no refund.',
+      el: 'Ακύρωση έως και 30 ημέρες πριν από την άφιξη: πλήρης επιστροφή χρημάτων. Ακύρωση από 29 έως και 14 ημέρες πριν από την άφιξη: επιστρέφεται το 50% του ποσού που έχει καταβληθεί. Ακύρωση 13 ημέρες ή λιγότερο πριν από την άφιξη: δεν επιστρέφονται χρήματα.',
+    } as Localized | null,
+    damageDeposit: {
+      en: 'No damage deposit is required, and guests are not charged for minor breakages (for example a light bulb, a plate or a glass). For more significant damage (for example a broken window, damage to the kitchen or fire damage), the guest pays the cost of the damage, which is determined in agreement with the host.',
+      el: 'Δεν απαιτείται εγγύηση για ζημιές και οι επισκέπτες δεν επιβαρύνονται για μικροζημιές (για παράδειγμα μια λάμπα, ένα πιάτο ή ένα ποτήρι). Για σοβαρότερες ζημιές (για παράδειγμα σπασμένο τζάμι, βλάβη στην κουζίνα ή ζημιά από φωτιά), ο επισκέπτης καταβάλλει το κόστος της ζημιάς, το οποίο υπολογίζεται κατόπιν συνεννόησης με τον οικοδεσπότη.',
+    } as Localized | null,
+    touristTax: {
+      en: 'The climate resilience fee and all other applicable taxes (such as VAT) are included in the price. Cleaning is also included in the price.',
+      el: 'Το τέλος ανθεκτικότητας στην κλιματική κρίση και όλοι οι λοιποί φόροι που ισχύουν (όπως ο ΦΠΑ) περιλαμβάνονται στην τιμή. Στην τιμή περιλαμβάνεται και η καθαριότητα.',
+    } as Localized | null,
   },
 
   /**
-   * Contact details. Each item is hidden while null.
-   *
-   * TODO before launch: these are the developer's own details, used as temporary
-   * placeholders. Replace all four with the owner's business contact details —
-   * every place on the site (contact section, footer, WhatsApp buttons, forms'
-   * e-mail fallback, structured data) reads them from here.
+   * The host's contact details, as supplied by the owner (October 2026). Each item
+   * is hidden while null. Every place on the site (contact section, footer,
+   * WhatsApp buttons, forms' e-mail fallback, legal pages, structured data) reads
+   * them from here.
    */
   contact: {
-    email: 'chriskaridis76@gmail.com' as string | null,
-    phone: '+30 690 654 2839' as string | null, // international format
-    whatsapp: '306906542839' as string | null, // digits only, with country code
+    email: 'anastasiakoul30@gmail.com' as string | null,
+    phone: '+30 698 084 1834' as string | null, // international format
+    whatsapp: '306980841834' as string | null, // digits only, with country code
     /** Name of the person answering on WhatsApp (shown on the WhatsApp contact card). */
-    whatsappName: { en: 'Christos Spyridon Karydis', el: 'Χρήστος Σπυρίδων Καρύδης' } as Localized | null,
+    whatsappName: { en: 'Anastasia Koulouri', el: 'Αναστασία Κουλούρη' } as Localized | null,
   },
 
   /**
@@ -199,17 +234,20 @@ export const property = {
    * show "[to be completed]" markers and stay hidden from search engines.
    */
   operator: {
-    /** Full legal name of the person or company running the rental. */
+    /**
+     * Full legal name of the company running the rental — STILL NEEDED from the
+     * owner (the registered company name that the ΑΦΜ below belongs to).
+     */
     legalName: null as string | null,
-    address: null as Localized | null,
-    /** ΑΦΜ (Greek tax ID). */
-    vatNumber: null as string | null,
+    address: { en: 'Agios Georgios, Southern Corfu, Greece', el: 'Άγιος Γεώργιος, Νότια Κέρκυρα' } as Localized | null,
+    /** ΑΦΜ (Greek tax ID) of the company. */
+    vatNumber: '801510189' as string | null,
     /**
      * ΑΜΑ — short-term rental property registry number (mandatory on every
      * advertisement of the property). Use `mhteNumber` instead if the property
      * is licensed as tourist accommodation (ΜΗ.Τ.Ε., EOT).
      */
-    amaNumber: null as string | null,
+    amaNumber: '00001600954' as string | null,
     mhteNumber: null as string | null,
   },
 
@@ -247,11 +285,11 @@ export const property = {
   },
 
   /**
-   * Optional extras. Availability is not guaranteed and charges may apply —
-   * the website always shows that disclaimer next to them.
+   * Optional extras, arranged with the host on request and charged separately —
+   * the website always shows that note next to them.
    */
   additionalServices: [
-    { id: 'airport-transfer', icon: 'plane', label: { en: 'Airport transfer', el: 'Μεταφορά από/προς το αεροδρόμιο' } },
+    { id: 'airport-transfer', icon: 'plane', label: { en: 'Airport or port transfer', el: 'Μεταφορά από/προς αεροδρόμιο ή λιμάνι' } },
     { id: 'car-rental', icon: 'car', label: { en: 'Car rental', el: 'Ενοικίαση αυτοκινήτου' } },
     { id: 'bicycle-rental', icon: 'bike', label: { en: 'Bicycle rental', el: 'Ενοικίαση ποδηλάτου' } },
   ] as const,
