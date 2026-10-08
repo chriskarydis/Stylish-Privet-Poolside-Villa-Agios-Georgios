@@ -77,12 +77,12 @@ export const home = {
     body: {
       en: [
         'Enjoy relaxing moments by the swimming pool during your stay in Agios Georgios.',
-        'The pool is part of the property and is available exclusively to guests staying at the villa and the apartments within the property. It is not open to the general public.',
+        'The pool is part of the property and is available exclusively to guests staying at the villa and the apartments within the property. It is not open to the general public. Guests of the villa also have access to the pool bar.',
         'Whether you prefer a refreshing swim or simply relaxing by the pool, it is the perfect place to enjoy the warm Corfu sunshine.',
       ],
       el: [
         'Απολαύστε στιγμές χαλάρωσης δίπλα στην πισίνα κατά τη διαμονή σας στον Άγιο Γεώργιο.',
-        'Η πισίνα ανήκει στο ακίνητο και είναι διαθέσιμη αποκλειστικά στους επισκέπτες της βίλας και των διαμερισμάτων του ίδιου ακινήτου. Δεν είναι ανοιχτή στο κοινό.',
+        'Η πισίνα ανήκει στο ακίνητο και είναι διαθέσιμη αποκλειστικά στους επισκέπτες της βίλας και των διαμερισμάτων του ίδιου ακινήτου. Δεν είναι ανοιχτή στο κοινό. Οι επισκέπτες της βίλας έχουν πρόσβαση και στο μπαρ της πισίνας.',
         'Είτε προτιμάτε μια δροσιστική βουτιά είτε απλώς να χαλαρώσετε δίπλα στο νερό, είναι το ιδανικό σημείο για να απολαύσετε τον ζεστό ήλιο της Κέρκυρας.',
       ],
     } satisfies P,
