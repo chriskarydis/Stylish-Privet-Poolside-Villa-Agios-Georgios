@@ -1,5 +1,6 @@
 ---
 import { home } from '@content/home';
+import { property } from '@content/property';
 import type { Locale } from '@/i18n/config';
 import { t } from '@/i18n/utils';
 import SmartImage from '@/components/ui/SmartImage.astro';
@@ -33,6 +34,14 @@ const { lang } = Astro.props;
         <Icon name="info" size={18} />
         <span>{t(home.pool.note, lang)}</span>
       </p>
+      {
+        !property.rules.childrenInPool && (
+          <p class="pool__note">
+            <Icon name="baby" size={18} />
+            <span>{t(home.pool.childrenNote, lang)}</span>
+          </p>
+        )
+      }
     </div>
   </div>
 </section>

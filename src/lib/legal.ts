@@ -47,7 +47,7 @@ function values(lang: Locale, siteUrl: string): Record<string, string | null> {
     deposit: loc(bt.deposit),
     balance: loc(bt.balance),
     paymentMethods: loc(bt.paymentMethods),
-    cancellation: loc(bt.cancellation),
+    cancellation: bt.cancellation ? t(bt.cancellation, lang).join(' ') : null,
     damageDeposit: loc(bt.damageDeposit),
     touristTax: loc(bt.touristTax),
     checkIn: rules.checkIn,

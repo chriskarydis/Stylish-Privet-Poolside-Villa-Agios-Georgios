@@ -96,6 +96,14 @@ export const faqs: FaqItem[] = [
     },
   },
   {
+    id: 'children-pool',
+    question: { en: 'Can children use the pool?', el: 'Μπορούν τα παιδιά να χρησιμοποιήσουν την πισίνα;' },
+    answer: {
+      en: 'Children are not allowed in the pool. You can ask us for an exception; in that case the children must be supervised at all times and must be quiet.',
+      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορείτε να μας ζητήσετε εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.',
+    },
+  },
+  {
     id: 'check-in',
     question: { en: 'What time is check-in?', el: 'Τι ώρα είναι η άφιξη (check-in);' },
     answer: { en: 'Check-in is from 15:00.', el: 'Η άφιξη (check-in) είναι από τις 15:00.' },
