@@ -90,7 +90,10 @@ export const faqs: FaqItem[] = [
   {
     id: 'children',
     question: { en: 'Are children welcome?', el: 'Είναι ευπρόσδεκτα τα παιδιά;' },
-    answer: { en: 'Yes, children are welcome.', el: 'Ναι, τα παιδιά είναι ευπρόσδεκτα.' },
+    answer: {
+      en: 'Yes, children are welcome. Please note that cots and high chairs are not available.',
+      el: 'Ναι, τα παιδιά είναι ευπρόσδεκτα. Σημειώνεται ότι δεν διατίθενται βρεφικά κρεβάτια και παιδικά καρεκλάκια.',
+    },
   },
   {
     id: 'check-in',
@@ -101,5 +104,18 @@ export const faqs: FaqItem[] = [
     id: 'check-out',
     question: { en: 'What time is check-out?', el: 'Τι ώρα είναι η αναχώρηση (check-out);' },
     answer: { en: 'Check-out is before 10:00.', el: 'Η αναχώρηση (check-out) είναι έως τις 10:00.' },
+  },
+  {
+    id: 'minimum-stay',
+    question: { en: 'Is there a minimum stay?', el: 'Υπάρχει ελάχιστη διαμονή;' },
+    answer: { en: 'Yes. The minimum stay is 3 nights.', el: 'Ναι. Η ελάχιστη διαμονή είναι 3 νύχτες.' },
+  },
+  {
+    id: 'season',
+    question: { en: 'When is the villa open?', el: 'Ποιους μήνες λειτουργεί η βίλα;' },
+    answer: {
+      en: 'The villa is open from April to October. For a stay in other months, contact us and we will let you know whether it can be arranged.',
+      el: 'Η βίλα λειτουργεί από τον Απρίλιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
+    },
   },
 ];

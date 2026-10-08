@@ -40,6 +40,7 @@ const config = {
   formId: property.forms.bookingFormId,
   seasons: property.rates.seasons.map(({ from, to, perNight, minNights }) => ({ from, to, perNight, minNights })),
   cleaningFee: property.rates.cleaningFee,
+  closedNote: property.rates.closedNote ? t(property.rates.closedNote, lang) : null,
   currency: property.rates.currency,
   minNights: property.bookingTerms.minNights,
   checkInTime: property.rules.checkIn,
@@ -227,6 +228,7 @@ const config = {
     formId: string | null;
     seasons: PriceSeason[];
     cleaningFee: number | null;
+    closedNote: string | null;
     currency: string;
     minNights: number | null;
     checkInTime: string;
@@ -413,7 +415,7 @@ const config = {
       const price = complete ? estimatePrice(checkIn!, checkOut!, cfg.seasons, cfg.cleaningFee) : null;
       priceText = !complete || !cfg.seasons.length ? '' : price
         ? `${fmt(s.estimate, { price: money.format(price.total) })}${price.cleaning ? ` (${fmt(s.inclCleaning, { price: money.format(price.cleaning) })})` : ''}. ${s.estimateNote}`
-        : s.priceOnRequest;
+        : (cfg.closedNote ?? s.priceOnRequest);
       priceEl.textContent = priceText;
       priceEl.hidden = !priceText;
       const g = guests();
