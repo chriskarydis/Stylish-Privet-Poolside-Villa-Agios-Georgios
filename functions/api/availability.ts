@@ -13,7 +13,7 @@
  *     an iCal calendar  → that feed counts as failed
  *   - some feeds failed → 'partial' (known bookings are still returned)
  *   - all feeds failed  → 'unavailable'
- * Only complete results are cached (30 minutes); failures are retried on the
+ * Only complete results are cached (5 minutes); failures are retried on the
  * next request after one minute.
  */
 import { mergeRanges, parseIcs, toIso, type AvailabilityResponse, type Range } from '../../src/lib/availability';
@@ -30,7 +30,10 @@ interface Context {
   waitUntil(promise: Promise<unknown>): void;
 }
 
-const CACHE_SECONDS = 1800;
+// How long a complete answer is reused before the calendars are read again.
+// Worst case a new booking shows on the site after CACHE_SECONDS + BROWSER_SECONDS (about 6 minutes).
+const CACHE_SECONDS = 300;
+const BROWSER_SECONDS = 60;
 const RETRY_SECONDS = 60;
 const FETCH_TIMEOUT_MS = 8000;
 
@@ -38,7 +41,7 @@ const json = (body: AvailabilityResponse, maxAge: number) =>
   new Response(JSON.stringify(body), {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': `public, max-age=${Math.min(maxAge, 300)}, s-maxage=${maxAge}`,
+      'Cache-Control': `public, max-age=${Math.min(maxAge, BROWSER_SECONDS)}, s-maxage=${maxAge}`,
     },
   });
 
