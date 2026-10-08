@@ -1,0 +1,58 @@
+# Builds the site and uploads it to the Cloudflare Pages project in the OWNER's
+# Cloudflare account: `main` becomes the production site, `develop` the preview
+# (https://develop.<project>.pages.dev).
+#
+# Needed in GitHub → Settings → Secrets and variables → Actions:
+#   Secrets    CLOUDFLARE_API_TOKEN   (permission: Account → Cloudflare Pages → Edit)
+#              CLOUDFLARE_ACCOUNT_ID
+#   Variables  PUBLIC_SITE_URL        e.g. https://stylishvillacorfu.com
+#              CLOUDFLARE_PAGES_PROJECT (optional, default: stylishvillacorfu)
+# Until the two secrets exist the upload is skipped, so this file is harmless.
+# The iCal calendar links are NOT set here: they are secrets of the Pages project
+# itself (Cloudflare dashboard → project → Settings → Variables and Secrets).
+name: Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'stylishvillacorfu' }}
+      PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+    steps:
+      - name: Check that the Cloudflare account is configured
+        id: cfg
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Cloudflare secrets are not set yet - nothing is uploaded."
+          fi
+      - uses: actions/checkout@v4
+        if: steps.cfg.outputs.ready == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.cfg.outputs.ready == 'true'
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+        if: steps.cfg.outputs.ready == 'true'
+      - run: npm run build
+        if: steps.cfg.outputs.ready == 'true'
+      - name: Create the Pages project on the first run
+        if: steps.cfg.outputs.ready == 'true'
+        run: npx --yes wrangler@4 pages project create "$PROJECT" --production-branch main || echo "Project already exists."
+      - name: Upload to Cloudflare Pages
+        if: steps.cfg.outputs.ready == 'true'
+        run: npx --yes wrangler@4 pages deploy dist --project-name "$PROJECT" --branch "${{ github.ref_name }}" --commit-dirty=true
