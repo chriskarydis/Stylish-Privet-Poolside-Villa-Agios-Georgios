@@ -337,19 +337,19 @@ export const legalPages: LegalPage[] = [
     slug: 'privacy-policy',
     title: { en: 'Privacy Policy', el: 'Πολιτική Απορρήτου' },
     body: { en: privacyEn, el: privacyEl },
-    lastUpdated: null,
+    lastUpdated: '2026-10-08',
   },
   {
     slug: 'cookie-policy',
     title: { en: 'Cookie Policy', el: 'Πολιτική Cookies' },
     body: { en: cookiesEn, el: cookiesEl },
-    lastUpdated: null,
+    lastUpdated: '2026-10-08',
   },
   {
     slug: 'terms-and-conditions',
     title: { en: 'Terms of Use', el: 'Όροι Χρήσης' },
     body: { en: termsEn, el: termsEl },
-    lastUpdated: null,
+    lastUpdated: '2026-10-08',
   },
   {
     slug: 'booking-terms',

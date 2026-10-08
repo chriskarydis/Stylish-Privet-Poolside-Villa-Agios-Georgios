@@ -13,8 +13,9 @@ const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
  */
 const SITE_URL = env.PUBLIC_SITE_URL || 'https://www.example.com';
 
-// Pages that are placeholders and must not be indexed yet (see src/content/legal.ts).
-const NOINDEX = ['/privacy-policy', '/cookie-policy', '/terms-and-conditions', '/booking-terms'];
+// Pages left out of the sitemap, e.g. a legal page that is still a draft (see src/content/legal.ts). None at the moment.
+/** @type {string[]} */
+const NOINDEX = [];
 
 export default defineConfig({
   site: SITE_URL,
