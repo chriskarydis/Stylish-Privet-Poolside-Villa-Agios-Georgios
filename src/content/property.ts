@@ -234,13 +234,15 @@ export const property = {
    * show "[to be completed]" markers and stay hidden from search engines.
    */
   operator: {
+    /** Registered name of the company running the rental, as listed in the business registry (ΓΕΜΗ). */
+    legalName: 'ΚΟΥΛΟΥΡΗΣ-ΜΗΝΑ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ' as string | null,
     /**
-     * Full legal name of the company running the rental — STILL NEEDED from the
-     * owner (the registered company name that the ΑΦΜ below belongs to), together
-     * with the exact address of its registered office (the address below is the area only).
+     * Address of the company's branch that runs the villa (the owner's choice).
+     * The company's registered seat is a different address in Corfu Town.
      */
-    legalName: null as string | null,
-    address: { en: 'Agios Georgios, Southern Corfu, Greece', el: 'Άγιος Γεώργιος, Νότια Κέρκυρα' } as Localized | null,
+    address: { en: 'Lantzes, Korission, Argyrades, 49100 Corfu, Greece', el: 'Θέση Λάντζες Κορισσίων, Αργυράδες, 49100 Κέρκυρα' } as Localized | null,
+    /** Business registry (ΓΕΜΗ) number of the company. */
+    gemiNumber: '158223833000' as string | null,
     /** ΑΦΜ (Greek tax ID) of the company. */
     vatNumber: '801510189' as string | null,
     /**
