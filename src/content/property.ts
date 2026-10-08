@@ -54,8 +54,8 @@ export const property = {
     sizeSqm: 90, // approximately
     beachDistanceM: 500, // approximately
     /**
-     * Walking time to the beach in minutes, e.g. '5' or '5–7'. NOT confirmed —
-     * while null the site says "a short walk" instead of a number.
+     * Walking time to the beach in minutes, e.g. '5' or '5–7'. Left null on purpose
+     * (owner's decision): the site says "a short walk" instead of a number.
      */
     beachWalkMinutes: null as string | null,
   },
@@ -234,13 +234,18 @@ export const property = {
    * show "[to be completed]" markers and stay hidden from search engines.
    */
   operator: {
-    /**
-     * Full legal name of the company running the rental — STILL NEEDED from the
-     * owner (the registered company name that the ΑΦΜ below belongs to), together
-     * with the exact address of its registered office (the address below is the area only).
-     */
-    legalName: null as string | null,
-    address: { en: 'Agios Georgios, Southern Corfu, Greece', el: 'Άγιος Γεώργιος, Νότια Κέρκυρα' } as Localized | null,
+    /** Registered name of the company running the rental, as listed in the business registry (ΓΕΜΗ). */
+    legalName: 'ΚΟΥΛΟΥΡΗΣ-ΜΗΝΑ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ' as string | null,
+    /** Registered seat of the company, as listed in the business registry. */
+    seatAddress: { en: 'Ethniki Odos Palaiokastritsas 0, 49100 Corfu, Greece', el: 'Εθνική Οδός Παλαιοκαστρίτσας 0, 49100 Κέρκυρα' } as Localized | null,
+    /** Address of the company's branch that runs the villa, as listed in the business registry. */
+    address: { en: 'Lantzes, Korission, Argyrades 0, 49100 Corfu, Greece', el: 'Θέση Λάντζες Κορισσίων, Αργυράδες 0, 49100 Κέρκυρα' } as Localized | null,
+    /** Business registry (ΓΕΜΗ) numbers: the company and the branch that runs the villa. */
+    gemiNumber: '158223833000' as string | null,
+    branchGemiNumber: '158223833003' as string | null,
+    /** The company's owner and his phone — published on the legal pages at the owner's request. */
+    representative: { en: 'Menelaos Koulouris', el: 'Μενέλαος Κουλούρης' } as Localized | null,
+    representativePhone: '+30 698 882 8285' as string | null,
     /** ΑΦΜ (Greek tax ID) of the company. */
     vatNumber: '801510189' as string | null,
     /**
