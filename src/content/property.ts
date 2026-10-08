@@ -236,13 +236,16 @@ export const property = {
   operator: {
     /** Registered name of the company running the rental, as listed in the business registry (ΓΕΜΗ). */
     legalName: 'ΚΟΥΛΟΥΡΗΣ-ΜΗΝΑ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ' as string | null,
-    /**
-     * Address of the company's branch that runs the villa (the owner's choice).
-     * The company's registered seat is a different address in Corfu Town.
-     */
-    address: { en: 'Lantzes, Korission, Argyrades, 49100 Corfu, Greece', el: 'Θέση Λάντζες Κορισσίων, Αργυράδες, 49100 Κέρκυρα' } as Localized | null,
-    /** Business registry (ΓΕΜΗ) number of the company. */
+    /** Registered seat of the company, as listed in the business registry. */
+    seatAddress: { en: 'Ethniki Odos Palaiokastritsas 0, 49100 Corfu, Greece', el: 'Εθνική Οδός Παλαιοκαστρίτσας 0, 49100 Κέρκυρα' } as Localized | null,
+    /** Address of the company's branch that runs the villa, as listed in the business registry. */
+    address: { en: 'Lantzes, Korission, Argyrades 0, 49100 Corfu, Greece', el: 'Θέση Λάντζες Κορισσίων, Αργυράδες 0, 49100 Κέρκυρα' } as Localized | null,
+    /** Business registry (ΓΕΜΗ) numbers: the company and the branch that runs the villa. */
     gemiNumber: '158223833000' as string | null,
+    branchGemiNumber: '158223833003' as string | null,
+    /** The company's owner and his phone — published on the legal pages at the owner's request. */
+    representative: { en: 'Menelaos Koulouris', el: 'Μενέλαος Κουλούρης' } as Localized | null,
+    representativePhone: '+30 698 882 8285' as string | null,
     /** ΑΦΜ (Greek tax ID) of the company. */
     vatNumber: '801510189' as string | null,
     /**
