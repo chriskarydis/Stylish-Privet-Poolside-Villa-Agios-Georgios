@@ -59,7 +59,7 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 | Environment variables | `NODE_VERSION=22`, `PUBLIC_SITE_URL=https://stylishvillacorfu.com` once the domain is connected |
 | Secrets (encrypted) | `ICAL_AIRBNB`, `ICAL_BOOKING` — the private iCal export links (never commit them) |
 
-`functions/api/availability.ts` runs on Cloudflare and serves `/api/availability` (booked dates only, cached 30 min).
+`functions/api/availability.ts` runs on Cloudflare and serves `/api/availability` (booked dates only, cached 5 min).
 
 Test it locally with real Cloudflare tooling:
 
