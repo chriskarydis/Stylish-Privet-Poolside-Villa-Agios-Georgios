@@ -35,7 +35,7 @@ const loc = property.location;
         <Icon name="map-pin" size={18} />
         <span>
           {loc.streetAddress && <>{t(loc.streetAddress, lang)}, </>}
-          {t(loc.locality, lang)}, {t(loc.region, lang)}, {t(loc.country, lang)}
+          {t(loc.locality, lang)}, {t(loc.region, lang)}{loc.postalCode && <> {loc.postalCode}</>}, {t(loc.country, lang)}
         </span>
       </p>
       <div class="prose">

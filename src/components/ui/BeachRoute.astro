@@ -69,6 +69,19 @@ const PATH = 'M50 62 C 105 18, 150 104, 200 62 S 296 22, 350 60';
   </div>
 </figure>
 
+<script>
+  // Pause the walking dot whenever the graphic is off screen.
+  const routes = document.querySelectorAll('.route');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) entry.target.classList.toggle('is-inview', entry.isIntersecting);
+    });
+    routes.forEach((route) => io.observe(route));
+  } else {
+    routes.forEach((route) => route.classList.add('is-inview'));
+  }
+</script>
+
 <style>
   .route {
     display: grid;
@@ -133,6 +146,10 @@ const PATH = 'M50 62 C 105 18, 150 104, 200 62 S 296 22, 350 60';
   @media (prefers-reduced-motion: no-preference) {
     .route__walker {
       animation: route-walk 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    /* With JavaScript the dot walks only while the graphic is on screen (see the script below). */
+    :global(.js) .route:not(.is-inview) .route__walker {
+      animation-play-state: paused;
     }
   }
   /* Walk to the beach, pause there, then start again from the villa. */
