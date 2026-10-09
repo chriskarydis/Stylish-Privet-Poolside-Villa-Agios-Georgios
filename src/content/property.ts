@@ -33,11 +33,16 @@ export const property = {
     country: { en: 'Greece', el: 'Ελλάδα' } satisfies Localized,
     countryCode: 'GR',
     /**
-     * Exact street address — NOT confirmed. Leave null until supplied by the owner.
-     * When set, it is shown in the footer and added to structured data.
+     * Street and number to SHOW on the site (footer, location section). The villa has
+     * none, so this stays null and the site shows village, region and country.
      */
     streetAddress: null as Localized | null,
-    postalCode: null as string | null,
+    /**
+     * Address line as the owner states it (no street name; "0" = no number). Used only
+     * in the structured data for search engines, where an address line is expected.
+     */
+    addressLine: { en: 'Agios Georgios, Southern Corfu 0', el: 'Άγιος Γεώργιος Νότιας Κέρκυρας 0' } as Localized | null,
+    postalCode: '49080' as string | null,
     /**
      * GPS coordinates of the villa (shown as the map pin; set to null to hide the map).
      * When set, structured data includes `geo`.
