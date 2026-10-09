@@ -18,7 +18,8 @@ export function accommodationSchema(lang: Locale, pageUrl: string, imageUrls: st
     addressRegion: t(loc.island, lang),
     addressCountry: loc.countryCode,
   };
-  if (loc.streetAddress) address.streetAddress = t(loc.streetAddress, lang);
+  const line = loc.streetAddress ?? loc.addressLine;
+  if (line) address.streetAddress = t(line, lang);
   if (loc.postalCode) address.postalCode = loc.postalCode;
 
   const amenityFeature = amenityCategories.flatMap((c) =>
