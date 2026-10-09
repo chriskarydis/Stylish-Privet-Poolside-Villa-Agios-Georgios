@@ -99,8 +99,8 @@ export const faqs: FaqItem[] = [
     id: 'children-pool',
     question: { en: 'Can children use the pool?', el: 'Μπορούν τα παιδιά να χρησιμοποιήσουν την πισίνα;' },
     answer: {
-      en: 'Children are not allowed in the pool. You can ask us for an exception; in that case the children must be supervised at all times and must be quiet.',
-      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορείτε να μας ζητήσετε εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.',
+      en: 'No. Children are not allowed in the pool.',
+      el: 'Όχι. Τα παιδιά δεν επιτρέπονται στην πισίνα.',
     },
   },
   {
@@ -122,8 +122,8 @@ export const faqs: FaqItem[] = [
     id: 'season',
     question: { en: 'When is the villa open?', el: 'Ποιους μήνες λειτουργεί η βίλα;' },
     answer: {
-      en: 'The villa is open from April to October. For a stay in other months, contact us and we will let you know whether it can be arranged.',
-      el: 'Η βίλα λειτουργεί από τον Απρίλιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
+      en: 'The villa is open from May to October. For a stay in other months, contact us and we will let you know whether it can be arranged.',
+      el: 'Η βίλα λειτουργεί από τον Μάιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
     },
   },
 ];

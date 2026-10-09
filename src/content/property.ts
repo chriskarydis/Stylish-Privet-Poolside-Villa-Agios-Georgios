@@ -96,10 +96,7 @@ export const property = {
     smokingInside: false,
     parties: false,
     children: true,
-    /**
-     * Children are not allowed in the pool. An exception can be requested; the
-     * children must then be supervised at all times and be quiet (owner, October 2026).
-     */
+    /** Children are not allowed in the pool, with no exceptions (owner, October 2026). */
     childrenInPool: false,
     /** Cots and high chairs are not available (owner, October 2026). */
     cotsAvailable: false as boolean | null,
@@ -157,7 +154,7 @@ export const property = {
   },
 
   /**
-   * RATES for direct bookings, per night, as supplied by the owner (October 2026).
+   * RATES for direct bookings, per night, as supplied by the owner (revised 9 October 2026).
    * They feed the "Rates" section and the indicative total in the calendar.
    * `from` / `to` are the first and last NIGHT of the period (inclusive); 'MM-DD'
    * repeats every year. Nights outside every period have no price: the calendar
@@ -167,13 +164,12 @@ export const property = {
   rates: {
     currency: 'EUR',
     seasons: [
-      { name: { en: 'April', el: 'Απρίλιος' }, from: '04-01', to: '04-30', perNight: 180 },
-      { name: { en: 'May', el: 'Μάιος' }, from: '05-01', to: '05-31', perNight: 200 },
+      { name: { en: 'May', el: 'Μάιος' }, from: '05-01', to: '05-31', perNight: 180 },
       { name: { en: 'June', el: 'Ιούνιος' }, from: '06-01', to: '06-30', perNight: 230 },
-      { name: { en: 'July', el: 'Ιούλιος' }, from: '07-01', to: '07-31', perNight: 250 },
-      { name: { en: 'August', el: 'Αύγουστος' }, from: '08-01', to: '08-31', perNight: 260 },
-      { name: { en: 'September', el: 'Σεπτέμβριος' }, from: '09-01', to: '09-30', perNight: 230 },
-      { name: { en: 'October', el: 'Οκτώβριος' }, from: '10-01', to: '10-31', perNight: 200 },
+      { name: { en: 'July', el: 'Ιούλιος' }, from: '07-01', to: '07-31', perNight: 280 },
+      { name: { en: 'August', el: 'Αύγουστος' }, from: '08-01', to: '08-31', perNight: 280 },
+      { name: { en: 'September', el: 'Σεπτέμβριος' }, from: '09-01', to: '09-30', perNight: 200 },
+      { name: { en: 'October', el: 'Οκτώβριος' }, from: '10-01', to: '10-31', perNight: 180 },
     ] as RateSeason[],
     /** One-off cleaning fee per stay, or null if included / none. Cleaning is included in the price. */
     cleaningFee: null as number | null,
@@ -184,8 +180,8 @@ export const property = {
     } as Localized | null,
     /** Shown under the rates, and in the calendar when the chosen dates fall outside the periods above. */
     closedNote: {
-      en: 'The villa is open from April to October. For a stay in other months, send us a request or contact us and we will let you know whether it can be arranged.',
-      el: 'Η βίλα λειτουργεί από τον Απρίλιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, στείλτε μας αίτημα ή επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
+      en: 'The villa is open from May to October. For a stay in other months, send us a request or contact us and we will let you know whether it can be arranged.',
+      el: 'Η βίλα λειτουργεί από τον Μάιο έως τον Οκτώβριο. Για διαμονή τους υπόλοιπους μήνες, στείλτε μας αίτημα ή επικοινωνήστε μαζί μας και θα σας ενημερώσουμε αν μπορεί να κανονιστεί.',
     } as Localized | null,
   },
 
