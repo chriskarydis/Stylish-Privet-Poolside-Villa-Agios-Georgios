@@ -254,10 +254,20 @@ const keyFacts: { icon: IconName; text: string }[] = [
     .hero__content > :nth-child(4) { animation-delay: 0.24s; }
     .hero__content > :nth-child(5) { animation-delay: 0.32s; }
     .hero__content > :nth-child(6) { animation-delay: 0.4s; }
+    /* The title is the largest thing on screen: if it fades in from invisible, browsers
+       count the page as "loaded" almost a second later. It only slides; the rest also fade. */
+    .hero__content > .hero__title {
+      animation-name: hero-rise;
+    }
   }
   @keyframes hero-in {
     from {
       opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes hero-rise {
+    from {
       transform: translateY(14px);
     }
   }
