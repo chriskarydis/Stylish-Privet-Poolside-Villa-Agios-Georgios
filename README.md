@@ -47,18 +47,18 @@ Every text is a `{ en, el }` pair. Interface strings (navigation, buttons, aria 
 
 ## Hosting (Cloudflare Pages)
 
-The site lives in the owner's Cloudflare account (project ), together with the domain.
+The site lives in the owner's Cloudflare account (project `stylishvillacorfu`), together with the domain.
 
-- Production (): https://stylishvillacorfu.com
-- Preview (): https://develop.stylishvillacorfu.pages.dev (not indexed)
+- Production (`main`): https://stylishvillacorfu.com
+- Preview (`develop`): https://develop.stylishvillacorfu.pages.dev (not indexed)
 
-Deployment is done by GitHub Actions, not by Cloudflare's Git integration:  builds the site and uploads it with wrangler on every push to  or .
+Deployment is done by GitHub Actions, not by Cloudflare's Git integration: `.github/workflows/deploy.yml` builds the site and uploads it with wrangler on every push to `main` or `develop`.
 
 | Where | Setting | Value |
 | --- | --- | --- |
-| GitHub → Actions secrets | ,  | token with Account → Cloudflare Pages → Edit |
-| GitHub → Actions variables |  |  |
-| Cloudflare project → Secrets | ,  (optional ) | the private iCal export links (never commit them); re-run the Deploy workflow after changing them |
+| GitHub → Actions secrets | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | token with Account → Cloudflare Pages → Edit |
+| GitHub → Actions variables | `PUBLIC_SITE_URL` | `https://stylishvillacorfu.com` |
+| Cloudflare project → Secrets | `ICAL_AIRBNB`, `ICAL_BOOKING` (optional `ICAL_EXTRA`) | the private iCal export links (never commit them); re-run the Deploy workflow after changing them |
 
 `functions/api/availability.ts` runs on Cloudflare and serves `/api/availability` (booked dates only, cached 5 min).
 
