@@ -232,7 +232,7 @@ const termsEn: LegalBlock[] = [
     ],
   },
   { h: '4. Information on the website' },
-  { p: 'We take care that the information on the website is accurate and up to date. Photos are indicative; furnishings and decoration may change. Ratings shown are aggregate scores published on Airbnb and Booking.com. Distances are approximate.' },
+  { p: 'We take care that the information on the website is accurate and up to date. Photos are indicative. Furnishings and decoration may change. Ratings shown are aggregate scores published on Airbnb and Booking.com. Distances are approximate.' },
   { h: '5. House rules' },
   { p: 'During your stay the house rules apply, including check-in and check-out times, no pets, no smoking inside the villa and no parties or events. They are listed on the website and are part of every booking.' },
   { h: '6. Intellectual property' },
@@ -305,7 +305,7 @@ const bookingEn: LegalBlock[] = [
   { h: '9. Arrival and departure' },
   { p: 'Check-in is from {checkIn} and check-out is before {checkOut}. The villa accommodates up to {maxGuests} guests.' },
   { h: '10. House rules' },
-  { p: 'Pets are not allowed, smoking is not permitted inside the villa, and parties or events are not allowed. Children are welcome; cots and high chairs are not available. Children are not allowed in the pool. An exception can be requested; in that case the children must be supervised at all times and must be quiet.' },
+  { p: 'Pets are not allowed, smoking is not permitted inside the villa, and parties or events are not allowed. Children are welcome. Cots and high chairs are not available. Children are not allowed in the pool.' },
   { h: '11. Other terms' },
   { p: 'The Terms of Use and the Privacy Policy of this website also apply. In case of a discrepancy between language versions, the Greek version prevails.' },
 ];
@@ -331,7 +331,7 @@ const bookingEl: LegalBlock[] = [
   { h: '9. Άφιξη και αναχώρηση' },
   { p: 'Η άφιξη (check-in) είναι από τις {checkIn} και η αναχώρηση (check-out) έως τις {checkOut}. Η βίλα φιλοξενεί έως {maxGuests} άτομα.' },
   { h: '10. Κανόνες διαμονής' },
-  { p: 'Δεν επιτρέπονται τα κατοικίδια, το κάπνισμα στους εσωτερικούς χώρους και τα πάρτι ή οι εκδηλώσεις. Τα παιδιά είναι ευπρόσδεκτα. Δεν διατίθενται βρεφικά κρεβάτια και παιδικά καρεκλάκια. Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορεί να ζητηθεί εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.' },
+  { p: 'Δεν επιτρέπονται τα κατοικίδια, το κάπνισμα στους εσωτερικούς χώρους και τα πάρτι ή οι εκδηλώσεις. Τα παιδιά είναι ευπρόσδεκτα. Δεν διατίθενται βρεφικά κρεβάτια και παιδικά καρεκλάκια. Τα παιδιά δεν επιτρέπονται στην πισίνα.' },
   { h: '11. Λοιποί όροι' },
   { p: 'Ισχύουν επίσης οι Όροι Χρήσης και η Πολιτική Απορρήτου της ιστοσελίδας. Σε περίπτωση απόκλισης μεταξύ των γλωσσικών εκδόσεων, υπερισχύει η ελληνική.' },
 ];

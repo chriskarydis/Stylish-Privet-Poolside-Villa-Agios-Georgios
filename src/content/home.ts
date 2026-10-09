@@ -87,8 +87,8 @@ export const home = {
       ],
     } satisfies P,
     childrenNote: {
-      en: 'Children are not allowed in the pool. An exception can be requested; the children must then be supervised at all times and be quiet.',
-      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα. Μπορεί να ζητηθεί εξαίρεση. Σε αυτή την περίπτωση τα παιδιά πρέπει να βρίσκονται συνεχώς υπό επίβλεψη και να είναι ήσυχα.',
+      en: 'Children are not allowed in the pool.',
+      el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα.',
     },
     note: {
       en: 'Shared exclusively by guests of the villa and the apartments on the property.',
@@ -215,7 +215,7 @@ export const home = {
     nextReview: { en: 'Next review', el: 'Επόμενη κριτική' },
     reviewCount: { en: 'Review {i} of {n}', el: 'Κριτική {i} από {n}' },
     disclaimer: {
-      en: 'Aggregate ratings and guest reviews as published on Airbnb and Booking.com; reviews are quoted in their original wording. Current scores and all reviews are available on each platform.',
+      en: 'Aggregate ratings and guest reviews as published on Airbnb and Booking.com. Reviews are quoted in their original wording. Current scores and all reviews are available on each platform.',
       el: 'Συνολικές βαθμολογίες και κριτικές επισκεπτών όπως δημοσιεύονται στο Airbnb και στο Booking.com. Οι κριτικές παρατίθενται αυτούσιες, στη γλώσσα που γράφτηκαν. Οι τρέχουσες βαθμολογίες και όλες οι κριτικές είναι διαθέσιμες σε κάθε πλατφόρμα.',
     },
   },

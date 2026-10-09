@@ -61,7 +61,7 @@ export const ui = {
   checkIn: { en: 'Check-in from {time}', el: 'Άφιξη από τις {time}' },
   checkOut: { en: 'Check-out before {time}', el: 'Αναχώρηση έως τις {time}' },
   childrenWelcome: { en: 'Children welcome', el: 'Τα παιδιά είναι ευπρόσδεκτα' },
-  noChildrenInPool: { en: 'No children in the pool (exceptions on request)', el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα (εξαίρεση κατόπιν αιτήματος)' },
+  noChildrenInPool: { en: 'No children in the pool', el: 'Τα παιδιά δεν επιτρέπονται στην πισίνα' },
   noPets: { en: 'No pets', el: 'Δεν επιτρέπονται κατοικίδια' },
   noSmoking: { en: 'No smoking inside the villa', el: 'Απαγορεύεται το κάπνισμα στους εσωτερικούς χώρους' },
   noParties: { en: 'No parties or events', el: 'Δεν επιτρέπονται πάρτι ή εκδηλώσεις' },
