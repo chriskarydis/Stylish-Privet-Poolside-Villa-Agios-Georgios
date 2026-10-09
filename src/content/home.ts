@@ -201,6 +201,8 @@ export const home = {
   },
 
   reviews: {
+    googlePrompt: { en: 'Stayed with us? We would love to hear from you.', el: 'Μείνατε μαζί μας; Θα χαρούμε να μάθουμε τη γνώμη σας.' },
+    googleCta: { en: 'Write a review on Google', el: 'Γράψτε μια κριτική στη Google' },
     eyebrow: { en: 'Guest Reviews', el: 'Κριτικές επισκεπτών' },
     title: { en: 'Rated by Our Guests', el: 'Η γνώμη των επισκεπτών μας' },
     body: {

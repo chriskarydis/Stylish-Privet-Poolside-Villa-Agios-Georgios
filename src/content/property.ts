@@ -283,6 +283,12 @@ export const property = {
    * Update these values when the platform scores change.
    * They are intentionally NOT added to structured data.
    */
+  /**
+   * Link from the villa's Google Business Profile ("Ask for reviews") that opens the
+   * review form directly. Shown as a button in the Reviews section; null hides it.
+   */
+  googleReviewUrl: 'https://g.page/r/CUXI5StpiDhZEBM/review' as string | null,
+
   ratings: {
     airbnb: {
       score: 5.0,

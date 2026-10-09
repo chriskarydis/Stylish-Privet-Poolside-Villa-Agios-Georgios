@@ -118,6 +118,19 @@ const reviewMeta = (r: (typeof guestReviews)[number]) =>
       )
     }
 
+    {
+      property.googleReviewUrl && (
+        <p class="reviews__google">
+          <span>{t(home.reviews.googlePrompt, lang)}</span>
+          <a class="btn btn--outline" href={property.googleReviewUrl} target="_blank" rel="noopener noreferrer">
+            <Icon name="star" size={18} />
+            {t(home.reviews.googleCta, lang)}
+            <span class="visually-hidden"> {newTab}</span>
+          </a>
+        </p>
+      )
+    }
+
     <p class="scores__note">{t(home.reviews.disclaimer, lang)}</p>
   </div>
 </section>
@@ -378,6 +391,16 @@ const reviewMeta = (r: (typeof guestReviews)[number]) =>
     .quotes__count {
       margin-top: 0.5rem;
     }
+  }
+  .reviews__google {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.25rem;
+    margin-top: 2.5rem;
+    text-align: center;
+    color: var(--ink-soft);
   }
   .scores__note {
     max-width: 64ch;
