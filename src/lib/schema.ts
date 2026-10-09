@@ -29,13 +29,21 @@ export function accommodationSchema(lang: Locale, pageUrl: string, imageUrls: st
     '@context': 'https://schema.org',
     '@type': 'VacationRental',
     '@id': `${pageUrl}#villa`,
+    // Google's vacation-rental format: a stable id for the property, at least 8 photos,
+    // latitude/longitude on the rental itself and the number of guests as occupancy.value.
+    identifier: 'stylish-private-poolside-villa',
+    additionalType: 'Villa',
     name: property.name,
     description: t(property.seo.description, lang),
     url: pageUrl,
     ...(imageUrls.length ? { image: imageUrls } : {}),
     address,
     ...(loc.coordinates
-      ? { geo: { '@type': 'GeoCoordinates', latitude: loc.coordinates.lat, longitude: loc.coordinates.lng } }
+      ? {
+          latitude: loc.coordinates.lat,
+          longitude: loc.coordinates.lng,
+          geo: { '@type': 'GeoCoordinates', latitude: loc.coordinates.lat, longitude: loc.coordinates.lng },
+        }
       : {}),
     containedInPlace: {
       '@type': 'Place',
@@ -56,7 +64,7 @@ export function accommodationSchema(lang: Locale, pageUrl: string, imageUrls: st
       numberOfBathroomsTotal: facts.bathrooms,
       numberOfRooms: facts.bedrooms,
       floorSize: { '@type': 'QuantitativeValue', value: facts.sizeSqm, unitCode: 'MTK' },
-      occupancy: { '@type': 'QuantitativeValue', maxValue: facts.maxGuests },
+      occupancy: { '@type': 'QuantitativeValue', value: facts.maxGuests },
       bed: [
         { '@type': 'BedDetails', numberOfBeds: 1, typeOfBed: 'Double' },
         { '@type': 'BedDetails', numberOfBeds: 2, typeOfBed: 'Single' },

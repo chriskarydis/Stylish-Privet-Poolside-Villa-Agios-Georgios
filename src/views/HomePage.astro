@@ -34,7 +34,7 @@ const pageUrl = new URL(localizePath(path, lang), Astro.site).href;
 
 // Only real photos go into structured data.
 const schemaImages = await Promise.all(
-  (['hero', 'exterior', 'pool', 'livingRoom', 'kitchen'] as const)
+  (['hero', 'exterior', 'livingRoom', 'kitchen', 'bedroom1', 'bedroom2', 'bathroom', 'pool', 'garden', 'outdoorDining', 'balcony'] as const)
     .map((k) => findImage(k))
     .filter((s) => s !== undefined)
     .map(async (src) => new URL((await getImage({ src, width: 1600, format: 'jpg' })).src, Astro.site).href),
