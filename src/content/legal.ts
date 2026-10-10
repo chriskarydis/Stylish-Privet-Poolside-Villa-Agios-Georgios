@@ -220,7 +220,8 @@ const cookiesEl: LegalBlock[] = [
 const termsEn: LegalBlock[] = [
   { p: 'These Terms of Use apply to the use of {site}. By using the website you accept these terms.' },
   { h: '1. Operator' },
-  { ul: ['{name}', 'Registered seat: {seat}', 'Property address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Company owner: {rep}, tel. {repPhone}, email {repEmail}', 'Property registry number: {registry}', 'Contact email: {email}', 'Contact phone: {phone}'] },
+  { ul: ['{name}', 'Registered seat: {seat}', 'Property address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Company owner: {rep}, tel. {repPhone}, email {repEmail}', 'Contact email: {email}', 'Contact phone: {phone}'] },
+  { p: 'The villa is listed in the short-term rental property registry under number {registry}.' },
   { h: '2. Purpose of the website' },
   { p: 'The website presents Stylish Private Poolside Villa in Agios Georgios, Southern Corfu, and allows you to check indicative availability, send us questions and booking requests, or continue to Airbnb or Booking.com to book.' },
   { h: '3. Bookings' },
@@ -252,7 +253,8 @@ const termsEn: LegalBlock[] = [
 const termsEl: LegalBlock[] = [
   { p: 'Οι παρόντες Όροι Χρήσης ισχύουν για τη χρήση του {site}. Χρησιμοποιώντας την ιστοσελίδα αποδέχεστε τους όρους αυτούς.' },
   { h: '1. Στοιχεία λειτουργού' },
-  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση καταλύματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}, email {repEmail}', 'Αριθμός μητρώου ακινήτου: {registry}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
+  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση καταλύματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}, email {repEmail}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
+  { p: 'Η βίλα είναι καταχωρισμένη στο Μητρώο Ακινήτων Βραχυχρόνιας Διαμονής με αριθμό {registry}.' },
   { h: '2. Σκοπός της ιστοσελίδας' },
   { p: 'Η ιστοσελίδα παρουσιάζει τη Stylish Private Poolside Villa στον Άγιο Γεώργιο της Νότιας Κέρκυρας και σας επιτρέπει να δείτε ενδεικτική διαθεσιμότητα, να μας στείλετε ερωτήσεις και αιτήματα κράτησης ή να συνεχίσετε στο Airbnb ή στο Booking.com για κράτηση.' },
   { h: '3. Κρατήσεις' },
