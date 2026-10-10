@@ -260,9 +260,10 @@ export const property = {
     /** Business registry (ΓΕΜΗ) numbers: the company and the branch that runs the villa. */
     gemiNumber: '158223833000' as string | null,
     branchGemiNumber: '158223833003' as string | null,
-    /** The company's owner and his phone — published on the legal pages at the owner's request. */
+    /** The company's owner, his phone and e-mail — published on the legal pages at the owner's request. */
     representative: { en: 'Menelaos Koulouris', el: 'Μενέλαος Κουλούρης' } as Localized | null,
     representativePhone: '+30 698 882 8285' as string | null,
+    representativeEmail: 'menelaoskoulouris@gmail.com' as string | null,
     /** ΑΦΜ (Greek tax ID) of the company. */
     vatNumber: '801510189' as string | null,
     /**

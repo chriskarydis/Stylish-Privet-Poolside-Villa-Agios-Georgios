@@ -44,7 +44,7 @@ export interface LegalPage {
 const privacyEn: LegalBlock[] = [
   { p: 'This Privacy Policy explains how we process personal data when you visit {site} or contact us about a stay at Stylish Private Poolside Villa, in accordance with the General Data Protection Regulation (EU) 2016/679 ("GDPR") and Greek law 4624/2019.' },
   { h: '1. Who we are (data controller)' },
-  { ul: ['{name}', 'Registered seat: {seat}', 'Branch address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Branch registry (ΓΕΜΗ) no.: {gemiBranch}', 'Company owner: {rep}, tel. {repPhone}', 'Contact email: {email}', 'Contact phone: {phone}'] },
+  { ul: ['{name}', 'Registered seat: {seat}', 'Branch address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Branch registry (ΓΕΜΗ) no.: {gemiBranch}', 'Company owner: {rep}, tel. {repPhone}, email {repEmail}', 'Contact email: {email}', 'Contact phone: {phone}'] },
   { h: '2. What data we collect' },
   { p: 'We only collect the data you choose to give us, plus the minimum technical data needed to deliver the website:' },
   {
@@ -105,7 +105,7 @@ const privacyEn: LegalBlock[] = [
 const privacyEl: LegalBlock[] = [
   { p: 'Η παρούσα Πολιτική Απορρήτου εξηγεί πώς επεξεργαζόμαστε δεδομένα προσωπικού χαρακτήρα όταν επισκέπτεστε το {site} ή επικοινωνείτε μαζί μας για διαμονή στη Stylish Private Poolside Villa, σύμφωνα με τον Γενικό Κανονισμό για την Προστασία Δεδομένων (ΕΕ) 2016/679 («ΓΚΠΔ») και τον ν. 4624/2019.' },
   { h: '1. Ποιοι είμαστε (υπεύθυνος επεξεργασίας)' },
-  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση υποκαταστήματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Αριθμός ΓΕΜΗ υποκαταστήματος: {gemiBranch}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
+  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση υποκαταστήματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Αριθμός ΓΕΜΗ υποκαταστήματος: {gemiBranch}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}, email {repEmail}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
   { h: '2. Ποια δεδομένα συλλέγουμε' },
   { p: 'Συλλέγουμε μόνο όσα δεδομένα επιλέγετε να μας δώσετε, καθώς και τα ελάχιστα τεχνικά δεδομένα που απαιτούνται για τη λειτουργία της ιστοσελίδας:' },
   {
@@ -220,7 +220,7 @@ const cookiesEl: LegalBlock[] = [
 const termsEn: LegalBlock[] = [
   { p: 'These Terms of Use apply to the use of {site}. By using the website you accept these terms.' },
   { h: '1. Operator' },
-  { ul: ['{name}', 'Registered seat: {seat}', 'Branch address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Branch registry (ΓΕΜΗ) no.: {gemiBranch}', 'Company owner: {rep}, tel. {repPhone}', 'Property registry number: {registry}', 'Contact email: {email}', 'Contact phone: {phone}'] },
+  { ul: ['{name}', 'Registered seat: {seat}', 'Branch address: {address}', 'Tax ID (ΑΦΜ): {vat}', 'Business registry (ΓΕΜΗ) no.: {gemi}', 'Branch registry (ΓΕΜΗ) no.: {gemiBranch}', 'Company owner: {rep}, tel. {repPhone}, email {repEmail}', 'Property registry number: {registry}', 'Contact email: {email}', 'Contact phone: {phone}'] },
   { h: '2. Purpose of the website' },
   { p: 'The website presents Stylish Private Poolside Villa in Agios Georgios, Southern Corfu, and allows you to check indicative availability, send us questions and booking requests, or continue to Airbnb or Booking.com to book.' },
   { h: '3. Bookings' },
@@ -252,7 +252,7 @@ const termsEn: LegalBlock[] = [
 const termsEl: LegalBlock[] = [
   { p: 'Οι παρόντες Όροι Χρήσης ισχύουν για τη χρήση του {site}. Χρησιμοποιώντας την ιστοσελίδα αποδέχεστε τους όρους αυτούς.' },
   { h: '1. Στοιχεία λειτουργού' },
-  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση υποκαταστήματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Αριθμός ΓΕΜΗ υποκαταστήματος: {gemiBranch}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}', 'Αριθμός μητρώου ακινήτου: {registry}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
+  { ul: ['{name}', 'Διεύθυνση έδρας: {seat}', 'Διεύθυνση υποκαταστήματος: {address}', 'ΑΦΜ: {vat}', 'Αριθμός ΓΕΜΗ: {gemi}', 'Αριθμός ΓΕΜΗ υποκαταστήματος: {gemiBranch}', 'Ιδιοκτήτης εταιρείας: {rep}, τηλ. {repPhone}, email {repEmail}', 'Αριθμός μητρώου ακινήτου: {registry}', 'Email επικοινωνίας: {email}', 'Τηλέφωνο επικοινωνίας: {phone}'] },
   { h: '2. Σκοπός της ιστοσελίδας' },
   { p: 'Η ιστοσελίδα παρουσιάζει τη Stylish Private Poolside Villa στον Άγιο Γεώργιο της Νότιας Κέρκυρας και σας επιτρέπει να δείτε ενδεικτική διαθεσιμότητα, να μας στείλετε ερωτήσεις και αιτήματα κράτησης ή να συνεχίσετε στο Airbnb ή στο Booking.com για κράτηση.' },
   { h: '3. Κρατήσεις' },
