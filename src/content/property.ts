@@ -255,11 +255,14 @@ export const property = {
     legalName: 'ΚΟΥΛΟΥΡΗΣ-ΜΗΝΑ ΙΔΙΩΤΙΚΗ ΚΕΦΑΛΑΙΟΥΧΙΚΗ ΕΤΑΙΡΕΙΑ' as string | null,
     /** Registered seat of the company, as listed in the business registry. */
     seatAddress: { en: 'Ethniki Odos Palaiokastritsas 0, 49100 Corfu, Greece', el: 'Εθνική Οδός Παλαιοκαστρίτσας 0, 49100 Κέρκυρα' } as Localized | null,
-    /** Address of the company's branch that runs the villa, as listed in the business registry. */
-    address: { en: 'Lantzes, Korission, Argyrades 0, 49100 Corfu, Greece', el: 'Θέση Λάντζες Κορισσίων, Αργυράδες 0, 49100 Κέρκυρα' } as Localized | null,
-    /** Business registry (ΓΕΜΗ) numbers: the company and the branch that runs the villa. */
+    /**
+     * Where the villa itself is. The company runs the villa under a lease from the
+     * property's owner; its branch in the registry (…003) is the rooms-to-let business
+     * next door and is deliberately NOT shown for the villa (owner's information, October 2026).
+     */
+    address: { en: 'Agios Georgios, Argyrades, 49080 Corfu, Greece', el: 'Άγιος Γεώργιος Αργυράδων, 49080 Κέρκυρα' } as Localized | null,
+    /** Business registry (ΓΕΜΗ) number of the company. */
     gemiNumber: '158223833000' as string | null,
-    branchGemiNumber: '158223833003' as string | null,
     /** The company's owner, his phone and e-mail — published on the legal pages at the owner's request. */
     representative: { en: 'Menelaos Koulouris', el: 'Μενέλαος Κουλούρης' } as Localized | null,
     representativePhone: '+30 698 882 8285' as string | null,
