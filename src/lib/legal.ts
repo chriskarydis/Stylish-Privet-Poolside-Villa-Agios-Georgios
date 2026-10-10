@@ -11,11 +11,10 @@ export type Segment = string | { missing: string };
 
 const missingLabels: Record<string, Localized> = {
   name: { en: 'legal name of the operator', el: 'ονοματεπώνυμο ή επωνυμία λειτουργού' },
-  address: { en: 'address', el: 'διεύθυνση' },
+  address: { en: 'address of the property', el: 'διεύθυνση καταλύματος' },
   vat: { en: 'tax ID (ΑΦΜ)', el: 'ΑΦΜ' },
   gemi: { en: 'business registry (ΓΕΜΗ) number', el: 'αριθμός ΓΕΜΗ' },
   seat: { en: 'registered seat', el: 'διεύθυνση έδρας' },
-  gemiBranch: { en: 'branch registry (ΓΕΜΗ) number', el: 'αριθμός ΓΕΜΗ υποκαταστήματος' },
   rep: { en: 'company owner', el: 'ιδιοκτήτης εταιρείας' },
   repPhone: { en: 'company phone', el: 'τηλέφωνο εταιρείας' },
   repEmail: { en: 'company email', el: 'email εταιρείας' },
@@ -59,7 +58,6 @@ function values(lang: Locale, siteUrl: string): Record<string, string | null> {
     vat: operator.vatNumber,
     gemi: operator.gemiNumber,
     seat: operator.seatAddress ? t(operator.seatAddress, lang) : null,
-    gemiBranch: operator.branchGemiNumber,
     rep: operator.representative ? t(operator.representative, lang) : null,
     repPhone: operator.representativePhone,
     repEmail: operator.representativeEmail,
