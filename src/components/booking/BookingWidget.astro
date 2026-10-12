@@ -203,6 +203,7 @@ const config = {
     addDays,
     airbnbLink,
     blockedNights,
+    inSeason,
     bookingComLink,
     estimatePrice,
     fromIso,
@@ -373,7 +374,7 @@ const config = {
         b.setAttribute('aria-pressed', String(d === checkIn || d === checkOut));
         b.tabIndex = d === focusDate ? 0 : -1;
         // Never call a day "available" unless every calendar was read successfully.
-        const state = past ? '' : checkoutOnly ? s.dayCheckoutOnly : booked ? s.dayBooked : status === 'ok' ? s.dayAvailable : '';
+        const state = past ? '' : checkoutOnly ? s.dayCheckoutOnly : booked ? s.dayBooked : status === 'ok' && inSeason(d, cfg.seasons) ? s.dayAvailable : '';
         const role = d === checkIn ? `, ${s.checkIn}` : d === checkOut ? `, ${s.checkOut}` : '';
         b.setAttribute('aria-label', `${dfLong.format(fromIso(d))}${state ? `, ${state}` : ''}${role}`);
       }
@@ -623,6 +624,10 @@ const config = {
           const legacyUnconfigured = (data as { configured?: boolean }).configured === false;
           status = known.includes(data.status) ? data.status : legacyUnconfigured ? 'unconfigured' : 'unavailable';
           blocked = blockedNights(Array.isArray(data.blocked) ? data.blocked : []);
+          // Outside the open months the booking platform reports every day as closed. Those
+          // days stay selectable here, so guests can still ask about an off-season stay
+          // (they get the "open from … to …" note instead of a price).
+          for (const night of [...blocked]) if (!inSeason(night, cfg.seasons)) blocked.delete(night);
         }
       } catch {
         status = 'unavailable'; // network error or an unreadable answer — never treated as "all free"
