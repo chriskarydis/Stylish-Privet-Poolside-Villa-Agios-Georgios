@@ -294,8 +294,8 @@ export const home = {
       pickCheckOut: { en: 'Now select your check-out date.', el: 'Τώρα επιλέξτε ημερομηνία αναχώρησης.' },
       loading: { en: 'Loading availability…', el: 'Φόρτωση διαθεσιμότητας…' },
       synced: {
-        en: 'Booked dates are synced from Airbnb and Booking.com. Availability is confirmed when you book.',
-        el: 'Οι κλεισμένες ημερομηνίες συγχρονίζονται από Airbnb και Booking.com. Η διαθεσιμότητα επιβεβαιώνεται κατά την κράτηση.',
+        en: 'Booked dates are synced with our booking calendar. Availability is confirmed when you book.',
+        el: 'Οι κλεισμένες ημερομηνίες συγχρονίζονται με το ημερολόγιο κρατήσεών μας. Η διαθεσιμότητα επιβεβαιώνεται κατά την κράτηση.',
       },
       notSynced: {
         en: 'Choose your dates and guests and send us a booking request, or check availability on Airbnb or Booking.com.',

@@ -148,6 +148,12 @@ const seasonFor = (night: IsoDate, seasons: PriceSeason[]) =>
   });
 
 /**
+ * true when the night falls inside a price period, i.e. in the months the villa is open.
+ * With no periods configured every night counts as in season.
+ */
+export const inSeason = (night: IsoDate, seasons: PriceSeason[]): boolean => !seasons.length || !!seasonFor(night, seasons);
+
+/**
  * Indicative price of a stay: each night at its season's rate, plus the
  * cleaning fee. Returns null when any night has no rate (price on request).
  */
