@@ -554,10 +554,48 @@ const config = {
       sel.tabIndex = -1;
       sel.setAttribute('aria-hidden', 'true');
       for (let age = 0; age <= 17; age++) sel.append(new Option(ageText(age), String(age), age === 8, age === 8));
-      const out = document.createElement('output');
-      out.className = 'bw__age-value';
-      out.setAttribute('aria-live', 'polite');
-      out.setAttribute('aria-labelledby', label.id);
+      // The age can be typed (0–17) or stepped with − / +.
+      const value = document.createElement('span');
+      value.className = 'bw__age-value';
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.inputMode = 'numeric';
+      input.autocomplete = 'off';
+      input.maxLength = 2;
+      input.className = 'bw__age-input';
+      input.setAttribute('aria-label', fmt(s.childAge, { n: i + 1 }));
+      const unit = document.createElement('span');
+      unit.className = 'bw__age-unit';
+      unit.setAttribute('aria-hidden', 'true');
+      value.append(input, unit);
+      const commit = () => {
+        const typed = input.value.trim() === '' ? NaN : Number(input.value);
+        if (Number.isInteger(typed)) sel.value = String(Math.min(17, Math.max(0, typed)));
+        paintAge();
+        update();
+      };
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/g, '').slice(0, 2);
+        const typed = Number(input.value);
+        if (input.value !== '' && typed >= 0 && typed <= 17) {
+          sel.value = String(typed);
+          unit.textContent = typed === 1 ? s.ageUnit1 : s.ageUnit;
+          less.disabled = typed <= 0;
+          more.disabled = typed >= 17;
+          update();
+        }
+      });
+      input.addEventListener('change', commit);
+      input.addEventListener('blur', commit);
+      input.addEventListener('focus', () => input.select());
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); commit(); }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          (e.key === 'ArrowUp' ? more : less).click();
+          input.select();
+        }
+      });
       const less = document.createElement('button');
       const more = document.createElement('button');
       for (const [btn, step, text, d] of [
@@ -578,14 +616,15 @@ const config = {
       }
       const paintAge = () => {
         const age = Number(sel.value);
-        out.textContent = ageText(age);
+        input.value = String(age);
+        unit.textContent = age === 1 ? s.ageUnit1 : s.ageUnit;
         less.disabled = age <= 0;
         more.disabled = age >= 17;
       };
       sel.addEventListener('change', () => { paintAge(); update(); });
       const stepper = document.createElement('div');
       stepper.className = 'bw__stepper';
-      stepper.append(less, out, more);
+      stepper.append(less, value, more);
       row.append(label, sel, stepper);
       paintAge();
       return row;
@@ -1119,11 +1158,38 @@ const config = {
     background: var(--surface);
   }
   .bw__ages :global(.bw__age-value) {
-    min-width: 6.5rem;
-    text-align: center;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.3rem;
+    min-width: 6rem;
+    white-space: nowrap;
+  }
+  .bw__ages :global(.bw__age-input) {
+    width: 2.6ch;
+    min-height: 36px;
+    padding: 0.1rem 0.15rem;
+    border: 1px solid transparent;
+    border-bottom-color: var(--stone);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    font: inherit;
+    font-size: 1.15rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    white-space: nowrap;
+    text-align: center;
+    color: var(--ink);
+  }
+  .bw__ages :global(.bw__age-input:hover) {
+    border-color: var(--stone);
+  }
+  .bw__ages :global(.bw__age-input:focus) {
+    border-color: var(--sea);
+    background: var(--surface);
+  }
+  .bw__ages :global(.bw__age-unit) {
+    font-weight: 600;
+    color: var(--ink-soft);
   }
   .bw__ages :global(.bw__stepper) {
     display: flex;
