@@ -288,6 +288,8 @@ export const home = {
       moreChildren: { en: 'More children', el: 'Περισσότερα παιδιά' },
       years: { en: '{n} years', el: '{n} ετών' },
       year1: { en: '1 year', el: '1 έτους' },
+      ageUnit: { en: 'years', el: 'ετών' },
+      ageUnit1: { en: 'year', el: 'έτους' },
       under1: { en: 'Under 1', el: 'Κάτω του 1' },
       maxGuests: { en: 'Up to {n} guests in total.', el: 'Έως {n} άτομα συνολικά.' },
       nights: { en: '{n} nights', el: '{n} νύχτες' },
