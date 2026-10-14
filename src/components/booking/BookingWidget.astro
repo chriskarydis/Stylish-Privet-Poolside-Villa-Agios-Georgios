@@ -31,7 +31,7 @@ const termsHref = bookingTermsPage && isLinkable(bookingTermsPage, lang) ? local
 const config = {
   locale: lang === 'el' ? 'el-GR' : 'en-GB',
   maxGuests: max,
-  monthsAhead: property.availability.monthsAhead,
+  yearsAhead: property.availability.yearsAhead,
   endpoint: property.availability.endpoint,
   airbnb: property.booking.airbnb[lang],
   bookingCom: property.booking.bookingCom[lang],
@@ -110,20 +110,38 @@ const config = {
   <fieldset class="bw__guests">
     <legend class="bw__step"><span aria-hidden="true">2</span>{t(w.guests, lang)}</legend>
     <div class="bw__guest-row">
-      <label>
-        <span>{t(w.adults, lang)}</span>
-        <select data-bw-adults>
-          {Array.from({ length: max }, (_, i) => <option value={i + 1} selected={i === 1}>{i + 1}</option>)}
-        </select>
-      </label>
-      <label>
-        <span>{t(w.children, lang)}</span>
-        <select data-bw-children>
-          {Array.from({ length: max }, (_, i) => <option value={i}>{i}</option>)}
-        </select>
-      </label>
+      {
+        [
+          { key: 'adults', label: w.adults, less: w.fewerAdults, more: w.moreAdults, from: 1, initial: 2 },
+          { key: 'children', label: w.children, less: w.fewerChildren, more: w.moreChildren, from: 0, initial: 0 },
+        ].map((g) => (
+          <div class="bw__counter" data-bw-counter={g.key}>
+            <span class="bw__counter-label" id={`bw-${g.key}-label`}>{t(g.label, lang)}</span>
+            <div class="bw__stepper">
+              <button type="button" class="bw__step-btn" data-step="-1" aria-label={t(g.less, lang)}>
+                <Icon name="minus" size={18} />
+              </button>
+              <output class="bw__count" aria-labelledby={`bw-${g.key}-label`} aria-live="polite" data-bw-count>
+                {g.initial}
+              </output>
+              <button type="button" class="bw__step-btn" data-step="1" aria-label={t(g.more, lang)}>
+                <Icon name="plus" size={18} />
+              </button>
+            </div>
+            {/* The select keeps the value (and works without the buttons' script); it is hidden from view and from screen readers. */}
+            <select class="visually-hidden" tabindex="-1" aria-hidden="true" {...{ [`data-bw-${g.key}`]: '' }}>
+              {Array.from({ length: max }, (_, i) => i + g.from)
+                .filter((n) => n <= max)
+                .map((n) => <option value={n} selected={n === g.initial}>{n}</option>)}
+            </select>
+          </div>
+        ))
+      }
     </div>
-    <div class="bw__ages" data-bw-ages></div>
+    <div class="bw__ages-wrap" data-bw-ages-wrap hidden>
+      <p class="bw__ages-title">{t(w.childrenAges, lang)}</p>
+      <div class="bw__ages" data-bw-ages></div>
+    </div>
     <p class="bw__hint">{fill(t(w.maxGuests, lang), { n: max })}</p>
   </fieldset>
 
@@ -220,7 +238,7 @@ const config = {
   type Config = {
     locale: string;
     maxGuests: number;
-    monthsAhead: number;
+    yearsAhead: number;
     endpoint: string;
     airbnb: string;
     bookingCom: string;
@@ -257,6 +275,7 @@ const config = {
     const adultsSel = $<HTMLSelectElement>('[data-bw-adults]');
     const childrenSel = $<HTMLSelectElement>('[data-bw-children]');
     const agesEl = $('[data-bw-ages]');
+    const agesWrap = $('[data-bw-ages-wrap]');
     const airbnbA = $<HTMLAnchorElement>('[data-bw-airbnb]');
     const bookingA = $<HTMLAnchorElement>('[data-bw-booking]');
     const waA = root.querySelector<HTMLAnchorElement>('[data-bw-whatsapp]');
@@ -264,11 +283,9 @@ const config = {
     const form = $<HTMLFormElement>('[data-bw-form]');
 
     const today = toIso(new Date());
-    const lastDay = (() => {
-      const d = new Date();
-      d.setMonth(d.getMonth() + cfg.monthsAhead);
-      return toIso(d);
-    })();
+    // First day that can no longer be chosen: 1 January after the last open year, so a stay
+    // can run to 31 December, `yearsAhead` years from now.
+    const lastDay: IsoDate = `${new Date().getFullYear() + cfg.yearsAhead + 1}-01-01`;
 
     let blocked = new Set<IsoDate>();
     let status: AvailabilityStatus = 'unconfigured';
@@ -382,7 +399,9 @@ const config = {
       const next = root.querySelector<HTMLButtonElement>('[data-bw-next]')!;
       const now = new Date();
       prev.disabled = view.getFullYear() === now.getFullYear() && view.getMonth() === now.getMonth();
-      next.disabled = toIso(new Date(view.getFullYear(), view.getMonth() + 1, 1)) >= lastDay.slice(0, 8) + '01';
+      // Two months side by side on wide screens, one on phones: stop when the last open month is on screen.
+      const shown = (monthsEl.lastElementChild as HTMLElement | null)?.offsetParent ? 2 : 1;
+      next.disabled = toIso(new Date(view.getFullYear(), view.getMonth() + shown, 1)) >= lastDay.slice(0, 8) + '01';
       update();
     }
 
@@ -508,28 +527,93 @@ const config = {
     function syncGuests() {
       const adults = Number(adultsSel.value);
       const maxChildren = cfg.maxGuests - adults;
+      // With the − / + buttons the total can never pass the maximum: + stops at it.
+      for (const o of adultsSel.options) o.disabled = Number(o.value) > cfg.maxGuests - Number(childrenSel.value);
       for (const o of childrenSel.options) o.disabled = Number(o.value) > maxChildren;
       if (Number(childrenSel.value) > maxChildren) childrenSel.value = String(maxChildren);
       const n = Number(childrenSel.value);
-      const existing = [...agesEl.querySelectorAll('label')];
-      existing.slice(n).forEach((l) => l.remove());
-      for (let i = existing.length; i < n; i++) {
-        const label = document.createElement('label');
-        const span = document.createElement('span');
-        span.textContent = fmt(s.childAge, { n: i + 1 });
-        const sel = document.createElement('select');
-        for (let age = 0; age <= 17; age++) {
-          const o = document.createElement('option');
-          o.value = String(age);
-          o.textContent = age === 0 ? s.under1 : age === 1 ? s.year1 : fmt(s.years, { n: age });
-          if (age === 8) o.selected = true;
-          sel.append(o);
-        }
-        sel.addEventListener('change', update);
-        label.append(span, sel);
-        agesEl.append(label);
-      }
+      agesWrap.hidden = n === 0;
+      const existing = [...agesEl.querySelectorAll('.bw__age-row')];
+      existing.slice(n).forEach((row) => row.remove());
+      for (let i = existing.length; i < n; i++) agesEl.append(ageRow(i));
+      paintCounters();
       update();
+    }
+    // One child's age: "Child 1   − 8 years +". The hidden select keeps the value for the request.
+    const ageText = (age: number) => (age === 0 ? s.under1 : age === 1 ? s.year1 : fmt(s.years, { n: age }));
+    const icon = (d: string) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">${d}</svg>`;
+    function ageRow(i: number) {
+      const row = document.createElement('div');
+      row.className = 'bw__age-row';
+      const label = document.createElement('span');
+      label.className = 'bw__age-label';
+      label.id = `bw-age-${i}`;
+      label.textContent = fmt(s.childN, { n: i + 1 });
+      const sel = document.createElement('select');
+      sel.className = 'visually-hidden';
+      sel.tabIndex = -1;
+      sel.setAttribute('aria-hidden', 'true');
+      for (let age = 0; age <= 17; age++) sel.append(new Option(ageText(age), String(age), age === 8, age === 8));
+      const out = document.createElement('output');
+      out.className = 'bw__age-value';
+      out.setAttribute('aria-live', 'polite');
+      out.setAttribute('aria-labelledby', label.id);
+      const less = document.createElement('button');
+      const more = document.createElement('button');
+      for (const [btn, step, text, d] of [
+        [less, -1, s.youngerChild, '<path d="M5 12h14"/>'],
+        [more, 1, s.olderChild, '<path d="M5 12h14"/><path d="M12 5v14"/>'],
+      ] as const) {
+        btn.type = 'button';
+        btn.className = 'bw__step-btn';
+        btn.setAttribute('aria-label', fmt(text, { n: i + 1 }));
+        btn.innerHTML = icon(d);
+        btn.addEventListener('click', () => {
+          const next = Number(sel.value) + step;
+          if (next < 0 || next > 17) return;
+          sel.value = String(next);
+          paintAge();
+          update();
+        });
+      }
+      const paintAge = () => {
+        const age = Number(sel.value);
+        out.textContent = ageText(age);
+        less.disabled = age <= 0;
+        more.disabled = age >= 17;
+      };
+      sel.addEventListener('change', () => { paintAge(); update(); });
+      const stepper = document.createElement('div');
+      stepper.className = 'bw__stepper';
+      stepper.append(less, out, more);
+      row.append(label, sel, stepper);
+      paintAge();
+      return row;
+    }
+    // The − / + buttons step the hidden selects, skipping values that are not allowed.
+    function paintCounters() {
+      for (const box of root.querySelectorAll<HTMLElement>('[data-bw-counter]')) {
+        const sel = box.querySelector('select')!;
+        const allowed = [...sel.options].filter((o) => !o.disabled).map((o) => Number(o.value));
+        const value = Number(sel.value);
+        box.querySelector('[data-bw-count]')!.textContent = String(value);
+        box.querySelector<HTMLButtonElement>('[data-step="-1"]')!.disabled = !allowed.some((v) => v < value);
+        box.querySelector<HTMLButtonElement>('[data-step="1"]')!.disabled = !allowed.some((v) => v > value);
+      }
+    }
+    for (const box of root.querySelectorAll<HTMLElement>('[data-bw-counter]')) {
+      const sel = box.querySelector('select')!;
+      for (const btn of box.querySelectorAll<HTMLButtonElement>('[data-step]')) {
+        btn.addEventListener('click', () => {
+          const dir = Number(btn.dataset.step);
+          const allowed = [...sel.options].filter((o) => !o.disabled).map((o) => Number(o.value));
+          const value = Number(sel.value);
+          const next = dir > 0 ? allowed.find((v) => v > value) : [...allowed].reverse().find((v) => v < value);
+          if (next === undefined) return;
+          sel.value = String(next);
+          sel.dispatchEvent(new Event('change'));
+        });
+      }
     }
     adultsSel.addEventListener('change', syncGuests);
     childrenSel.addEventListener('change', syncGuests);
@@ -957,11 +1041,115 @@ const config = {
     text-transform: uppercase;
     color: var(--muted);
   }
-  .bw__guest-row,
+  .bw__guest-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 0.75rem 1.5rem;
+  }
+  .bw__counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 52px;
+    padding: 0.35rem 0.4rem 0.35rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .bw__counter-label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .bw__stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  .bw__step-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--stone);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sea);
+    cursor: pointer;
+  }
+  .bw__step-btn:hover:not(:disabled) {
+    border-color: var(--sea);
+    background: var(--sea-tint);
+  }
+  .bw__step-btn:disabled {
+    color: var(--line);
+    border-color: var(--line);
+    cursor: default;
+  }
+  .bw__count {
+    min-width: 2ch;
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .bw__ages-wrap {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .bw__ages-title {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
   .bw__ages {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.6rem 1.5rem;
+  }
+  /* :global — the age rows are created by the script */
+  .bw__ages :global(.bw__age-row) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 0.35rem 0.4rem 0.35rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .bw__ages :global(.bw__age-value) {
+    min-width: 6.5rem;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .bw__ages :global(.bw__stepper) {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  .bw__ages :global(.bw__step-btn) {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border: 1px solid var(--stone);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sea);
+    cursor: pointer;
+  }
+  .bw__ages :global(.bw__step-btn:hover:not(:disabled)) {
+    border-color: var(--sea);
+    background: var(--sea-tint);
+  }
+  .bw__ages :global(.bw__step-btn:disabled) {
+    color: var(--line);
+    border-color: var(--line);
+    cursor: default;
   }
   .bw__guests label,
   .bw__ages :global(label) {
@@ -977,7 +1165,13 @@ const config = {
     border: 1px solid var(--stone);
     border-radius: var(--radius-sm);
     background: var(--surface);
+    font: inherit;
     font-size: 1rem;
+    color: var(--ink);
+  }
+  .bw__ages :global(.bw__age-label) {
+    font-size: var(--fs-sm);
+    font-weight: 600;
   }
   .bw__hint {
     font-size: var(--fs-xs);
