@@ -138,8 +138,11 @@ export const property = {
    */
   availability: {
     endpoint: '/api/availability',
-    /** How many months ahead guests can select. */
-    monthsAhead: 12,
+    /**
+     * How far ahead guests can select dates: the rest of the current year plus this
+     * many whole years (1 = until 31 December of next year). Owner's choice, October 2026.
+     */
+    yearsAhead: 1,
   },
 
   /**

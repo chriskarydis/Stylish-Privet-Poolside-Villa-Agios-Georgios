@@ -22,6 +22,8 @@ import Clock from '@lucide/astro/icons/clock';
 import Coffee from '@lucide/astro/icons/coffee';
 import Compass from '@lucide/astro/icons/compass';
 import Martini from '@lucide/astro/icons/martini';
+import Minus from '@lucide/astro/icons/minus';
+import Plus from '@lucide/astro/icons/plus';
 import CookingPot from '@lucide/astro/icons/cooking-pot';
 import Droplets from '@lucide/astro/icons/droplets';
 import Expand from '@lucide/astro/icons/expand';
@@ -87,6 +89,8 @@ export const lucideIcons = {
   clock: Clock,
   coffee: Coffee,
   martini: Martini,
+  minus: Minus,
+  plus: Plus,
   compass: Compass,
   'cooking-pot': CookingPot,
   droplets: Droplets,
