@@ -279,6 +279,8 @@ export const home = {
       children: { en: 'Children', el: 'Παιδιά' },
       childAge: { en: 'Age of child {n}', el: 'Ηλικία παιδιού {n}' },
       childN: { en: 'Child {n}', el: 'Παιδί {n}' },
+      youngerChild: { en: 'Younger age for child {n}', el: 'Μικρότερη ηλικία για το παιδί {n}' },
+      olderChild: { en: 'Older age for child {n}', el: 'Μεγαλύτερη ηλικία για το παιδί {n}' },
       childrenAges: { en: "Children's ages", el: 'Ηλικίες παιδιών' },
       fewerAdults: { en: 'Fewer adults', el: 'Λιγότεροι ενήλικες' },
       moreAdults: { en: 'More adults', el: 'Περισσότεροι ενήλικες' },

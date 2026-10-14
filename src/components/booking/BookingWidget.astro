@@ -533,29 +533,62 @@ const config = {
       if (Number(childrenSel.value) > maxChildren) childrenSel.value = String(maxChildren);
       const n = Number(childrenSel.value);
       agesWrap.hidden = n === 0;
-      const existing = [...agesEl.querySelectorAll('label')];
-      existing.slice(n).forEach((l) => l.remove());
-      for (let i = existing.length; i < n; i++) {
-        const label = document.createElement('label');
-        const span = document.createElement('span');
-        span.textContent = fmt(s.childN, { n: i + 1 });
-        span.className = 'bw__age-label';
-        const sel = document.createElement('select');
-        for (let age = 0; age <= 17; age++) {
-          const o = document.createElement('option');
-          o.value = String(age);
-          o.textContent = age === 0 ? s.under1 : age === 1 ? s.year1 : fmt(s.years, { n: age });
-          if (age === 8) o.selected = true;
-          sel.append(o);
-        }
-        sel.className = 'bw__age-select';
-        sel.setAttribute('aria-label', fmt(s.childAge, { n: i + 1 }));
-        sel.addEventListener('change', update);
-        label.append(span, sel);
-        agesEl.append(label);
-      }
+      const existing = [...agesEl.querySelectorAll('.bw__age-row')];
+      existing.slice(n).forEach((row) => row.remove());
+      for (let i = existing.length; i < n; i++) agesEl.append(ageRow(i));
       paintCounters();
       update();
+    }
+    // One child's age: "Child 1   − 8 years +". The hidden select keeps the value for the request.
+    const ageText = (age: number) => (age === 0 ? s.under1 : age === 1 ? s.year1 : fmt(s.years, { n: age }));
+    const icon = (d: string) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">${d}</svg>`;
+    function ageRow(i: number) {
+      const row = document.createElement('div');
+      row.className = 'bw__age-row';
+      const label = document.createElement('span');
+      label.className = 'bw__age-label';
+      label.id = `bw-age-${i}`;
+      label.textContent = fmt(s.childN, { n: i + 1 });
+      const sel = document.createElement('select');
+      sel.className = 'visually-hidden';
+      sel.tabIndex = -1;
+      sel.setAttribute('aria-hidden', 'true');
+      for (let age = 0; age <= 17; age++) sel.append(new Option(ageText(age), String(age), age === 8, age === 8));
+      const out = document.createElement('output');
+      out.className = 'bw__age-value';
+      out.setAttribute('aria-live', 'polite');
+      out.setAttribute('aria-labelledby', label.id);
+      const less = document.createElement('button');
+      const more = document.createElement('button');
+      for (const [btn, step, text, d] of [
+        [less, -1, s.youngerChild, '<path d="M5 12h14"/>'],
+        [more, 1, s.olderChild, '<path d="M5 12h14"/><path d="M12 5v14"/>'],
+      ] as const) {
+        btn.type = 'button';
+        btn.className = 'bw__step-btn';
+        btn.setAttribute('aria-label', fmt(text, { n: i + 1 }));
+        btn.innerHTML = icon(d);
+        btn.addEventListener('click', () => {
+          const next = Number(sel.value) + step;
+          if (next < 0 || next > 17) return;
+          sel.value = String(next);
+          paintAge();
+          update();
+        });
+      }
+      const paintAge = () => {
+        const age = Number(sel.value);
+        out.textContent = ageText(age);
+        less.disabled = age <= 0;
+        more.disabled = age >= 17;
+      };
+      sel.addEventListener('change', () => { paintAge(); update(); });
+      const stepper = document.createElement('div');
+      stepper.className = 'bw__stepper';
+      stepper.append(less, out, more);
+      row.append(label, sel, stepper);
+      paintAge();
+      return row;
     }
     // The − / + buttons step the hidden selects, skipping values that are not allowed.
     function paintCounters() {
@@ -1070,8 +1103,53 @@ const config = {
   }
   .bw__ages {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(7.75rem, 1fr));
-    gap: 0.6rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 0.6rem 1.5rem;
+  }
+  /* :global — the age rows are created by the script */
+  .bw__ages :global(.bw__age-row) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 0.35rem 0.4rem 0.35rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .bw__ages :global(.bw__age-value) {
+    min-width: 6.5rem;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .bw__ages :global(.bw__stepper) {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+  .bw__ages :global(.bw__step-btn) {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border: 1px solid var(--stone);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sea);
+    cursor: pointer;
+  }
+  .bw__ages :global(.bw__step-btn:hover:not(:disabled)) {
+    border-color: var(--sea);
+    background: var(--sea-tint);
+  }
+  .bw__ages :global(.bw__step-btn:disabled) {
+    color: var(--line);
+    border-color: var(--line);
+    cursor: default;
   }
   .bw__guests label,
   .bw__ages :global(label) {
@@ -1091,19 +1169,9 @@ const config = {
     font-size: 1rem;
     color: var(--ink);
   }
-  .bw__ages :global(label) {
-    display: grid;
-    gap: 0.25rem;
-  }
   .bw__ages :global(.bw__age-label) {
-    font-size: var(--fs-xs);
+    font-size: var(--fs-sm);
     font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0.02em;
-  }
-  .bw__ages :global(.bw__age-select) {
-    width: 100%;
-    font-variant-numeric: tabular-nums;
   }
   .bw__hint {
     font-size: var(--fs-xs);
