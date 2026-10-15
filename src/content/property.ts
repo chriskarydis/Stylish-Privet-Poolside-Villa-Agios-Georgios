@@ -157,7 +157,7 @@ export const property = {
   },
 
   /**
-   * RATES for direct bookings, per night, as supplied by the owner (revised 9 October 2026).
+   * RATES for direct bookings, per night, as supplied by the owner (revised 15 October 2026).
    * They feed the "Rates" section and the indicative total in the calendar.
    * `from` / `to` are the first and last NIGHT of the period (inclusive); 'MM-DD'
    * repeats every year. Nights outside every period have no price: the calendar
@@ -167,12 +167,12 @@ export const property = {
   rates: {
     currency: 'EUR',
     seasons: [
-      { name: { en: 'May', el: 'Μάιος' }, from: '05-01', to: '05-31', perNight: 180 },
-      { name: { en: 'June', el: 'Ιούνιος' }, from: '06-01', to: '06-30', perNight: 230 },
-      { name: { en: 'July', el: 'Ιούλιος' }, from: '07-01', to: '07-31', perNight: 280 },
-      { name: { en: 'August', el: 'Αύγουστος' }, from: '08-01', to: '08-31', perNight: 280 },
-      { name: { en: 'September', el: 'Σεπτέμβριος' }, from: '09-01', to: '09-30', perNight: 200 },
-      { name: { en: 'October', el: 'Οκτώβριος' }, from: '10-01', to: '10-31', perNight: 180 },
+      { name: { en: 'May', el: 'Μάιος' }, from: '05-01', to: '05-31', perNight: 190 },
+      { name: { en: 'June', el: 'Ιούνιος' }, from: '06-01', to: '06-30', perNight: 250 },
+      { name: { en: 'July', el: 'Ιούλιος' }, from: '07-01', to: '07-31', perNight: 330 },
+      { name: { en: 'August', el: 'Αύγουστος' }, from: '08-01', to: '08-31', perNight: 370 },
+      { name: { en: 'September', el: 'Σεπτέμβριος' }, from: '09-01', to: '09-30', perNight: 250 },
+      { name: { en: 'October', el: 'Οκτώβριος' }, from: '10-01', to: '10-31', perNight: 190 },
     ] as RateSeason[],
     /** One-off cleaning fee per stay, or null if included / none. Cleaning is included in the price. */
     cleaningFee: null as number | null,
